@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <color name="teal_ripple">#3300B3A1</color>
+    <color name="transparent">#00000000</color>
+    <color name="bottom_nav_inactive">#B0B0B0</color>
+    <color name="off_white">#282A30</color>
+    <color name="inactive_grey">#B5B5B5</color>
+
+
+
+
+    <!-- Primary Colors -->
+    <color name="primary">#80CBC4</color> <!-- Teal for dark -->
+    <color name="colorPrimaryDark">#4DB6AC</color> <!-- Teal Light for dark -->
+    <color name="colorPrimaryLight">#B2DFDB</color> <!-- Lighter Teal for dark -->
+
+    <!-- Accent/Secondary Colors -->
+    <color name="colorAccent">#FFC107</color> <!-- Amber (This can remain the same if it's visible against dark backgrounds) -->
+    <color name="colorSecondaryLight">#FFE082</color> <!-- Lighter Amber for dark -->
+    <color name="colorSecondaryDark">#FFCA28</color> <!-- Brighter Amber for dark -->
+
+    <!-- Background Color -->
+    <color name="colorBackground">#121212</color> <!-- This is the recommended background color for dark themes in Material Design -->
+
+    <!-- Error Color -->
+    <color name="colorError">#FF6659</color> <!-- Red adjusted for dark themes -->
+
+    <!-- Text Colors -->
+    <color name="textColorLight">#E0E0E0</color> <!-- A light gray for better visibility on dark backgrounds -->
+    <color name="textColorDark">#FFFFFF</color> <!-- White for primary text -->
+    <color name="textColorGrey">#BDBDBD</color> <!-- A lighter gray for secondary or less emphasized text -->
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/shopsFragment">
+
+    <fragment
+        android:id="@+id/shopsFragment"
+        android:name="com.thatwaz.shoppuppet.presentation.fragments.ShopsFragment"
+        android:label="My Shops"
+        tools:layout="@layout/fragment_shops" />
+    <fragment
+        android:id="@+id/listFragment"
+        android:name="com.thatwaz.shoppuppet.presentation.fragments.ListFragment"
+        android:label="fragment_list"
+        tools:layout="@layout/fragment_list" />
+    <fragment
+        android:id="@+id/addShopFragment"
+        android:name="com.thatwaz.shoppuppet.presentation.fragments.AddShopFragment"
+        android:label="fragment_add_shop"
+        tools:layout="@layout/fragment_add_shop" />
+</navigation>
