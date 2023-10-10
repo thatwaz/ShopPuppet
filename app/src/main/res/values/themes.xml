@@ -3,6 +3,13 @@
     <style name="Base.Theme.ShopPuppet" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <!-- Add the following line to use the custom toolbar title text appearance -->
+        <item name="toolbarStyle">@style/CustomToolbarStyle</item>
+    </style>
+
+    <!-- Define the custom toolbar style here -->
+    <style name="CustomToolbarStyle" parent="Widget.Material3.Toolbar">
+        <item name="titleTextAppearance">@style/ToolbarTitleTextAppearance</item>
     </style>
 
     <style name="Theme.ShopPuppet" parent="Base.Theme.ShopPuppet" />

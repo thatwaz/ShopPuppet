@@ -31,4 +31,16 @@
     <color name="textColorDark">#212121</color>
     <color name="textColorGrey">#757575</color>
 
+
+    <!-- Shop Colors -->
+    <color name="shop_blue">#007BFF</color> <!-- Bright Blue for Grocery & Hardware -->
+    <color name="shop_green">#4CAF50</color> <!-- Green for Grocery -->
+    <color name="shop_red">#FF0000</color> <!-- Red for Drug & Clothing -->
+    <color name="shop_maroon">#800000</color> <!-- Maroon/Dark Red for Department -->
+    <color name="shop_dark_gray">#2E2E2E</color> <!-- Dark Gray/Black for Department & Clothing -->
+    <color name="shop_fashion_red">#C21807</color> <!-- Fashion Red for Clothing -->
+    <color name="shop_navy_blue">#001F3F</color> <!-- Navy Blue for Clothing -->
+    <color name="shop_orange">#FF4500</color> <!-- Orange for Hardware -->
+
+
 </resources>

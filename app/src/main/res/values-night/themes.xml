@@ -2,6 +2,11 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.ShopPuppet" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="toolbarStyle">@style/CustomToolbarStyle</item>
+    </style>
+
+    <style name="CustomToolbarStyle" parent="Widget.Material3.Toolbar">
+        <item name="titleTextAppearance">@style/ToolbarTitleTextAppearance</item>
     </style>
 </resources>

@@ -9,26 +9,41 @@
     <color name="inactive_grey">#B5B5B5</color>
 
 
-
-
     <!-- Primary Colors -->
     <color name="primary">#80CBC4</color> <!-- Teal for dark -->
     <color name="colorPrimaryDark">#4DB6AC</color> <!-- Teal Light for dark -->
     <color name="colorPrimaryLight">#B2DFDB</color> <!-- Lighter Teal for dark -->
 
     <!-- Accent/Secondary Colors -->
-    <color name="colorAccent">#FFC107</color> <!-- Amber (This can remain the same if it's visible against dark backgrounds) -->
+    <color name="colorAccent">#FFC107
+    </color> <!-- Amber (This can remain the same if it's visible against dark backgrounds) -->
     <color name="colorSecondaryLight">#FFE082</color> <!-- Lighter Amber for dark -->
     <color name="colorSecondaryDark">#FFCA28</color> <!-- Brighter Amber for dark -->
 
     <!-- Background Color -->
-    <color name="colorBackground">#121212</color> <!-- This is the recommended background color for dark themes in Material Design -->
+    <color name="colorBackground">#121212
+    </color> <!-- This is the recommended background color for dark themes in Material Design -->
 
     <!-- Error Color -->
     <color name="colorError">#FF6659</color> <!-- Red adjusted for dark themes -->
 
     <!-- Text Colors -->
-    <color name="textColorLight">#E0E0E0</color> <!-- A light gray for better visibility on dark backgrounds -->
+    <color name="textColorLight">#E0E0E0
+    </color> <!-- A light gray for better visibility on dark backgrounds -->
     <color name="textColorDark">#FFFFFF</color> <!-- White for primary text -->
-    <color name="textColorGrey">#BDBDBD</color> <!-- A lighter gray for secondary or less emphasized text -->
+    <color name="textColorGrey">#BDBDBD
+    </color> <!-- A lighter gray for secondary or less emphasized text -->
+
+
+    <!-- Shop Colors -->
+    <color name="shop_blue">#007BFF</color> <!-- Bright Blue for Grocery & Hardware -->
+    <color name="shop_green">#4CAF50</color> <!-- Green for Grocery -->
+    <color name="shop_red">#FF0000</color> <!-- Red for Drug & Clothing -->
+    <color name="shop_maroon">#800000</color> <!-- Maroon/Dark Red for Department -->
+    <color name="shop_dark_gray">#2E2E2E</color> <!-- Dark Gray/Black for Department & Clothing -->
+    <color name="shop_fashion_red">#C21807</color> <!-- Fashion Red for Clothing -->
+    <color name="shop_navy_blue">#001F3F</color> <!-- Navy Blue for Clothing -->
+    <color name="shop_orange">#FF4500</color> <!-- Orange for Hardware -->
+
+
 </resources>
