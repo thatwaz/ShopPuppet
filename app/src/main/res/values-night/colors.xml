@@ -33,6 +33,7 @@
     <color name="textColorDark">#FFFFFF</color> <!-- White for primary text -->
     <color name="textColorGrey">#BDBDBD
     </color> <!-- A lighter gray for secondary or less emphasized text -->
+    <color name="clickable_blue">#2196F3</color> <!-- Material Design Blue 500 -->
 
 
     <!-- Shop Colors -->
