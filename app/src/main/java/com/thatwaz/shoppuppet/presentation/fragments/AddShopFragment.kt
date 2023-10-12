@@ -44,6 +44,10 @@ class AddShopFragment : Fragment() {
             binding.cvChooseIcon.visibility = View.VISIBLE
         }
 
+        binding.btnShopIcon.setOnClickListener {
+            binding.cvChooseColor.visibility = View.VISIBLE
+        }
+
         return binding.root
     }
 
