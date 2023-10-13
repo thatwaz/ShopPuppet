@@ -30,6 +30,7 @@
                 android:id="@+id/et_shop_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textCapWords"
                 android:textColor="@color/textColorDark" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -249,7 +250,7 @@
 
 
                 <View
-                    android:id="@+id/colorOption1"
+                    android:id="@+id/shop_blue"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_margin="16dp"
@@ -257,7 +258,7 @@
                     android:onClick="onColorClicked" />
 
                 <View
-                    android:id="@+id/colorOption2"
+                    android:id="@+id/shop_green"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_margin="16dp"
@@ -265,7 +266,7 @@
                     android:onClick="onColorClicked" />
 
                 <View
-                    android:id="@+id/colorOption3"
+                    android:id="@+id/shop_fashion_red"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_margin="16dp"
@@ -273,7 +274,7 @@
                     android:onClick="onColorClicked" />
 
                 <View
-                    android:id="@+id/colorOption4"
+                    android:id="@+id/shop_dark_gray"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_margin="16dp"
@@ -281,7 +282,7 @@
                     android:onClick="onColorClicked" />
 
                 <View
-                    android:id="@+id/colorOption5"
+                    android:id="@+id/shop_red"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_margin="16dp"
@@ -289,7 +290,7 @@
                     android:onClick="onColorClicked" />
 
                 <View
-                    android:id="@+id/colorOption6"
+                    android:id="@+id/shop_orange"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_margin="16dp"
@@ -297,7 +298,7 @@
                     android:onClick="onColorClicked" />
 
                 <View
-                    android:id="@+id/colorOption7"
+                    android:id="@+id/shop_pink"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_margin="16dp"
@@ -305,7 +306,7 @@
                     android:onClick="onColorClicked" />
 
                 <View
-                    android:id="@+id/colorOption8"
+                    android:id="@+id/shop_navy_blue"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_margin="16dp"
@@ -313,21 +314,21 @@
                     android:onClick="onColorClicked" />
 
                     <View
-                        android:id="@+id/colorOption9"
+                        android:id="@+id/shop_yellow"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:layout_margin="16dp"
                         android:background="@color/shop_yellow"
                         android:onClick="onColorClicked" />
                     <View
-                        android:id="@+id/colorOption10"
+                        android:id="@+id/shop_purple"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:layout_margin="16dp"
                         android:background="@color/shop_purple"
                         android:onClick="onColorClicked" />
                     <View
-                        android:id="@+id/colorOption11"
+                        android:id="@+id/shop_teal"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:layout_margin="16dp"
@@ -335,7 +336,7 @@
                         android:onClick="onColorClicked" />
 
                     <View
-                        android:id="@+id/colorOption12"
+                        android:id="@+id/shop_brown"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:layout_margin="16dp"
@@ -397,7 +398,7 @@
                     android:layout_marginStart="45dp"
                     android:layout_height="wrap_content"
                     android:minHeight="125dp"
-                    android:outlineSpotShadowColor="@color/shop_orange"
+                    android:outlineSpotShadowColor="@color/inactive_grey"
                     app:layout_constraintStart_toStartOf="parent"
                     app:cardCornerRadius="6dp"
                     app:cardElevation="8dp"
@@ -415,19 +416,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:src="@drawable/ic_hardware"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/shop_orange" />
+                        app:tint="@color/inactive_grey" />
 
                     <TextView
+                        android:id="@+id/shop_name_preview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:ellipsize="end"
                         android:maxLines="2"
-                        android:text="Home\nDepot"
                         android:textAlignment="center"
                         android:textColor="@color/textColorDark"
                         android:textSize="14sp"

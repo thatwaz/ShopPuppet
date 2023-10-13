@@ -18,6 +18,6 @@
     <fragment
         android:id="@+id/addShopFragment"
         android:name="com.thatwaz.shoppuppet.presentation.fragments.AddShopFragment"
-        android:label="fragment_add_shop"
+        android:label="Add New Shop"
         tools:layout="@layout/fragment_add_shop" />
 </navigation>
