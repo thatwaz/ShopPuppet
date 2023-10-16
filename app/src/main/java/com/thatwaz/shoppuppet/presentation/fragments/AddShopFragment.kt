@@ -7,17 +7,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.FragmentAddShopBinding
+import com.thatwaz.shoppuppet.domain.model.Shop
+import com.thatwaz.shoppuppet.util.mock.MockDataStore
 
 
 class AddShopFragment : Fragment() {
     // Declare your binding variable
     private var _binding: FragmentAddShopBinding? = null
     private val binding get() = _binding!!
+
+    private var selectedIconRef: Int? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,20 +74,68 @@ class AddShopFragment : Fragment() {
 
             val iconClickListener = View.OnClickListener { view ->
                 when (view.id) {
-                    R.id.ib_grocery_store -> updatePreviewIcon(R.drawable.ic_grocery_store)
-                    R.id.ib_pharmacy -> updatePreviewIcon(R.drawable.ic_pharmacy)
-                    R.id.ib_hardware -> updatePreviewIcon(R.drawable.ic_hardware)
-                    R.id.ib_storefront -> updatePreviewIcon(R.drawable.ic_storefront)
-                    R.id.ib_television -> updatePreviewIcon(R.drawable.ic_television)
-                    R.id.ib_shopping_bag -> updatePreviewIcon(R.drawable.ic_shopping_bag)
-                    R.id.ib_store -> updatePreviewIcon(R.drawable.ic_store)
-                    R.id.ib_stroller -> updatePreviewIcon(R.drawable.ic_stroller)
-                    R.id.ib_books -> updatePreviewIcon(R.drawable.ic_books)
-                    R.id.ib_bullseye -> updatePreviewIcon(R.drawable.ic_bullseye)
+                    R.id.ib_grocery_store -> {
+                        updatePreviewIcon(R.drawable.ic_grocery_store)
+                        selectedIconRef = R.drawable.ic_grocery_store
+                    }
+                    R.id.ib_pharmacy -> {
+                        updatePreviewIcon(R.drawable.ic_pharmacy)
+                        selectedIconRef = R.drawable.ic_pharmacy
+                    }
+                    R.id.ib_hardware -> {
+                        updatePreviewIcon(R.drawable.ic_hardware)
+                        selectedIconRef = R.drawable.ic_hardware
+                    }
+                    R.id.ib_storefront -> {
+                        updatePreviewIcon(R.drawable.ic_storefront)
+                        selectedIconRef = R.drawable.ic_storefront
+                    }
+                    R.id.ib_television -> {
+                        updatePreviewIcon(R.drawable.ic_television)
+                        selectedIconRef = R.drawable.ic_television
+                    }
+                    R.id.ib_shopping_bag -> {
+                        updatePreviewIcon(R.drawable.ic_shopping_bag)
+                        selectedIconRef = R.drawable.ic_shopping_bag
+                    }
+                    R.id.ib_store -> {
+                        updatePreviewIcon(R.drawable.ic_store)
+                        selectedIconRef = R.drawable.ic_store
+                    }
+                    R.id.ib_stroller-> {
+                        updatePreviewIcon(R.drawable.ic_stroller)
+                        selectedIconRef = R.drawable.ic_stroller
+                    }
+                    R.id.ib_books -> {
+                        updatePreviewIcon(R.drawable.ic_books)
+                        selectedIconRef = R.drawable.ic_books
+                    }
+                    R.id.ib_bullseye -> {
+                        updatePreviewIcon(R.drawable.ic_bullseye)
+                        selectedIconRef = R.drawable.ic_bullseye
+                    }
 
-                    // ... handle other icons
+
                 }
             }
+
+//
+//            val iconClickListener = View.OnClickListener { view ->
+//                when (view.id) {
+//                    R.id.ib_grocery_store -> updatePreviewIcon(R.drawable.ic_grocery_store)
+//                    R.id.ib_pharmacy -> updatePreviewIcon(R.drawable.ic_pharmacy)
+//                    R.id.ib_hardware -> updatePreviewIcon(R.drawable.ic_hardware)
+//                    R.id.ib_storefront -> updatePreviewIcon(R.drawable.ic_storefront)
+//                    R.id.ib_television -> updatePreviewIcon(R.drawable.ic_television)
+//                    R.id.ib_shopping_bag -> updatePreviewIcon(R.drawable.ic_shopping_bag)
+//                    R.id.ib_store -> updatePreviewIcon(R.drawable.ic_store)
+//                    R.id.ib_stroller -> updatePreviewIcon(R.drawable.ic_stroller)
+//                    R.id.ib_books -> updatePreviewIcon(R.drawable.ic_books)
+//                    R.id.ib_bullseye -> updatePreviewIcon(R.drawable.ic_bullseye)
+//
+//                    // ... handle other icons
+//                }
+//            }
 
             binding.apply {
                 ibGroceryStore.setOnClickListener(iconClickListener)
@@ -134,6 +189,35 @@ class AddShopFragment : Fragment() {
 
             }
         }
+
+        binding.btnSaveShop.setOnClickListener {
+            // Capture the shop name from the EditText
+            val shopName = binding.etShopName.text.toString()
+
+            // Validate the shop name to ensure it's not empty
+            if (shopName.isNotBlank()) {
+                // Use the selectedIconRef or a default icon if it's null
+                val iconRef = selectedIconRef ?: R.drawable.ic_grocery_store
+
+                // Save the shop to the MockDataStore
+                val newShop = Shop(name = shopName, iconRef = iconRef)
+                MockDataStore.addShop(newShop)
+
+
+
+                // Optionally: Provide some user feedback, like a Toast
+                Toast.makeText(context, "Shop saved!", Toast.LENGTH_SHORT).show()
+
+                // Navigate back to the ShopsFragment or reset the AddShopFragment UI
+                val action = AddShopFragmentDirections
+                    .actionAddShopFragmentToShopsFragment()
+                findNavController().navigate(action)
+            } else {
+                // Inform the user if the shop name is not valid
+                Toast.makeText(context, "Please enter a valid shop name.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
 
     private fun hideKeyboard() {
@@ -148,17 +232,9 @@ class AddShopFragment : Fragment() {
         binding.cvShopPreview.outlineSpotShadowColor = color
     }
 
-
-
     private fun updatePreviewIcon(drawableResId: Int,) {
         binding.previewIcon.setImageResource(drawableResId)
-
-
     }
-
-
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()

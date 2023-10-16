@@ -8,9 +8,9 @@
     tools:context=".presentation.fragments.AddShopFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@color/colorBackground"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/colorBackground">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_shop_name"
@@ -185,9 +185,9 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
+                        android:layout_columnSpan="1"
                         android:gravity="center_horizontal"
-                        android:layout_columnSpan="1">
+                        android:orientation="vertical">
 
                         <ImageButton
                             android:id="@+id/ib_alphabet"
@@ -195,9 +195,9 @@
                             android:layout_height="48dp"
                             android:background="@drawable/ib_selected"
                             android:clickable="true"
+                            android:padding="8dp"
                             android:src="@drawable/ic_alphabet"
-                            app:tint="@color/clickable_blue"
-                            android:padding="8dp" />
+                            app:tint="@color/clickable_blue" />
 
                     </LinearLayout>
                 </GridLayout>
@@ -219,8 +219,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_choose_color"
                 android:layout_width="match_parent"
-                android:background="@color/card_view2"
                 android:layout_height="wrap_content"
+                android:background="@color/card_view2"
                 android:paddingBottom="24dp">
 
                 <TextView
@@ -239,79 +239,78 @@
 
                 <GridLayout
                     android:id="@+id/colorGrid"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/lbl_choose_color"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:columnCount="4"
-                    android:padding="4dp">
+                    android:padding="4dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/lbl_choose_color">
 
 
+                    <View
+                        android:id="@+id/shop_blue"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_margin="16dp"
+                        android:background="@color/shop_blue"
+                        android:onClick="onColorClicked" />
 
-                <View
-                    android:id="@+id/shop_blue"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_margin="16dp"
-                    android:background="@color/shop_blue"
-                    android:onClick="onColorClicked" />
+                    <View
+                        android:id="@+id/shop_green"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_margin="16dp"
+                        android:background="@color/shop_green"
+                        android:onClick="onColorClicked" />
 
-                <View
-                    android:id="@+id/shop_green"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_margin="16dp"
-                    android:background="@color/shop_green"
-                    android:onClick="onColorClicked" />
+                    <View
+                        android:id="@+id/shop_fashion_red"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_margin="16dp"
+                        android:background="@color/shop_fashion_red"
+                        android:onClick="onColorClicked" />
 
-                <View
-                    android:id="@+id/shop_fashion_red"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_margin="16dp"
-                    android:background="@color/shop_fashion_red"
-                    android:onClick="onColorClicked" />
+                    <View
+                        android:id="@+id/shop_dark_gray"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_margin="16dp"
+                        android:background="@color/shop_dark_gray"
+                        android:onClick="onColorClicked" />
 
-                <View
-                    android:id="@+id/shop_dark_gray"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_margin="16dp"
-                    android:background="@color/shop_dark_gray"
-                    android:onClick="onColorClicked" />
+                    <View
+                        android:id="@+id/shop_red"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_margin="16dp"
+                        android:background="@color/shop_red"
+                        android:onClick="onColorClicked" />
 
-                <View
-                    android:id="@+id/shop_red"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_margin="16dp"
-                    android:background="@color/shop_red"
-                    android:onClick="onColorClicked" />
+                    <View
+                        android:id="@+id/shop_orange"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_margin="16dp"
+                        android:background="@color/shop_orange"
+                        android:onClick="onColorClicked" />
 
-                <View
-                    android:id="@+id/shop_orange"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_margin="16dp"
-                    android:background="@color/shop_orange"
-                    android:onClick="onColorClicked" />
+                    <View
+                        android:id="@+id/shop_pink"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_margin="16dp"
+                        android:background="@color/shop_pink"
+                        android:onClick="onColorClicked" />
 
-                <View
-                    android:id="@+id/shop_pink"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_margin="16dp"
-                    android:background="@color/shop_pink"
-                    android:onClick="onColorClicked" />
-
-                <View
-                    android:id="@+id/shop_navy_blue"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_margin="16dp"
-                    android:background="@color/shop_navy_blue"
-                    android:onClick="onColorClicked" />
+                    <View
+                        android:id="@+id/shop_navy_blue"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_margin="16dp"
+                        android:background="@color/shop_navy_blue"
+                        android:onClick="onColorClicked" />
 
                     <View
                         android:id="@+id/shop_yellow"
@@ -320,6 +319,7 @@
                         android:layout_margin="16dp"
                         android:background="@color/shop_yellow"
                         android:onClick="onColorClicked" />
+
                     <View
                         android:id="@+id/shop_purple"
                         android:layout_width="36dp"
@@ -327,6 +327,7 @@
                         android:layout_margin="16dp"
                         android:background="@color/shop_purple"
                         android:onClick="onColorClicked" />
+
                     <View
                         android:id="@+id/shop_teal"
                         android:layout_width="36dp"
@@ -351,10 +352,10 @@
         <Button
             android:id="@+id/btn_shop_icon"
             android:layout_width="0dp"
-            android:visibility="gone"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Next"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@id/cv_choose_icon"
             app:layout_constraintStart_toStartOf="@id/cv_choose_icon"
             app:layout_constraintTop_toBottomOf="@id/cv_choose_icon" />
@@ -374,8 +375,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_finalize_shop"
                 android:layout_width="match_parent"
-                android:background="@color/card_view2"
                 android:layout_height="match_parent"
+                android:background="@color/card_view2"
                 android:paddingBottom="24dp">
 
                 <TextView
@@ -387,85 +388,99 @@
                     android:textColor="@color/textColorDark"
                     android:textSize="16sp"
                     android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/cv_shop_preview"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="@id/cv_shop_preview"
-                    app:layout_constraintEnd_toEndOf="@id/cv_shop_preview"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cv_shop_preview"
                     android:layout_width="100dp"
-                    android:layout_marginStart="45dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="45dp"
                     android:minHeight="125dp"
                     android:outlineSpotShadowColor="@color/inactive_grey"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:cardCornerRadius="6dp"
                     app:cardElevation="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lbl_preview">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="100dp"
-                        android:background="@color/card_view"
                         android:layout_height="wrap_content"
+                        android:background="@color/card_view"
                         android:paddingBottom="16dp">
 
-                    <ImageView
-                        android:id="@+id/preview_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/inactive_grey" />
+                        <TextView
+                            android:id="@+id/initials_preview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:textStyle="bold"
+                            android:background="?attr/selectableItemBackground"
+                            android:textColor="@color/textColorDark"
+                            android:textSize="24sp"
+                            android:visibility="visible"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/shop_name_preview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:textAlignment="center"
-                        android:textColor="@color/textColorDark"
-                        android:textSize="14sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/preview_icon"/>
+
+                        <ImageView
+                            android:id="@+id/preview_icon"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_marginTop="20dp"
+                            android:visibility="visible"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/inactive_grey" />
+
+                        <TextView
+                            android:id="@+id/shop_name_preview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:textAlignment="center"
+                            android:textColor="@color/textColorDark"
+                            android:textSize="14sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/preview_icon" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.cardview.widget.CardView>
 
                 <Button
-                    android:id="@+id/btn_looks_good"
+                    android:id="@+id/btn_save_shop"
                     android:layout_width="135dp"
-                    android:backgroundTint="@color/positiveAction"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toEndOf="@id/cv_shop_preview"
+                    android:backgroundTint="@color/positiveAction"
+                    android:text="Save Shop"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/cv_shop_preview"
-                    android:text="Looks Good"/>
+                    app:layout_constraintStart_toEndOf="@id/cv_shop_preview"
+                    app:layout_constraintTop_toTopOf="@id/cv_shop_preview" />
 
                 <Button
                     android:id="@+id/btn_start_over"
                     android:layout_width="135dp"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@color/off_white"
+                    android:text="Start Over"
                     android:textColor="@color/black"
-                    android:backgroundTint="@color/negativeAction"
-                    app:layout_constraintStart_toEndOf="@id/cv_shop_preview"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="@id/cv_shop_preview"
-                    android:text="Start Over"/>
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/cv_shop_preview" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
