@@ -1,5 +1,6 @@
 package com.thatwaz.shoppuppet.presentation.fragments
 
+
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
@@ -24,7 +25,7 @@ class AddShopFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var selectedIconRef: Int? = null
-
+    private var selectedColor: Int = R.color.black
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,9 +41,6 @@ class AddShopFragment : Fragment() {
             val dialog = CustomIconDialogFragment()
             dialog.show(childFragmentManager, "CustomIconDialog")
         }
-
-
-
 
         binding.btnShopIcon.setOnClickListener {
             binding.cvChooseColor.visibility = View.VISIBLE
@@ -119,24 +117,6 @@ class AddShopFragment : Fragment() {
                 }
             }
 
-//
-//            val iconClickListener = View.OnClickListener { view ->
-//                when (view.id) {
-//                    R.id.ib_grocery_store -> updatePreviewIcon(R.drawable.ic_grocery_store)
-//                    R.id.ib_pharmacy -> updatePreviewIcon(R.drawable.ic_pharmacy)
-//                    R.id.ib_hardware -> updatePreviewIcon(R.drawable.ic_hardware)
-//                    R.id.ib_storefront -> updatePreviewIcon(R.drawable.ic_storefront)
-//                    R.id.ib_television -> updatePreviewIcon(R.drawable.ic_television)
-//                    R.id.ib_shopping_bag -> updatePreviewIcon(R.drawable.ic_shopping_bag)
-//                    R.id.ib_store -> updatePreviewIcon(R.drawable.ic_store)
-//                    R.id.ib_stroller -> updatePreviewIcon(R.drawable.ic_stroller)
-//                    R.id.ib_books -> updatePreviewIcon(R.drawable.ic_books)
-//                    R.id.ib_bullseye -> updatePreviewIcon(R.drawable.ic_bullseye)
-//
-//                    // ... handle other icons
-//                }
-//            }
-
             binding.apply {
                 ibGroceryStore.setOnClickListener(iconClickListener)
                 ibPharmacy.setOnClickListener(iconClickListener)
@@ -151,7 +131,7 @@ class AddShopFragment : Fragment() {
             }
             @RequiresApi(Build.VERSION_CODES.P)
             fun onColorClicked(view: View) {
-                val selectedColor = when(view.id) {
+                selectedColor = when(view.id) {
                     R.id.shop_blue -> R.color.shop_blue
                     R.id.shop_green -> R.color.shop_green
                     R.id.shop_fashion_red -> R.color.shop_fashion_red
@@ -200,7 +180,7 @@ class AddShopFragment : Fragment() {
                 val iconRef = selectedIconRef ?: R.drawable.ic_grocery_store
 
                 // Save the shop to the MockDataStore
-                val newShop = Shop(name = shopName, iconRef = iconRef)
+                val newShop = Shop(name = shopName, iconRef = iconRef, colorResId = selectedColor)
                 MockDataStore.addShop(newShop)
 
 
@@ -230,6 +210,7 @@ class AddShopFragment : Fragment() {
         val color = ContextCompat.getColor(requireContext(), colorResId)
         binding.previewIcon.setColorFilter(color)
         binding.cvShopPreview.outlineSpotShadowColor = color
+
     }
 
     private fun updatePreviewIcon(drawableResId: Int,) {

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cv_shop"
     android:layout_width="100dp"
     android:layout_height="wrap_content"
     android:minHeight="125dp"
+    android:background="@drawable/custom_shadow"
     android:outlineAmbientShadowColor="@color/shop_red"
     app:cardCornerRadius="6dp"
     app:cardElevation="8dp">
@@ -54,5 +55,5 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>
 

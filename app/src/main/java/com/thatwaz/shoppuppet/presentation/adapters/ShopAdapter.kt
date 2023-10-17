@@ -1,11 +1,18 @@
 package com.thatwaz.shoppuppet.presentation.adapters
 
+
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.LayerDrawable
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.domain.model.Shop
 
@@ -16,9 +23,26 @@ class ShopAdapter(private val shops: List<Shop>) : RecyclerView.Adapter<ShopAdap
         val shopIconImageView: ImageView = itemView.findViewById(R.id.shop_icon)
         val shopNameTextView: TextView = itemView.findViewById(R.id.shop_name)
 
+        @RequiresApi(Build.VERSION_CODES.P)
         fun bind(shop: Shop) {
             shopNameTextView.text = shop.name
             shopIconImageView.setImageResource(shop.iconRef)
+            val cardView: MaterialCardView = itemView.findViewById(R.id.cv_shop)
+
+            val color = ContextCompat.getColor(itemView.context, shop.colorResId)
+            shopIconImageView.setColorFilter(color)
+
+            val shadowDrawable = ContextCompat.getDrawable(itemView.context, R.drawable.custom_shadow) as LayerDrawable
+            val shadowLayer = shadowDrawable.getDrawable(0) as GradientDrawable
+            shadowLayer.setColor(color)
+            cardView.background = shadowDrawable
+            cardView.outlineSpotShadowColor = color
+            cardView.outlineAmbientShadowColor = color
+//            cardView.invalidate()
+
+
+
+
         }
     }
 
@@ -27,8 +51,10 @@ class ShopAdapter(private val shops: List<Shop>) : RecyclerView.Adapter<ShopAdap
         return ShopViewHolder(view)
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: ShopViewHolder, position: Int) {
         holder.bind(shops[position])
+
     }
 
     override fun getItemCount() = shops.size
