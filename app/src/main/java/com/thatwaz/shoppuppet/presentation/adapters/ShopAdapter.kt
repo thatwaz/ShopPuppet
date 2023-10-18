@@ -17,33 +17,66 @@ import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.domain.model.Shop
 
 
-class ShopAdapter(private val shops: List<Shop>) : RecyclerView.Adapter<ShopAdapter.ShopViewHolder>() {
+class ShopAdapter(private val shops: List<Shop>) :
+    RecyclerView.Adapter<ShopAdapter.ShopViewHolder>() {
 
     inner class ShopViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val shopIconImageView: ImageView = itemView.findViewById(R.id.shop_icon)
         val shopNameTextView: TextView = itemView.findViewById(R.id.shop_name)
+        val shopIconInitials: TextView = itemView.findViewById(R.id.shop_icon_initials)
 
         @RequiresApi(Build.VERSION_CODES.P)
         fun bind(shop: Shop) {
             shopNameTextView.text = shop.name
-            shopIconImageView.setImageResource(shop.iconRef)
+            val color = ContextCompat.getColor(itemView.context, shop.colorResId)
             val cardView: MaterialCardView = itemView.findViewById(R.id.cv_shop)
 
-            val color = ContextCompat.getColor(itemView.context, shop.colorResId)
-            shopIconImageView.setColorFilter(color)
+            // If the shop has initials, display them and hide the icon
+            if (!shop.initials.isNullOrEmpty()) {
+                shopIconInitials.text = shop.initials
+                shopIconInitials.setTextColor(color)
+                shopIconInitials.visibility = View.VISIBLE
+                shopIconImageView.visibility = View.INVISIBLE
+            } else {  // Else, display the icon and hide the initials
+                shopIconImageView.setImageResource(shop.iconRef)
+                shopIconImageView.setColorFilter(color)
+                shopIconImageView.visibility = View.VISIBLE
+                shopIconInitials.visibility = View.GONE
+            }
 
-            val shadowDrawable = ContextCompat.getDrawable(itemView.context, R.drawable.custom_shadow) as LayerDrawable
+            // For the card view background and shadow
+            val shadowDrawable = ContextCompat.getDrawable(
+                itemView.context,
+                R.drawable.custom_shadow
+            ) as LayerDrawable
             val shadowLayer = shadowDrawable.getDrawable(0) as GradientDrawable
             shadowLayer.setColor(color)
             cardView.background = shadowDrawable
             cardView.outlineSpotShadowColor = color
             cardView.outlineAmbientShadowColor = color
-//            cardView.invalidate()
-
-
-
-
         }
+
+
+//        @RequiresApi(Build.VERSION_CODES.P)
+//        fun bind(shop: Shop) {
+//            shopNameTextView.text = shop.name
+//            shopIconImageView.setImageResource(shop.iconRef)
+//            val cardView: MaterialCardView = itemView.findViewById(R.id.cv_shop)
+//
+//            val color = ContextCompat.getColor(itemView.context, shop.colorResId)
+//            shopIconImageView.setColorFilter(color)
+//
+//            val shadowDrawable = ContextCompat.getDrawable(
+//                itemView.context,
+//                R.drawable.custom_shadow
+//            ) as LayerDrawable
+//            val shadowLayer = shadowDrawable.getDrawable(0) as GradientDrawable
+//            shadowLayer.setColor(color)
+//            cardView.background = shadowDrawable
+//            cardView.outlineSpotShadowColor = color
+//            cardView.outlineAmbientShadowColor = color
+//
+//        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopViewHolder {

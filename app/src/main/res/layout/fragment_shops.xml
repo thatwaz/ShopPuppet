@@ -7,6 +7,14 @@
     android:paddingBottom="80dp"
     tools:context=".presentation.fragments.ShopsFragment">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_top"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
         <!-- RecyclerView to display shops -->
@@ -19,7 +27,7 @@
             app:layout_constraintBottom_toTopOf="@+id/btn_add_shop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_top"
             app:spanCount="3"
             tools:listitem="@layout/item_shop" />
 

@@ -19,14 +19,14 @@ import com.thatwaz.shoppuppet.domain.model.Shop
 import com.thatwaz.shoppuppet.util.mock.MockDataStore
 
 
-class AddShopFragment : Fragment() {
+class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogListener {
     // Declare your binding variable
     private var _binding: FragmentAddShopBinding? = null
     private val binding get() = _binding!!
 
     private var selectedIconRef: Int? = null
     private var selectedColor: Int = R.color.black
-
+    private var shopInitials: String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -76,38 +76,47 @@ class AddShopFragment : Fragment() {
                         updatePreviewIcon(R.drawable.ic_grocery_store)
                         selectedIconRef = R.drawable.ic_grocery_store
                     }
+
                     R.id.ib_pharmacy -> {
                         updatePreviewIcon(R.drawable.ic_pharmacy)
                         selectedIconRef = R.drawable.ic_pharmacy
                     }
+
                     R.id.ib_hardware -> {
                         updatePreviewIcon(R.drawable.ic_hardware)
                         selectedIconRef = R.drawable.ic_hardware
                     }
+
                     R.id.ib_storefront -> {
                         updatePreviewIcon(R.drawable.ic_storefront)
                         selectedIconRef = R.drawable.ic_storefront
                     }
+
                     R.id.ib_television -> {
                         updatePreviewIcon(R.drawable.ic_television)
                         selectedIconRef = R.drawable.ic_television
                     }
+
                     R.id.ib_shopping_bag -> {
                         updatePreviewIcon(R.drawable.ic_shopping_bag)
                         selectedIconRef = R.drawable.ic_shopping_bag
                     }
+
                     R.id.ib_store -> {
                         updatePreviewIcon(R.drawable.ic_store)
                         selectedIconRef = R.drawable.ic_store
                     }
-                    R.id.ib_stroller-> {
+
+                    R.id.ib_stroller -> {
                         updatePreviewIcon(R.drawable.ic_stroller)
                         selectedIconRef = R.drawable.ic_stroller
                     }
+
                     R.id.ib_books -> {
                         updatePreviewIcon(R.drawable.ic_books)
                         selectedIconRef = R.drawable.ic_books
                     }
+
                     R.id.ib_bullseye -> {
                         updatePreviewIcon(R.drawable.ic_bullseye)
                         selectedIconRef = R.drawable.ic_bullseye
@@ -131,7 +140,7 @@ class AddShopFragment : Fragment() {
             }
             @RequiresApi(Build.VERSION_CODES.P)
             fun onColorClicked(view: View) {
-                selectedColor = when(view.id) {
+                selectedColor = when (view.id) {
                     R.id.shop_blue -> R.color.shop_blue
                     R.id.shop_green -> R.color.shop_green
                     R.id.shop_fashion_red -> R.color.shop_fashion_red
@@ -180,9 +189,13 @@ class AddShopFragment : Fragment() {
                 val iconRef = selectedIconRef ?: R.drawable.ic_grocery_store
 
                 // Save the shop to the MockDataStore
-                val newShop = Shop(name = shopName, iconRef = iconRef, colorResId = selectedColor)
+                val newShop = Shop(
+                    name = shopName,
+                    iconRef = iconRef,
+                    colorResId = selectedColor,
+                    initials = shopInitials
+                )
                 MockDataStore.addShop(newShop)
-
 
 
                 // Optionally: Provide some user feedback, like a Toast
@@ -194,7 +207,8 @@ class AddShopFragment : Fragment() {
                 findNavController().navigate(action)
             } else {
                 // Inform the user if the shop name is not valid
-                Toast.makeText(context, "Please enter a valid shop name.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please enter a valid shop name.", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -209,11 +223,11 @@ class AddShopFragment : Fragment() {
     private fun updateIconColor(colorResId: Int) {
         val color = ContextCompat.getColor(requireContext(), colorResId)
         binding.previewIcon.setColorFilter(color)
+        binding.initialsPreview.setTextColor(color)
         binding.cvShopPreview.outlineSpotShadowColor = color
-
     }
 
-    private fun updatePreviewIcon(drawableResId: Int,) {
+    private fun updatePreviewIcon(drawableResId: Int) {
         binding.previewIcon.setImageResource(drawableResId)
     }
 
@@ -222,5 +236,12 @@ class AddShopFragment : Fragment() {
         // Avoid memory leak
         _binding = null
     }
+
+    override fun onIconTextEntered(text: String) {
+        binding.initialsPreview.text = text
+        shopInitials = text
+    }
+
+
 
 }
