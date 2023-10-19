@@ -10,9 +10,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.card.MaterialCardView
 import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.domain.model.Shop
 
@@ -29,7 +29,7 @@ class ShopAdapter(private val shops: List<Shop>) :
         fun bind(shop: Shop) {
             shopNameTextView.text = shop.name
             val color = ContextCompat.getColor(itemView.context, shop.colorResId)
-            val cardView: MaterialCardView = itemView.findViewById(R.id.cv_shop)
+            val cardView: CardView = itemView.findViewById(R.id.cv_shop)
 
             // If the shop has initials, display them and hide the icon
             if (!shop.initials.isNullOrEmpty()) {
@@ -53,7 +53,8 @@ class ShopAdapter(private val shops: List<Shop>) :
             shadowLayer.setColor(color)
             cardView.background = shadowDrawable
             cardView.outlineSpotShadowColor = color
-            cardView.outlineAmbientShadowColor = color
+
+
         }
 
 

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cv_shop"
     android:layout_width="100dp"
+    android:layout_marginStart="12dp"
+    android:layout_marginBottom="24dp"
     android:layout_height="wrap_content"
     android:minHeight="125dp"
-    android:background="@drawable/custom_shadow"
-    android:outlineAmbientShadowColor="@color/shop_red"
+    android:background="@color/white"
     app:cardCornerRadius="6dp"
     app:cardElevation="8dp">
 
@@ -40,16 +41,17 @@
 
         <TextView
             android:id="@+id/badge_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:background="@drawable/badge_background"
+            android:text="6"
             android:gravity="center"
-            android:visibility="gone"
-            android:padding="4dp"
-            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/black"
             android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="@+id/shop_icon"
-            app:layout_constraintTop_toTopOf="@+id/shop_icon" />
+            app:layout_constraintStart_toEndOf="@+id/shop_icon"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
@@ -68,5 +70,5 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</com.google.android.material.card.MaterialCardView>
+</androidx.cardview.widget.CardView>
 

@@ -19,6 +19,7 @@
     <color name="colorAccent">#FFC107</color> <!-- Amber -->
     <color name="colorSecondaryLight">#FFECB3</color> <!-- Amber Light -->
     <color name="colorSecondaryDark">#FFA000</color> <!-- Amber Dark -->
+    <color name="badge">#E9EBEF</color> <!-- Light Gray -->
 
     <!-- Background Color -->
     <color name="card_view">#FAFAFA</color> <!-- Alabaster -->

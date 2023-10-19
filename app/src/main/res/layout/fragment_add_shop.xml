@@ -401,6 +401,7 @@
                     android:minHeight="125dp"
                     android:outlineSpotShadowColor="@color/inactive_grey"
                     app:cardCornerRadius="6dp"
+                    android:background="@drawable/custom_shadow"
                     app:cardElevation="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
