@@ -15,7 +15,8 @@ import java.util.Date
     )]
 )
 data class Item(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
     val name: String,
     val description: String,
     val shopId: Long,

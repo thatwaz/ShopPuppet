@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/myShopsFragment"
+        android:id="@+id/shopsFragment"
         android:icon="@drawable/ic_store"
         android:iconTint="@color/colorPrimaryDark"
         android:title="My Shops" />
     <item
-        android:id="@+id/shoppingListFragment"
+        android:id="@+id/listFragment"
         android:icon="@drawable/ic_list"
         android:iconTint="@color/colorPrimaryDark"
         android:title="My List" />

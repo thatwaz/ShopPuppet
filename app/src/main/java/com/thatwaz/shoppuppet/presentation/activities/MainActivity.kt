@@ -7,7 +7,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.ActivityMainBinding
 
@@ -25,8 +24,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+
+
+//        val navHostFragment = supportFragmentManager
+//            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
         val toolbar: Toolbar = findViewById(R.id.app_toolbar)
@@ -34,7 +36,8 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(false)  // Ensure up button is not displayed
 
         // Setup BottomNavigationView with NavController
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bnv_shop_puppet)
+        val bottomNavigationView = binding.bnvShopPuppet
+
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
 
         // Set the title of ActionBar based on the label of the current destination
@@ -44,6 +47,7 @@ class MainActivity : AppCompatActivity() {
                     // Hide the BottomNavigationView when in AddShopsFragment
                     binding.bnvShopPuppet.visibility = View.GONE
                 }
+
 
                 else -> {
                     // Show the BottomNavigationView for all other fragments
