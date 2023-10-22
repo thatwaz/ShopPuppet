@@ -19,18 +19,20 @@ class CustomIconDialogFragment : DialogFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        // If the dialog is shown from an activity
-        if (context is CustomIconDialogListener) {
-            listener = context
-        }
+
         // If the dialog is shown from a fragment
-        else if (parentFragment is CustomIconDialogListener) {
+        if (parentFragment is CustomIconDialogListener) {
             listener = parentFragment as CustomIconDialogListener
+        }
+        // If the dialog is shown from an activity
+        else if (context is CustomIconDialogListener) {
+            listener = context
         }
         else {
             throw ClassCastException("$context must implement CustomIconDialogListener")
         }
     }
+
 
 
 

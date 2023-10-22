@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_shopsFragment_to_listFragment"
             app:destination="@id/listFragment" />
+        <action
+            android:id="@+id/action_shopsFragment_to_storeSpecificListFragment"
+            app:destination="@id/storeSpecificListFragment" />
     </fragment>
     <fragment
         android:id="@+id/listFragment"
@@ -35,4 +38,9 @@
             android:id="@+id/action_addShopFragment_to_shopsFragment"
             app:destination="@id/shopsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/storeSpecificListFragment"
+        android:name="com.thatwaz.shoppuppet.presentation.fragments.StoreSpecificListFragment"
+        android:label="fragment_store_specific_list"
+        tools:layout="@layout/fragment_store_specific_list" />
 </navigation>

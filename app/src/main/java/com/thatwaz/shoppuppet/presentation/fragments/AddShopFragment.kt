@@ -1,240 +1,156 @@
 package com.thatwaz.shoppuppet.presentation.fragments
 
 
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.FragmentAddShopBinding
-import com.thatwaz.shoppuppet.domain.model.Shop
-import com.thatwaz.shoppuppet.util.mock.MockDataStore
+import com.thatwaz.shoppuppet.presentation.viewmodel.AddShopViewModel
+import com.thatwaz.shoppuppet.util.ColorUtils
+import com.thatwaz.shoppuppet.util.IconUtils
+import com.thatwaz.shoppuppet.util.KeyboardUtils
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogListener {
-    // Declare your binding variable
+
+    private val viewModel: AddShopViewModel by viewModels()
     private var _binding: FragmentAddShopBinding? = null
     private val binding get() = _binding!!
 
     private var selectedIconRef: Int? = null
     private var selectedColor: Int = R.color.black
     private var shopInitials: String? = null
+
+    private val iconClickListener = View.OnClickListener { view ->
+        val iconResId = IconUtils.getIconResId(view.id)
+        iconResId?.let {
+            updatePreviewIcon(it)
+            selectedIconRef = it
+        }
+    }
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Initialize the binding object
         _binding = FragmentAddShopBinding.inflate(inflater, container, false)
-
-        // Initially set your CardView as gone
-        binding.cvChooseIcon.visibility = View.GONE
-
-        binding.ibAlphabet.setOnClickListener {
-            val dialog = CustomIconDialogFragment()
-            dialog.show(childFragmentManager, "CustomIconDialog")
-        }
-
-        binding.btnShopIcon.setOnClickListener {
-            binding.cvChooseColor.visibility = View.VISIBLE
-            binding.cvChooseIcon.visibility = View.GONE
-            binding.btnShopIcon.visibility = View.GONE
-        }
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnShopName.setOnClickListener {
-            val enteredText = binding.etShopName.text.toString()
-            binding.shopNamePreview.text = enteredText
-            binding.etShopName.isEnabled = false
-            binding.btnShopIcon.visibility = View.VISIBLE
-
-            // Dim the EditText
-            binding.etShopName.alpha = 0.5f
-            binding.btnShopName.alpha = 0.5f
-            // You might want to add some validation logic for the EditText here
-
-            // Make the CardView visible
-            binding.cvChooseIcon.visibility = View.VISIBLE
-
-            // Optionally hide the keyboard after button press
-            hideKeyboard()
-
-            val iconClickListener = View.OnClickListener { view ->
-                when (view.id) {
-                    R.id.ib_grocery_store -> {
-                        updatePreviewIcon(R.drawable.ic_grocery_store)
-                        selectedIconRef = R.drawable.ic_grocery_store
-                    }
-
-                    R.id.ib_pharmacy -> {
-                        updatePreviewIcon(R.drawable.ic_pharmacy)
-                        selectedIconRef = R.drawable.ic_pharmacy
-                    }
-
-                    R.id.ib_hardware -> {
-                        updatePreviewIcon(R.drawable.ic_hardware)
-                        selectedIconRef = R.drawable.ic_hardware
-                    }
-
-                    R.id.ib_storefront -> {
-                        updatePreviewIcon(R.drawable.ic_storefront)
-                        selectedIconRef = R.drawable.ic_storefront
-                    }
-
-                    R.id.ib_television -> {
-                        updatePreviewIcon(R.drawable.ic_television)
-                        selectedIconRef = R.drawable.ic_television
-                    }
-
-                    R.id.ib_shopping_bag -> {
-                        updatePreviewIcon(R.drawable.ic_shopping_bag)
-                        selectedIconRef = R.drawable.ic_shopping_bag
-                    }
-
-                    R.id.ib_store -> {
-                        updatePreviewIcon(R.drawable.ic_store)
-                        selectedIconRef = R.drawable.ic_store
-                    }
-
-                    R.id.ib_stroller -> {
-                        updatePreviewIcon(R.drawable.ic_stroller)
-                        selectedIconRef = R.drawable.ic_stroller
-                    }
-
-                    R.id.ib_books -> {
-                        updatePreviewIcon(R.drawable.ic_books)
-                        selectedIconRef = R.drawable.ic_books
-                    }
-
-                    R.id.ib_bullseye -> {
-                        updatePreviewIcon(R.drawable.ic_bullseye)
-                        selectedIconRef = R.drawable.ic_bullseye
-                    }
-
-
-                }
-            }
-
-            binding.apply {
-                ibGroceryStore.setOnClickListener(iconClickListener)
-                ibPharmacy.setOnClickListener(iconClickListener)
-                ibHardware.setOnClickListener(iconClickListener)
-                ibStorefront.setOnClickListener(iconClickListener)
-                ibTelevision.setOnClickListener(iconClickListener)
-                ibShoppingBag.setOnClickListener(iconClickListener)
-                ibStore.setOnClickListener(iconClickListener)
-                ibStroller.setOnClickListener(iconClickListener)
-                ibBooks.setOnClickListener(iconClickListener)
-                ibBullseye.setOnClickListener(iconClickListener)
-            }
-            @RequiresApi(Build.VERSION_CODES.P)
-            fun onColorClicked(view: View) {
-                selectedColor = when (view.id) {
-                    R.id.shop_blue -> R.color.shop_blue
-                    R.id.shop_green -> R.color.shop_green
-                    R.id.shop_fashion_red -> R.color.shop_fashion_red
-                    R.id.shop_dark_gray -> R.color.shop_dark_gray
-                    R.id.shop_red -> R.color.shop_red
-                    R.id.shop_orange -> R.color.shop_orange
-                    R.id.shop_pink -> R.color.shop_pink
-                    R.id.shop_navy_blue -> R.color.shop_navy_blue
-                    R.id.shop_yellow -> R.color.shop_yellow
-                    R.id.shop_purple -> R.color.shop_purple
-                    R.id.shop_teal -> R.color.shop_teal
-                    R.id.shop_brown -> R.color.shop_brown
-                    // ... other color mappings ...
-                    else -> return
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    updateIconColor(selectedColor)
-                }
-            }
-
-            binding.apply {
-                shopBlue.setOnClickListener(::onColorClicked)
-                shopGreen.setOnClickListener(::onColorClicked)
-                shopFashionRed.setOnClickListener(::onColorClicked)
-                shopDarkGray.setOnClickListener(::onColorClicked)
-                shopRed.setOnClickListener(::onColorClicked)
-                shopOrange.setOnClickListener(::onColorClicked)
-                shopPink.setOnClickListener(::onColorClicked)
-                shopNavyBlue.setOnClickListener(::onColorClicked)
-                shopYellow.setOnClickListener(::onColorClicked)
-                shopPurple.setOnClickListener(::onColorClicked)
-                shopPink.setOnClickListener(::onColorClicked)
-                shopTeal.setOnClickListener(::onColorClicked)
-                shopBrown.setOnClickListener(::onColorClicked)
-
-            }
+        initializeViews()
+        viewModel.shopName.observe(viewLifecycleOwner) { name ->
+            binding.shopNamePreview.text = name
         }
 
-        binding.btnSaveShop.setOnClickListener {
-            // Capture the shop name from the EditText
-            val shopName = binding.etShopName.text.toString()
+    }
 
-            // Validate the shop name to ensure it's not empty
-            if (shopName.isNotBlank()) {
-                // Use the selectedIconRef or a default icon if it's null
-                val iconRef = selectedIconRef ?: R.drawable.ic_grocery_store
+    private fun initializeViews() {
+        binding.apply {
+            cvChooseIcon.visibility = View.GONE
+            ibAlphabet.setOnClickListener { showIconDialog() }
+            btnShopIcon.setOnClickListener { toggleIconView() }
+            btnShopName.setOnClickListener { handleShopNameInput() }
+            btnSaveShop.setOnClickListener { handleShopSave() }
+        }
+        setupIconClickListeners()
+        setupColorClickListeners()
+    }
 
-                // Save the shop to the MockDataStore
-                val newShop = Shop(
-                    name = shopName,
-                    iconRef = iconRef,
-                    colorResId = selectedColor,
-                    initials = shopInitials
-                )
-                MockDataStore.addShop(newShop)
+    private fun showIconDialog() {
+        val dialog = CustomIconDialogFragment()
+        dialog.show(childFragmentManager, "CustomIconDialog")
+    }
 
+    private fun toggleIconView() {
+        binding.apply {
+            cvChooseColor.visibility = View.VISIBLE
+            cvChooseIcon.visibility = View.GONE
+            btnShopIcon.visibility = View.GONE
+        }
+    }
 
-                // Optionally: Provide some user feedback, like a Toast
+    private fun onColorClicked(view: View) {
+        val colorResId = ColorUtils.getColorResId(view.id)
+        colorResId?.let {
+            selectedColor = it
+            ColorUtils.updateIconColor(binding, it, requireContext())
+        }
+    }
+
+    private fun handleShopNameInput() {
+        val enteredText = binding.etShopName.text.toString()
+        binding.apply {
+            shopNamePreview.text = enteredText
+            etShopName.isEnabled = false
+            btnShopIcon.visibility = View.VISIBLE
+            etShopName.alpha = 0.5f
+            btnShopName.alpha = 0.5f
+            cvChooseIcon.visibility = View.VISIBLE
+        }
+        KeyboardUtils.hideKeyboard(requireView())
+    }
+
+    private fun handleShopSave() {
+        val shopName = binding.etShopName.text.toString()
+        if (shopName.isNotBlank()) {
+            viewModel.updateShopName(shopName)
+            viewModel.updateSelectedIconRef(selectedIconRef ?: R.drawable.ic_grocery_store)
+            viewModel.updateSelectedColor(selectedColor)
+            viewModel.updateShopInitials(shopInitials)
+
+            if (viewModel.saveShop()) {
                 Toast.makeText(context, "Shop saved!", Toast.LENGTH_SHORT).show()
-
-                // Navigate back to the ShopsFragment or reset the AddShopFragment UI
-                val action = AddShopFragmentDirections
-                    .actionAddShopFragmentToShopsFragment()
-                findNavController().navigate(action)
+                navigateToShopsFragment()
             } else {
-                // Inform the user if the shop name is not valid
-                Toast.makeText(context, "Please enter a valid shop name.", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(context, "Failed to save shop. Try again.", Toast.LENGTH_SHORT).show()
             }
+        } else {
+            Toast.makeText(context, "Please enter a valid shop name.", Toast.LENGTH_SHORT).show()
         }
-
     }
 
-    private fun hideKeyboard() {
-        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        imm?.hideSoftInputFromWindow(view?.windowToken, 0)
+
+
+    private fun navigateToShopsFragment() {
+        val action = AddShopFragmentDirections.actionAddShopFragmentToShopsFragment()
+        findNavController().navigate(action)
     }
 
-    @RequiresApi(Build.VERSION_CODES.P)
-    private fun updateIconColor(colorResId: Int) {
-        val color = ContextCompat.getColor(requireContext(), colorResId)
-        binding.previewIcon.setColorFilter(color)
-        binding.initialsPreview.setTextColor(color)
-        binding.cvShopPreview.outlineSpotShadowColor = color
+    private fun setupIconClickListeners() {
+        val icons = listOf(
+            binding.ibGroceryStore, binding.ibPharmacy, binding.ibHardware, binding.ibStorefront,
+            binding.ibTelevision, binding.ibShoppingBag, binding.ibStore,
+            binding.ibStroller, binding.ibBooks, binding.ibBullseye
+        )
+        icons.forEach { it.setOnClickListener(iconClickListener) }
+    }
+
+    private fun setupColorClickListeners() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val colors = listOf(
+                binding.shopBlue, binding.shopGreen, binding.shopFashionRed, binding.shopDarkGray,
+                binding.shopRed, binding.shopOrange, binding.shopPink, binding.shopNavyBlue,
+                binding.shopYellow, binding.shopPurple, binding.shopTeal, binding.shopBrown
+            )
+            colors.forEach { it.setOnClickListener(::onColorClicked) }
+        } else {
+            // Handle UI setup for devices below API 28 or hide certain UI elements.
+        }
     }
 
     private fun updatePreviewIcon(drawableResId: Int) {
         binding.previewIcon.setImageResource(drawableResId)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        // Avoid memory leak
-        _binding = null
     }
 
     override fun onIconTextEntered(text: String) {
@@ -242,6 +158,9 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         shopInitials = text
     }
 
-
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
+

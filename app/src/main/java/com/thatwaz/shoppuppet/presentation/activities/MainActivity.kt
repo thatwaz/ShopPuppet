@@ -9,11 +9,12 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 // u.i. design 09/23/2023 - 10/4/2023
 // Official start date 10/5/2023
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
