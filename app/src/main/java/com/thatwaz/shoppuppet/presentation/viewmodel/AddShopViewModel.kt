@@ -1,9 +1,11 @@
 package com.thatwaz.shoppuppet.presentation.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.data.repository.ShopRepository
@@ -34,6 +36,13 @@ class AddShopViewModel @Inject constructor(
 
     private val _shopInitials = MutableLiveData<String?>()
     val shopInitials: LiveData<String?> get() = _shopInitials
+
+    val allShops: LiveData<List<Shop>> = liveData {
+        val shops = repository.getAllShops()
+        Log.d("ShopViewModel", "Retrieved shops: $shops")
+        emit(shops)
+    }
+
 
     fun updateShopName(name: String) {
         _shopName.value = name

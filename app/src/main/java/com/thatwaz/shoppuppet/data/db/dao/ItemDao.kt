@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.thatwaz.shoppuppet.domain.model.Item
-import java.util.Date
 
 @Dao
 interface ItemDao {
@@ -40,12 +39,12 @@ interface ItemDao {
     suspend fun getPurchasedItems(): List<Item>
 
     // Get items purchased within the last 30 days
-    @Query("SELECT * FROM items WHERE lastPurchasedDate >= :dateCutoff")
-    suspend fun getRecentPurchases(dateCutoff: Date): List<Item>
-
-    // Update the last purchased date for an item
-    @Query("UPDATE Items SET lastPurchasedDate = :date WHERE id = :itemId")
-    suspend fun updateLastPurchasedDate(itemId: Long, date: Date)
+//    @Query("SELECT * FROM items WHERE lastPurchasedDate >= :dateCutoff")
+//    suspend fun getRecentPurchases(dateCutoff: Date): List<Item>
+//
+//    // Update the last purchased date for an item
+//    @Query("UPDATE Items SET lastPurchasedDate = :date WHERE id = :itemId")
+//    suspend fun updateLastPurchasedDate(itemId: Long, date: Date)
 
 }
 

@@ -12,7 +12,9 @@ class ShopRepository @Inject constructor(private val shopDao: ShopDao) {
     suspend fun insertShop(shop: Shop): Long = shopDao.insert(shop)
 
     // Retrieve all shops
+
     suspend fun getAllShops(): List<Shop> = shopDao.getAllShops()
+
 
     // Retrieve a shop by its ID
     suspend fun getShopById(shopId: Long): Shop? = shopDao.getShopById(shopId)
