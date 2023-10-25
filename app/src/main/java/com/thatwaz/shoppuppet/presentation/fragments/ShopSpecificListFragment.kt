@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import com.thatwaz.shoppuppet.R
 
 
-class StoreSpecificListFragment : Fragment() {
+class ShopSpecificListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

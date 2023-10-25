@@ -1,7 +1,6 @@
 package com.thatwaz.shoppuppet.presentation.adapters
 
 import android.content.res.ColorStateList
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -13,29 +12,29 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.thatwaz.shoppuppet.R
-import com.thatwaz.shoppuppet.domain.model.ShoppingItem
+import com.thatwaz.shoppuppet.domain.model.Item
+import com.thatwaz.shoppuppet.domain.model.Shop
 
 
-class ListAdapter(initialItems: List<ShoppingItem>) :
+class ListAdapter(initialItems: List<Item>, initialShopsMap: Map<Item, List<Shop>>) :
     RecyclerView.Adapter<ListAdapter.ShoppingViewHolder>() {
 
-    private val items: MutableList<ShoppingItem> = initialItems.toMutableList()
+    private val items: MutableList<Item> = initialItems.toMutableList()
+    private val shopsMap: MutableMap<Item, List<Shop>> = initialShopsMap.toMutableMap()
 
-
-    // Inner class for the ViewHolder
     inner class ShoppingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvItemName: TextView = itemView.findViewById(R.id.tv_item_name)
         val chipGroupShops: ChipGroup = itemView.findViewById(R.id.chipGroupShops)
         val imgDropdown: ImageView = itemView.findViewById(R.id.img_drop_down)
 
-        fun bind(item: ShoppingItem) {
+        fun bind(item: Item) {
             tvItemName.text = item.name
 
-            // Clear any existing chips (important for recycling views)
+            // Clear any existing chips
             chipGroupShops.removeAllViews()
 
             // Populate chips based on the shops
-            for (shop in item.shops) {
+            shopsMap[item]?.forEach { shop ->
                 val chip = Chip(itemView.context)
                 chip.setChipBackgroundColorResource(R.color.off_white)
                 val strokeColor = ContextCompat.getColor(itemView.context, R.color.shop_blue)
@@ -45,7 +44,7 @@ class ListAdapter(initialItems: List<ShoppingItem>) :
                     1f,
                     itemView.resources.displayMetrics
                 )
-                chip.text = shop
+                chip.text = shop.name
                 chip.isClickable = false
                 chip.isCheckable = false
                 chipGroupShops.addView(chip)
@@ -59,7 +58,7 @@ class ListAdapter(initialItems: List<ShoppingItem>) :
                             it.context,
                             R.drawable.ic_arrow_down
                         )
-                    )  // Change to your arrow pointing down image
+                    )
                 } else {
                     chipGroupShops.visibility = View.VISIBLE
                     imgDropdown.setImageDrawable(
@@ -67,39 +66,121 @@ class ListAdapter(initialItems: List<ShoppingItem>) :
                             it.context,
                             R.drawable.ic_arrow_up
                         )
-                    )  // Change to your arrow pointing up image
+                    )
                 }
             }
-
-
         }
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShoppingViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.shopping_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.shopping_item, parent, false)
         return ShoppingViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ShoppingViewHolder, position: Int) {
-        // Use the bind method to set up the views for the current item
         holder.bind(items[position])
     }
 
-    fun updateData(newData: List<ShoppingItem>) {
+    fun updateData(newData: List<Item>, newShopsMap: Map<Item, List<Shop>>) {
         items.clear()
+        shopsMap.clear()
         items.addAll(newData)
-        Log.d("Adapter", "Updated data. Item count: ${items.size}")
+        shopsMap.putAll(newShopsMap)
         notifyDataSetChanged()
     }
 
-
-    override fun getItemCount(): Int {
-        Log.d("Adapter", "Getting item count: ${items.size}")
-        return items.size
-    }
-
-
+    override fun getItemCount(): Int = items.size
 }
+
+
+
+
+
+
+//class ListAdapter(initialItems: List<ShoppingItem>) :
+//    RecyclerView.Adapter<ListAdapter.ShoppingViewHolder>() {
+//
+//    private val items: MutableList<ShoppingItem> = initialItems.toMutableList()
+//
+//
+//    // Inner class for the ViewHolder
+//    inner class ShoppingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+//        val tvItemName: TextView = itemView.findViewById(R.id.tv_item_name)
+//        val chipGroupShops: ChipGroup = itemView.findViewById(R.id.chipGroupShops)
+//        val imgDropdown: ImageView = itemView.findViewById(R.id.img_drop_down)
+//
+//        fun bind(item: ShoppingItem) {
+//            tvItemName.text = item.name
+//
+//            // Clear any existing chips (important for recycling views)
+//            chipGroupShops.removeAllViews()
+//
+//            // Populate chips based on the shops
+//            for (shop in item.shops) {
+//                val chip = Chip(itemView.context)
+//                chip.setChipBackgroundColorResource(R.color.off_white)
+//                val strokeColor = ContextCompat.getColor(itemView.context, R.color.shop_blue)
+//                chip.chipStrokeColor = ColorStateList.valueOf(strokeColor)
+//                chip.chipStrokeWidth = TypedValue.applyDimension(
+//                    TypedValue.COMPLEX_UNIT_DIP,
+//                    1f,
+//                    itemView.resources.displayMetrics
+//                )
+//                chip.text = shop
+//                chip.isClickable = false
+//                chip.isCheckable = false
+//                chipGroupShops.addView(chip)
+//            }
+//
+//            imgDropdown.setOnClickListener {
+//                if (chipGroupShops.visibility == View.VISIBLE) {
+//                    chipGroupShops.visibility = View.GONE
+//                    imgDropdown.setImageDrawable(
+//                        ContextCompat.getDrawable(
+//                            it.context,
+//                            R.drawable.ic_arrow_down
+//                        )
+//                    )  // Change to your arrow pointing down image
+//                } else {
+//                    chipGroupShops.visibility = View.VISIBLE
+//                    imgDropdown.setImageDrawable(
+//                        ContextCompat.getDrawable(
+//                            it.context,
+//                            R.drawable.ic_arrow_up
+//                        )
+//                    )  // Change to your arrow pointing up image
+//                }
+//            }
+//
+//
+//        }
+//    }
+//
+//
+//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShoppingViewHolder {
+//        val view =
+//            LayoutInflater.from(parent.context).inflate(R.layout.shopping_item, parent, false)
+//        return ShoppingViewHolder(view)
+//    }
+//
+//    override fun onBindViewHolder(holder: ShoppingViewHolder, position: Int) {
+//        // Use the bind method to set up the views for the current item
+//        holder.bind(items[position])
+//    }
+//
+//    fun updateData(newData: List<Item>) {
+//        items.clear()
+//        items.addAll(newData)
+//        Log.d("Adapter", "Updated data. Item count: ${items.size}")
+//        notifyDataSetChanged()
+//    }
+//
+//
+//    override fun getItemCount(): Int {
+//        Log.d("Adapter", "Getting item count: ${items.size}")
+//        return items.size
+//    }
+//
+//
+//}
 
