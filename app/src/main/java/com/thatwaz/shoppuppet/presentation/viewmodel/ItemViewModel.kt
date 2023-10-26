@@ -34,11 +34,39 @@ class ItemViewModel @Inject constructor(
         viewModelScope.launch {
             val allItems = itemRepository.getAllItems()
             allItems.forEach { item ->
-                val associatedShops = shopRepository.getShopsForItem(item.id)
+                val associatedShopIds = crossRefRepository.getShopIdsForItem(item.id)
+                val associatedShops = shopRepository.getShopsByIds(associatedShopIds)
                 Log.d("ItemViewModel", "Item name: ${item.name}, Associated Shops: ${associatedShops.joinToString { it.name }}")
             }
         }
     }
+
+
+//    fun logAssociatedShopsForItem(itemId: Long) {
+//        viewModelScope.launch {
+//            val item = itemRepository.getItemById(itemId)
+//            val associatedShops = shopRepository.getShopsForItem(itemId)
+//            Log.d("ItemViewModel", "Item name: ${item?.name}, Associated Shops: ${associatedShops.joinToString { it.name }}")
+//        }
+//    }
+
+    fun logAllItemShopAssociations() {
+        viewModelScope.launch {
+            crossRefRepository.logAllAssociations()
+        }
+    }
+
+
+
+//    fun logItemsWithAssociatedShops() {
+//        viewModelScope.launch {
+//            val allItems = itemRepository.getAllItems()
+//            allItems.forEach { item ->
+//                val associatedShops = shopRepository.getShopsForItem(item.id)
+//                Log.d("ItemViewModel", "Item name: ${item.name}, Associated Shops: ${associatedShops.joinToString { it.name }}")
+//            }
+//        }
+//    }
 
 
 

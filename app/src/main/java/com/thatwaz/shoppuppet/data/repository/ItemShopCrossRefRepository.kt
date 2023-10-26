@@ -1,5 +1,6 @@
 package com.thatwaz.shoppuppet.data.repository
 
+import android.util.Log
 import com.thatwaz.shoppuppet.data.db.dao.ItemShopCrossRefDao
 import com.thatwaz.shoppuppet.domain.model.ItemShopCrossRef
 import javax.inject.Inject
@@ -16,6 +17,26 @@ class ItemShopCrossRefRepository @Inject constructor(private val crossRefDao: It
     suspend fun removeAssociationBetweenItemAndShop(itemId: Long, shopId: Long) {
         crossRefDao.deleteCrossRef(itemId, shopId)
     }
+
+    suspend fun logAllAssociations() {
+        val allAssociations = crossRefDao.getAllAssociations()
+        allAssociations.forEach { association ->
+            Log.d("CrossRefRepository", "Item ID: ${association.itemId}, Shop ID: ${association.shopId}")
+        }
+    }
+
+    suspend fun getShopIdsForItem(itemId: Long): List<Long> {
+        return crossRefDao.getShopIdsForItem(itemId)
+    }
+
+
+
+//    suspend fun logAllAssociations() {
+//        val allAssociations = ItemShopCrossRefDao.getAllAssociations()
+//        allAssociations.forEach { association ->
+//            Log.d("CrossRefRepository", "Item ID: ${association.itemId}, Shop ID: ${association.shopId}")
+//        }
+//    }
 
     // Other related methods...
 }

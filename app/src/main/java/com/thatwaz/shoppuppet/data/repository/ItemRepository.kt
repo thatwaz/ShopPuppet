@@ -17,6 +17,12 @@ class ItemRepository @Inject constructor(private val itemDao: ItemDao) {
     // Insert a new item
     suspend fun insertItem(item: Item): Long = itemDao.insert(item)
 
+    suspend fun getItemById(itemId: Long): Item? = itemDao.getItemById(itemId)
+
+
+
+
+
     // Update an item's details
     suspend fun updateItem(item: Item) = itemDao.updateItem(item)
 

@@ -52,6 +52,9 @@ interface ItemDao {
 //    @Query("SELECT COUNT(*) FROM items WHERE shopId = :shopId")
 //    suspend fun getItemsCountForShop(shopId: Long): Int
 
+    @Query("SELECT * FROM items WHERE id = :itemId")
+    suspend fun getItemById(itemId: Long): Item?
+
     @Query("UPDATE Items SET isPurchased = :purchased WHERE id = :itemId")
     suspend fun setItemPurchasedStatus(itemId: Long, purchased: Boolean)
 

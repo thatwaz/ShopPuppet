@@ -36,7 +36,17 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+//        viewModel.logAssociatedShopsForItem()
+        viewModel.fetchAllItems()
+        viewModel.logAllItemShopAssociations()
         viewModel.logItemsWithAssociatedShops()
+//        viewModel.items.observe(viewLifecycleOwner, { items ->
+//            items.forEach { item ->
+//                viewModel.logAssociatedShopsForItem(item.id)
+//            }
+//            adapter.updateData(items, emptyMap())
+//        })
+
 
 
         adapter = ListAdapter(listOf(), emptyMap())

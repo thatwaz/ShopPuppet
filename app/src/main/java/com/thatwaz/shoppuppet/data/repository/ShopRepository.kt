@@ -1,5 +1,6 @@
 package com.thatwaz.shoppuppet.data.repository
 
+import android.util.Log
 import com.thatwaz.shoppuppet.data.db.dao.ShopDao
 import com.thatwaz.shoppuppet.domain.model.Item
 import com.thatwaz.shoppuppet.domain.model.Shop
@@ -33,9 +34,21 @@ class ShopRepository @Inject constructor(private val shopDao: ShopDao) {
         return shopDao.getItemsForShop(shopId)
     }
 
-    suspend fun getShopsForItem(itemId: Long): List<Shop> {
-        return shopDao.getShopsForItem(itemId)
+    suspend fun getShopsByIds(shopIds: List<Long>): List<Shop> {
+        return shopDao.getShopsByIds(shopIds)
     }
+
+
+    suspend fun getShopsForItem(itemId: Long): List<Shop> {
+        val shops = shopDao.getShopsForItem(itemId)
+        Log.d("ShopRepository", "Shops for item $itemId: ${shops.joinToString { it.name }}")
+        return shops
+    }
+
+
+//    suspend fun getShopsForItem(itemId: Long): List<Shop> {
+//        return shopDao.getShopsForItem(itemId)
+//    }
 
 
 }

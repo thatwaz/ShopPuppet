@@ -43,6 +43,7 @@ interface ShopDao {
     @Query("SELECT * FROM items INNER JOIN item_shop_cross_ref ON items.id = item_shop_cross_ref.itemId WHERE item_shop_cross_ref.shopId = :shopId")
     suspend fun getItemsForShop(shopId: Long): List<Item>
 
+
     @Query("""
     SELECT * FROM Shops 
     INNER JOIN item_shop_cross_ref
@@ -51,7 +52,8 @@ interface ShopDao {
 """)
     suspend fun getShopsForItem(itemId: Long): List<Shop>
 
-
+    @Query("SELECT * FROM shops WHERE id IN (:shopIds)")
+    suspend fun getShopsByIds(shopIds: List<Long>): List<Shop>
 
 }
 
