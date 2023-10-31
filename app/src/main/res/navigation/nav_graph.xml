@@ -10,6 +10,10 @@
         android:name="com.thatwaz.shoppuppet.presentation.fragments.ShopsFragment"
         android:label="My Shops"
         tools:layout="@layout/fragment_shops" >
+<!--        <argument-->
+<!--            android:name="shopId"-->
+<!--            app:argType="long"-->
+<!--            android:defaultValue="-1" />-->
         <action
             android:id="@+id/action_shopsFragment_to_addShopFragment"
             app:destination="@id/addShopFragment" />
@@ -19,6 +23,7 @@
         <action
             android:id="@+id/action_shopsFragment_to_storeSpecificListFragment"
             app:destination="@id/storeSpecificListFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/listFragment"
@@ -28,6 +33,10 @@
         <action
             android:id="@+id/action_listFragment_to_shopsFragment"
             app:destination="@id/shopsFragment" />
+        <action
+            android:id="@+id/action_listFragment_to_addItemFragment"
+            app:destination="@id/addItemFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/addShopFragment"
@@ -41,6 +50,30 @@
     <fragment
         android:id="@+id/storeSpecificListFragment"
         android:name="com.thatwaz.shoppuppet.presentation.fragments.ShopSpecificListFragment"
-        android:label="fragment_store_specific_list"
-        tools:layout="@layout/fragment_store_specific_list" />
+        android:label="Shop Specific List"
+        tools:layout="@layout/fragment_shop_specific_list">
+
+    </fragment>
+    <fragment
+        android:id="@+id/addItemFragment"
+        android:name="com.thatwaz.shoppuppet.presentation.fragments.AddItemFragment"
+        android:label="fragment_add_item"
+        tools:layout="@layout/fragment_add_item" >
+        <action
+            android:id="@+id/action_addItemFragment_to_listFragment"
+            app:destination="@id/listFragment" />
+        <action
+            android:id="@+id/action_addItemFragment_to_tagItemToShopsFragment"
+            app:destination="@id/tagItemToShopsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tagItemToShopsFragment"
+        android:name="com.thatwaz.shoppuppet.presentation.fragments.TagItemToShopsFragment"
+        android:label="fragment_tag_item_to_shops"
+        tools:layout="@layout/fragment_tag_item_to_shops" >
+        <action
+            android:id="@+id/action_tagItemToShopsFragment_to_listFragment"
+            app:destination="@id/listFragment" />
+    </fragment>
+
 </navigation>

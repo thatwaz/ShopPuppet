@@ -9,6 +9,7 @@ import com.thatwaz.shoppuppet.data.repository.ItemRepository
 import com.thatwaz.shoppuppet.data.repository.ItemShopCrossRefRepository
 import com.thatwaz.shoppuppet.data.repository.ShopRepository
 import com.thatwaz.shoppuppet.domain.model.Item
+import com.thatwaz.shoppuppet.domain.model.ItemUiModel
 import com.thatwaz.shoppuppet.domain.model.Shop
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -30,51 +31,19 @@ class ItemViewModel @Inject constructor(
     private val _shops = MutableLiveData<List<Shop>>()
     val shops: LiveData<List<Shop>> get() = _shops
 
-    fun logItemsWithAssociatedShops() {
-        viewModelScope.launch {
-            val allItems = itemRepository.getAllItems()
-            allItems.forEach { item ->
-                val associatedShopIds = crossRefRepository.getShopIdsForItem(item.id)
-                val associatedShops = shopRepository.getShopsByIds(associatedShopIds)
-                Log.d("ItemViewModel", "Item name: ${item.name}, Associated Shops: ${associatedShops.joinToString { it.name }}")
-            }
-        }
-    }
+    private val _itemUiModels = MutableLiveData<List<ItemUiModel>>()
+    val itemUiModels: LiveData<List<ItemUiModel>> = _itemUiModels
 
+//    private val _refreshData = MediatorLiveData<Unit>()
+//    val refreshData: LiveData<Unit> get() = _refreshData
 
-//    fun logAssociatedShopsForItem(itemId: Long) {
-//        viewModelScope.launch {
-//            val item = itemRepository.getItemById(itemId)
-//            val associatedShops = shopRepository.getShopsForItem(itemId)
-//            Log.d("ItemViewModel", "Item name: ${item?.name}, Associated Shops: ${associatedShops.joinToString { it.name }}")
-//        }
-//    }
+    init {
+        fetchAllItems()
+        fetchAllShops()
 
-    fun logAllItemShopAssociations() {
-        viewModelScope.launch {
-            crossRefRepository.logAllAssociations()
-        }
-    }
-
-
-
-//    fun logItemsWithAssociatedShops() {
-//        viewModelScope.launch {
-//            val allItems = itemRepository.getAllItems()
-//            allItems.forEach { item ->
-//                val associatedShops = shopRepository.getShopsForItem(item.id)
-//                Log.d("ItemViewModel", "Item name: ${item.name}, Associated Shops: ${associatedShops.joinToString { it.name }}")
-//            }
-//        }
-//    }
-
-
-
-    // Function to fetch all items associated with a specific shop
-    fun fetchItemsForShop(shopId: Long) {
-        viewModelScope.launch {
-            _items.value = shopRepository.getItemsForShop(shopId)
-        }
+//        // Add items and shops as sources to the refreshData LiveData
+//        _refreshData.addSource(_items) { _refreshData.value = Unit }
+//        _refreshData.addSource(_shops) { _refreshData.value = Unit }
     }
 
     fun fetchAllItems() {
@@ -82,15 +51,24 @@ class ItemViewModel @Inject constructor(
             val allItems = itemRepository.getAllItems()
             _items.value = allItems
 
+
             // Log items
             allItems.forEach { item ->
                 Log.d("ItemViewModel", "Item name: ${item.name}, Item description: ${item.description}")
             }
         }
     }
-    init {
-        fetchAllItems()
+
+    fun deleteItemWithShops(item: Item) {
+        viewModelScope.launch {
+            // Delete the item and its associated shops
+            itemRepository.deleteItemWithShops(item)
+        }
     }
+
+
+
+
 
     // Function to fetch all shops
     fun fetchAllShops() {
@@ -105,10 +83,15 @@ class ItemViewModel @Inject constructor(
         }
     }
 
-    init {
+    fun refreshData() {
+        // Update the LiveData with the latest data
+        fetchAllItems()
         fetchAllShops()
     }
 
+
+
+    // Function to insert an item and associate it with given shops
 
     // Function to insert an item and associate it with given shops
     fun insertItemWithShops(item: Item, shopIds: List<Long>) {
@@ -117,10 +100,44 @@ class ItemViewModel @Inject constructor(
             shopIds.forEach { shopId ->
                 crossRefRepository.associateItemWithShop(itemId, shopId)
             }
+            // After the insertion, fetch all items again and update the _items LiveData
+
+        }
+        fetchAllItems()
+    }
+
+//    fun insertItemWithShops(item: Item, shopIds: List<Long>) {
+//        viewModelScope.launch {
+//            val itemId = itemRepository.insertItem(item)
+//            shopIds.forEach { shopId ->
+//                crossRefRepository.associateItemWithShop(itemId, shopId)
+//            }
+//        }
+//    }
+
+
+    fun logItemsWithAssociatedShops() {
+        viewModelScope.launch {
+            val allItems = itemRepository.getAllItems()
+
+            val uiModels = allItems.map { item ->
+                val associatedShopIds = crossRefRepository.getShopIdsForItem(item.id)
+                val associatedShops = shopRepository.getShopsByIds(associatedShopIds)
+
+                ItemUiModel(itemId = item.id, itemName = item.name, shopNames = associatedShops)
+            }
+
+
+            allItems.forEach { item ->
+                val associatedShopIds = crossRefRepository.getShopIdsForItem(item.id)
+                val associatedShops = shopRepository.getShopsByIds(associatedShopIds)
+                Log.d("ItemViewModel", "Item name: ${item.name}, Associated Shops: ${associatedShops.joinToString { it.name }}")
+
+            }
+            _itemUiModels.value = uiModels
         }
     }
 
-    // Add more functions as needed...
 }
 
 

@@ -21,7 +21,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/tv_unpurchased_label"
         app:layout_constraintBottom_toTopOf="@id/tv_purchased_label"
-        tools:listitem="@layout/item_store_specific"/>
+        tools:listitem="@layout/item_shop_specific"/>
 
     <TextView
         android:id="@+id/tv_purchased_label"
@@ -39,6 +39,6 @@
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/tv_purchased_label"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/item_store_specific"/>
+        tools:listitem="@layout/item_shop_specific"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

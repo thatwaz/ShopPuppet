@@ -23,7 +23,25 @@ import com.thatwaz.shoppuppet.domain.model.Shop
 class ShopAdapter : ListAdapter<Shop, ShopAdapter.ShopViewHolder>(ShopDiffCallback())
  {
 
-    inner class ShopViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+     interface OnShopItemClickListener {
+         fun onShopItemClick(shop: Shop)
+     }
+
+     var onShopItemClickListener: OnShopItemClickListener? = null
+
+
+     inner class ShopViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+
+         init {
+             itemView.setOnClickListener {
+                 val position = adapterPosition
+                 if (position != RecyclerView.NO_POSITION) {
+                     val shop = getItem(position)
+                     onShopItemClickListener?.onShopItemClick(shop)
+                 }
+             }
+         }
         val shopIconImageView: ImageView = itemView.findViewById(R.id.shop_icon)
         val shopNameTextView: TextView = itemView.findViewById(R.id.shop_name)
         val shopIconInitials: TextView = itemView.findViewById(R.id.shop_icon_initials)

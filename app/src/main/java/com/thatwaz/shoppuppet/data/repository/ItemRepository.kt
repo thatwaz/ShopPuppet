@@ -1,12 +1,16 @@
 package com.thatwaz.shoppuppet.data.repository
 
 import com.thatwaz.shoppuppet.data.db.dao.ItemDao
+import com.thatwaz.shoppuppet.data.db.dao.ItemShopCrossRefDao
 import com.thatwaz.shoppuppet.domain.model.Item
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ItemRepository @Inject constructor(private val itemDao: ItemDao) {
+class ItemRepository @Inject constructor(
+    private val itemDao: ItemDao,
+    private val itemShopCrossRefDao: ItemShopCrossRefDao
+) {
 
     // Get all items
     suspend fun getAllItems(): List<Item> = itemDao.getAllItems()
@@ -19,8 +23,16 @@ class ItemRepository @Inject constructor(private val itemDao: ItemDao) {
 
     suspend fun getItemById(itemId: Long): Item? = itemDao.getItemById(itemId)
 
+    suspend fun deleteItemWithShops(item: Item) {
+        // Step 1: Delete associations in item_shop_cross_ref
+        val shopIds = itemShopCrossRefDao.getShopIdsForItem(item.id)
+        for (shopId in shopIds) {
+            itemShopCrossRefDao.deleteCrossRef(item.id, shopId)
+        }
 
-
+        // Step 2: Delete the item itself
+        itemDao.deleteItem(item)
+    }
 
 
     // Update an item's details
@@ -36,7 +48,8 @@ class ItemRepository @Inject constructor(private val itemDao: ItemDao) {
     suspend fun getItemsCountForShop(shopId: Long): Int = itemDao.getItemsCountForShop(shopId)
 
     // Set item as purchased or not
-    suspend fun setItemPurchased(itemId: Long, purchased: Boolean) = itemDao.setItemPurchasedStatus(itemId, purchased)
+    suspend fun setItemPurchased(itemId: Long, purchased: Boolean) =
+        itemDao.setItemPurchasedStatus(itemId, purchased)
 
     // Get all purchased items
     suspend fun getPurchasedItems(): List<Item> = itemDao.getPurchasedItems()

@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.thatwaz.shoppuppet.databinding.FragmentShopsBinding
+import com.thatwaz.shoppuppet.domain.model.Shop
 import com.thatwaz.shoppuppet.presentation.adapters.ShopAdapter
 import com.thatwaz.shoppuppet.presentation.viewmodel.ShopsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,6 +37,19 @@ class ShopsFragment : Fragment() {
         setupRecyclerView()
         observeShopData()
         setupAddShopButton()
+
+
+        shopAdapter.onShopItemClickListener = object : ShopAdapter.OnShopItemClickListener {
+            override fun onShopItemClick(shop: Shop) {
+                // Here you define your navigation logic
+//                val shopId: Long = 1// get the shop ID from the selected shop
+//                val action = ShopsFragmentDirections.actionShopsFragmentToStoreSpecificListFragment(shopId)
+//                findNavController().navigate(action)
+
+//                val action = ShopsFragmentDirections.actionShopsFragmentToStoreSpecificListFragment()
+//                findNavController().navigate(action)
+            }
+        }
     }
 
     private fun setupRecyclerView() {
