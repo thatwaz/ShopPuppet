@@ -5,9 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.thatwaz.shoppuppet.databinding.FragmentAddItemBinding
-import com.thatwaz.shoppuppet.databinding.FragmentAddShopBinding
-import com.thatwaz.shoppuppet.databinding.FragmentListBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -24,6 +23,17 @@ class AddItemFragment : Fragment() {
     ): View? {
         _binding = FragmentAddItemBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.btnNext.setOnClickListener {
+            val action = AddItemFragmentDirections
+                .actionAddItemFragmentToTagItemToShopsFragment()
+            findNavController().navigate(action)
+
+
+        }
     }
 
 
