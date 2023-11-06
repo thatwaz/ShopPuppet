@@ -65,6 +65,8 @@
         <action
             android:id="@+id/action_addItemFragment_to_tagItemToShopsFragment"
             app:destination="@id/tagItemToShopsFragment" />
+
+
     </fragment>
     <fragment
         android:id="@+id/tagItemToShopsFragment"
@@ -74,6 +76,10 @@
         <action
             android:id="@+id/action_tagItemToShopsFragment_to_listFragment"
             app:destination="@id/listFragment" />
+        <argument
+            android:name="itemName"
+            app:argType="string"
+            android:defaultValue=""/>
     </fragment>
 
 </navigation>

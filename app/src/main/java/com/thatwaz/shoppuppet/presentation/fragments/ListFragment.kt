@@ -74,32 +74,6 @@ class ListFragment : Fragment() {
         }
     }
 
-//    private fun showShopListDialog() {
-//        val itemName = binding.etShoppingItem.text.toString()
-//
-//        if (itemName.isNotBlank()) {
-//            val shopNames = allShops.map { it.name }.toTypedArray()
-//            val shopIds = allShops.map { it.id }.toLongArray()
-//
-//            val builder = AlertDialog.Builder(requireContext())
-//            builder.setTitle("Select a Shop")
-//                .setSingleChoiceItems(shopNames, -1) { dialog, which ->
-//                    // Handle shop selection here
-//                    val selectedShopId = shopIds[which]
-//                    val newItem = Item(name = itemName, description = "")
-//                    val taggedShopIds = listOf(selectedShopId)
-//                    viewModel.insertItemWithShops(newItem, taggedShopIds)
-//                    binding.etShoppingItem.text.clear()
-//                    dialog.dismiss()
-//                }
-//                .setNegativeButton("Cancel") { dialog, _ ->
-//                    // Handle the negative button click if needed
-//                    dialog.dismiss()
-//                }
-//            val dialog = builder.create()
-//            dialog.show()
-//        }
-//    }
 
 
 
@@ -108,5 +82,4 @@ class ListFragment : Fragment() {
         _binding = null
     }
 }
-
 

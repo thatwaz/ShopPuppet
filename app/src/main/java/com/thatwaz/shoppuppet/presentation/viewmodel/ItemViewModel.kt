@@ -23,6 +23,12 @@ class ItemViewModel @Inject constructor(
     private val crossRefRepository: ItemShopCrossRefRepository
 ) : ViewModel() {
 
+    private val _itemName = MutableLiveData("")
+    var itemName: LiveData<String> = _itemName
+
+    private val _itemNameLiveData = MutableLiveData<String>()
+    var itemNameLiveData: MutableLiveData<String> = _itemNameLiveData
+
     // LiveData to observe changes in items
     private val _items = MutableLiveData<List<Item>>()
     val items: LiveData<List<Item>> get() = _items
@@ -33,6 +39,27 @@ class ItemViewModel @Inject constructor(
 
     private val _itemUiModels = MutableLiveData<List<ItemUiModel>>()
     val itemUiModels: LiveData<List<ItemUiModel>> = _itemUiModels
+
+    fun updateItemName(itemName: String) {
+        itemNameLiveData.value = itemName
+
+        Log.i("DOH!", "updateItemName called with itemName: $itemName")
+        Log.i("DOH!", "itemNameLiveData value: ${itemNameLiveData.value}")
+    }
+
+
+//    fun updateItemName(itemName: String) {
+//        itemNameLiveData.value = itemName
+//
+//        Log.i("DOH!","vm name is ${itemNameLiveData.value}")
+//    }
+
+
+    fun getItemNameLiveData(): LiveData<String> {
+        return _itemNameLiveData
+    }
+
+
 
 //    private val _refreshData = MediatorLiveData<Unit>()
 //    val refreshData: LiveData<Unit> get() = _refreshData

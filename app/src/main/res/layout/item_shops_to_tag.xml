@@ -16,9 +16,7 @@
     <!-- Shop name -->
     <TextView
         android:id="@+id/tv_shop_to_tag"
-        android:layout_width="275dp"
-        android:text="Fake Stuff"
-        android:textColor="@color/black"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textAppearance="?android:textAppearanceMedium"
