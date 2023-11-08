@@ -43,9 +43,9 @@ class ShopsFragment : Fragment() {
             override fun onShopItemClick(shop: Shop) {
                 // Here you define your navigation logic
 //                val shopId: Long = 1// get the shop ID from the selected shop
-//                val action = ShopsFragmentDirections.actionShopsFragmentToStoreSpecificListFragment(shopId)
-//                findNavController().navigate(action)
-
+                val action = ShopsFragmentDirections.actionShopsFragmentToStoreSpecificListFragment(shop.id)
+                findNavController().navigate(action)
+//
 //                val action = ShopsFragmentDirections.actionShopsFragmentToStoreSpecificListFragment()
 //                findNavController().navigate(action)
             }

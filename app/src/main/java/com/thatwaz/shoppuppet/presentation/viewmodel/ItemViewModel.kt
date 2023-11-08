@@ -46,31 +46,17 @@ class ItemViewModel @Inject constructor(
         Log.i("DOH!", "updateItemName called with itemName: $itemName")
         Log.i("DOH!", "itemNameLiveData value: ${itemNameLiveData.value}")
     }
-
-
-//    fun updateItemName(itemName: String) {
-//        itemNameLiveData.value = itemName
-//
-//        Log.i("DOH!","vm name is ${itemNameLiveData.value}")
-//    }
+    
 
 
     fun getItemNameLiveData(): LiveData<String> {
         return _itemNameLiveData
     }
 
-
-
-//    private val _refreshData = MediatorLiveData<Unit>()
-//    val refreshData: LiveData<Unit> get() = _refreshData
-
+    
     init {
         fetchAllItems()
         fetchAllShops()
-
-//        // Add items and shops as sources to the refreshData LiveData
-//        _refreshData.addSource(_items) { _refreshData.value = Unit }
-//        _refreshData.addSource(_shops) { _refreshData.value = Unit }
     }
 
     fun fetchAllItems() {
@@ -86,18 +72,47 @@ class ItemViewModel @Inject constructor(
         }
     }
 
+    fun findItemByUiModel(itemUiModel: ItemUiModel): Item? {
+        return items.value?.find { it.id == itemUiModel.itemId }
+    }
+
+
     fun deleteItemWithShops(item: Item) {
         viewModelScope.launch {
             // Delete the item and its associated shops
             itemRepository.deleteItemWithShops(item)
+
+            // Fetch the updated list of items and update
+
+
+
+            //*********************************  FOR DELETING SHOPS IN REAL TIME
+//            val updatedItems = itemRepository.getAllItems()
+//            _itemUiModels.value = convertItemsToUiModels(updatedItems)
         }
     }
 
+//    private fun convertItemsToUiModels(updatedItems: List<Item>): List<ItemUiModel> {
+//        val itemUiModels = mutableListOf<ItemUiModel>()
+//
+//        for (item in updatedItems) {
+//            // Create an ItemUiModel based on the properties of the Item
+//            val itemUiModel = ItemUiModel(
+//                itemId = item.id, // Assuming there is a unique identifier for items
+//                itemName = item.name,
+//                shopNames = getShopNamesForItem(item) // You need to implement this function
+//            )
+//
+//            itemUiModels.add(itemUiModel)
+//        }
+//
+//        return itemUiModels
+//    }
+
+    //********************************************* END
 
 
 
-
-    // Function to fetch all shops
     fun fetchAllShops() {
         viewModelScope.launch {
             _shops.value = shopRepository.getAllShops()

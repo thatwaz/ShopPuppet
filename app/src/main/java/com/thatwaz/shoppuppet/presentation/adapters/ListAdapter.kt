@@ -5,6 +5,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -16,14 +17,19 @@ import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.domain.model.ItemUiModel
 
 
-class ListAdapter(
+class ListAdapter(private val itemClickListener: ItemClickListener
 ) : androidx.recyclerview.widget.ListAdapter<ItemUiModel, ListAdapter.ShoppingViewHolder>(DiffCallback) {
 
-    class ShoppingViewHolder(itemView: View) :
+    interface ItemClickListener {
+        fun onDeleteItem(item: ItemUiModel)
+    }
+
+    class ShoppingViewHolder(itemView: View, private val itemClickListener: ItemClickListener) :
         RecyclerView.ViewHolder(itemView) {
         val tvItemName: TextView = itemView.findViewById(R.id.tv_item_name)
         val chipGroupShops: ChipGroup = itemView.findViewById(R.id.chipGroupShops)
         val imgDropdown: ImageView = itemView.findViewById(R.id.img_drop_down)
+        val btnDeleteItem: ImageButton = itemView.findViewById(R.id.btn_delete_item)
 
 
         fun bind(itemUiModel: ItemUiModel) {
@@ -69,6 +75,9 @@ class ListAdapter(
                     )
                 }
             }
+            btnDeleteItem.setOnClickListener {
+                itemClickListener.onDeleteItem(itemUiModel)
+            }
         }
     }
 
@@ -86,7 +95,7 @@ class ListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShoppingViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.shopping_item, parent, false)
-        return ShoppingViewHolder(view)
+        return ShoppingViewHolder(view, itemClickListener)
     }
 
     override fun onBindViewHolder(holder: ShoppingViewHolder, position: Int) {

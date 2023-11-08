@@ -19,11 +19,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class ListFragment : Fragment() {
+class ListFragment : Fragment(), ListAdapter.ItemClickListener  {
 
         private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
-    private val adapter = ListAdapter()
+    private val adapter = ListAdapter(this)
 
     // Injecting the ViewModel
     private val viewModel: ItemViewModel by viewModels()
@@ -72,6 +72,8 @@ class ListFragment : Fragment() {
             findNavController().navigate(action)
 //            showShopListDialog()
         }
+
+
     }
 
 
@@ -81,5 +83,22 @@ class ListFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun onDeleteItem(itemUiModel: ItemUiModel) {
+        // Find the corresponding Item object from the ViewModel's data
+        val item = viewModel.findItemByUiModel(itemUiModel)
+
+        if (item != null) {
+            // Call the deleteItemWithShops function with the Item object
+            viewModel.deleteItemWithShops(item)
+        } else {
+            // Handle the case where the corresponding Item object is not found
+        }
+    }
+
+
+//    override fun onDeleteItem(item: ItemUiModel) {
+//        viewModel.deleteItemWithShops(item)
+//    }
 }
 

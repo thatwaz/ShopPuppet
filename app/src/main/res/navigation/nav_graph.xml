@@ -22,7 +22,7 @@
             app:destination="@id/listFragment" />
         <action
             android:id="@+id/action_shopsFragment_to_storeSpecificListFragment"
-            app:destination="@id/storeSpecificListFragment" />
+            app:destination="@id/shopSpecificListFragment" />
 
     </fragment>
     <fragment
@@ -48,11 +48,17 @@
             app:destination="@id/shopsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/storeSpecificListFragment"
+        android:id="@+id/shopSpecificListFragment"
         android:name="com.thatwaz.shoppuppet.presentation.fragments.ShopSpecificListFragment"
         android:label="Shop Specific List"
         tools:layout="@layout/fragment_shop_specific_list">
-
+        <argument
+            android:name="shopId"
+            app:argType="long"/>
+        <action
+            android:id="@+id/action_shopsFragment_to_shopSpecificListFragment"
+            app:destination="@id/shopSpecificListFragment">
+        </action>
     </fragment>
     <fragment
         android:id="@+id/addItemFragment"
