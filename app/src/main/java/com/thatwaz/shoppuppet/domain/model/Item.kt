@@ -11,7 +11,7 @@ data class Item(
     val id: Long = 0,
     val name: String,
     val description: String,
-    val isPurchased: Boolean = false,
+    var isPurchased: Boolean = false,
     val lastPurchasedDate: Date? = null, // This will store the last purchase date. Null means the item hasn't been purchased yet.
     val purchaseCount: Int = 0  // This will store how often an item has been purchased.
 )

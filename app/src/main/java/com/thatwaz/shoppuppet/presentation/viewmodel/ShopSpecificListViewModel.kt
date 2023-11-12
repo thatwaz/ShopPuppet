@@ -1,6 +1,5 @@
 package com.thatwaz.shoppuppet.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,24 +10,106 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @HiltViewModel
 class ShopSpecificListViewModel @Inject constructor(
     private val repository: ItemRepository
 ) : ViewModel() {
 
-    // LiveData for shop-specific items
-    private val _shopSpecificItems = MutableLiveData<List<Item>>()
-    val shopSpecificItems: LiveData<List<Item>> = _shopSpecificItems
+    // LiveData for unpurchased items
+    private val _unpurchasedItems = MutableLiveData<List<Item>>()
+    val unpurchasedItems: LiveData<List<Item>> = _unpurchasedItems
 
-    // Function to fetch shop-specific items based on shopId
+    // LiveData for purchased items
+    private val _purchasedItems = MutableLiveData<List<Item>>()
+    val purchasedItems: LiveData<List<Item>> = _purchasedItems
+
+    // Function to fetch all items from the repository
     fun fetchShopSpecificItems(shopId: Long) {
         viewModelScope.launch {
             val result = repository.getItemsByShop(shopId)
-            Log.i("DOH1","Result is $result")
-            _shopSpecificItems.value = result
+            _unpurchasedItems.value = result.filter { !it.isPurchased }
+            _purchasedItems.value = result.filter { it.isPurchased }
         }
     }
+
+    fun handleUnpurchasedItemChecked(item: Item) {
+        item.isPurchased = true
+        updateLists()
+    }
+
+    fun handlePurchasedItemChecked(item: Item) {
+        item.isPurchased = false
+        updateLists()
+    }
+
+    private fun updateLists() {
+        val allItems = (_unpurchasedItems.value.orEmpty() + _purchasedItems.value.orEmpty())
+        _unpurchasedItems.value = allItems.filter { !it.isPurchased }
+        _purchasedItems.value = allItems.filter { it.isPurchased }
+    }
 }
+
+
+//@HiltViewModel
+//class ShopSpecificListViewModel @Inject constructor(
+//    private val repository: ItemRepository
+//) : ViewModel() {
+//
+//
+//    private val _shopSpecificItems = MutableLiveData<List<Item>>()
+//    val shopSpecificItems: LiveData<List<Item>> = _shopSpecificItems
+//
+//
+//    private val _shopSpecificCheckedItems = MutableLiveData<List<Item>>()
+//    val shopSpecificCheckedItems: LiveData<List<Item>> = _shopSpecificCheckedItems
+//
+//    private val _purchasedCheckedItems = MutableLiveData<List<Item>>()
+//    val purchasedCheckedItems: LiveData<List<Item>> = _purchasedCheckedItems
+//
+//
+//    // LiveData for unpurchased items
+//    private val _unpurchasedItems = MutableLiveData<List<Item>>()
+//    val unpurchasedItems: LiveData<List<Item>> = _unpurchasedItems
+//
+//    // LiveData for purchased items
+//    private val _purchasedItems = MutableLiveData<List<Item>>()
+//    val purchasedItems: LiveData<List<Item>> = _purchasedItems
+//
+//
+//
+//    fun updateShopSpecificCheckedItems(newCheckedItems: List<Item>) {
+//        _shopSpecificCheckedItems.value = newCheckedItems
+//        Log.d("ShopSpecificListViewModel", "Updated shop-specific checked items: $newCheckedItems")
+//    }
+//
+//
+//    fun updatePurchasedCheckedItems(newCheckedItems: List<Item>) {
+//        _purchasedCheckedItems.value = newCheckedItems
+//        Log.d("ShopSpecificListViewModel", "Updated purchased checked items: $newCheckedItems")
+//    }
+//
+//
+//
+//
+//    // Function to fetch all items from the repository
+//    fun fetchShopSpecificItems(shopId: Long) {
+//        viewModelScope.launch {
+//            val result = repository.getItemsByShop(shopId)
+//            Log.i("DOH1", "Result is $result")
+//            _shopSpecificItems.value = result
+//
+//            // Split items into unpurchased and purchased lists
+//            val unpurchased = result.filter { !it.isPurchased }
+//            val purchased = result.filter { it.isPurchased }
+//
+//            _unpurchasedItems.value = unpurchased
+//            _purchasedItems.value = purchased
+//            Log.i("DOH1", "Unpurchased items: $unpurchased")
+//            Log.i("DOH1", "purchased items: $purchased")
+//        }
+//    }
+//}
 
 
 //@HiltViewModel
