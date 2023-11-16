@@ -1,223 +1,130 @@
 package com.thatwaz.shoppuppet.presentation.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.thatwaz.shoppuppet.R
+import com.thatwaz.shoppuppet.databinding.ItemShopSpecificBinding
 import com.thatwaz.shoppuppet.domain.model.Item
+
 
 
 class ShopSpecificItemAdapter(
     private val onItemCheckedListener: (Item) -> Unit
-) : RecyclerView.Adapter<ShopSpecificItemAdapter.ItemViewHolder>() {
-    private val unpurchasedItems: MutableList<Item> = mutableListOf()
-    private val purchasedItems: MutableList<Item> = mutableListOf()
-
-    init {
-        Log.d("ShopSpecificItemAdapter", "Adapter created")
-    }
-
-
-    fun updateUnpurchasedCheckedItems(newCheckedItems: List<Item>) {
-        val diffCallback = ShopSpecificItemDiffCallback(unpurchasedItems, newCheckedItems)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-
-        unpurchasedItems.clear()
-        unpurchasedItems.addAll(newCheckedItems)
-
-        diffResult.dispatchUpdatesTo(this)
-    }
-
+) : ListAdapter<Item, ShopSpecificItemAdapter.ItemViewHolder>(ShopSpecificItemDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_shop_specific,
-            parent,
-            false
-        )
-        Log.d("ShopSpecificItemAdapter", "onCreateViewHolder called")
-        return ItemViewHolder(itemView)
+        val binding = ItemShopSpecificBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ItemViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        if (position < unpurchasedItems.size) {
-            val item = unpurchasedItems[position]
-            holder.bind(item, true) // Pass the checked state
-        } else {
-            val item = purchasedItems[position - unpurchasedItems.size]
-            holder.bind(item, true) // Pass the checked state
-        }
-        Log.d("ShopSpecificItemAdapter", "onBindViewHolder called for position $position")
+        val item = getItem(position) // get item from ListAdapter
+        holder.bind(item)
     }
 
-    override fun getItemCount(): Int {
-        return unpurchasedItems.size + purchasedItems.size
-    }
+    inner class ItemViewHolder(private val binding: ItemShopSpecificBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Item) {
+            binding.tvItemForShop.text = item.name
+            binding.cbPurchased.isChecked = item.isPurchased
 
-    inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val itemNameTextView: TextView = itemView.findViewById(R.id.tv_item_for_shop)
-        private val checkBox: CheckBox = itemView.findViewById(R.id.cb_purchased)
-
-        fun bind(item: Item, isChecked: Boolean) {
-            itemNameTextView.text = item.name
-            checkBox.isChecked = !isChecked // Set the initial checked state based on the parameter
-
-            checkBox.setOnCheckedChangeListener { _, isChecked ->
+            // Clear previous listeners and set new ones
+            binding.cbPurchased.setOnCheckedChangeListener(null)
+            binding.cbPurchased.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     onItemCheckedListener(item)
-                    Log.d("ShopSpecificItemAdapter", "Checkbox clicked for item ${item.id}")
-                } else {
-                    // Handle the case where the checkbox is unchecked
-                    // For example, remove the item from the checked items list
-                    // You can implement this logic here if needed.
                 }
             }
         }
-
     }
 
-    private class ShopSpecificItemDiffCallback(
-        private val oldList: List<Item>,
-        private val newList: List<Item>
-    ) : DiffUtil.Callback() {
+    companion object {
+        private val ShopSpecificItemDiffCallback = object : DiffUtil.ItemCallback<Item>() {
+            override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+                return oldItem.id == newItem.id
+            }
 
-        override fun getOldListSize(): Int = oldList.size
-        override fun getNewListSize(): Int = newList.size
-
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            val oldItem = oldList[oldItemPosition]
-            val newItem = newList[newItemPosition]
-            val areItemsTheSame = oldItem.id == newItem.id // Use a unique identifier for items
-            Log.d("DiffCallback", "areItemsTheSame: ${oldItem.id} == ${newItem.id}, position: $oldItemPosition -> $newItemPosition")
-            return areItemsTheSame
-        }
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            val oldItem = oldList[oldItemPosition]
-            val newItem = newList[newItemPosition]
-            val areContentsTheSame = oldItem == newItem
-            Log.d("DiffCallback", "areContentsTheSame: $oldItem == $newItem, position: $oldItemPosition -> $newItemPosition")
-            return areContentsTheSame
+            override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }
+
 
 //class ShopSpecificItemAdapter(
 //    private val onItemCheckedListener: (Item) -> Unit
 //) : RecyclerView.Adapter<ShopSpecificItemAdapter.ItemViewHolder>() {
 //
 //    private val items: MutableList<Item> = mutableListOf()
-//    private var checkedItems: List<Item> = emptyList()
 //
-//    fun submitItems(newItems: List<Item>) {
+//    fun updateItems(newItems: List<Item>) {
+//        Log.d(
+//            "AdapterLog",
+//            "Updating items. New items: ${newItems.map { it.name + ": " + it.isPurchased }}"
+//        )
 //        val diffCallback = ShopSpecificItemDiffCallback(items, newItems)
 //        val diffResult = DiffUtil.calculateDiff(diffCallback)
 //
 //        items.clear()
 //        items.addAll(newItems)
+//
 //        diffResult.dispatchUpdatesTo(this)
-//        Log.d("ShopSpecificItemAdapter", "submitItems called with ${newItems.size} items")
-//    }
-//    fun getItems(): List<Item> {
-//        return items
-//    }
-//
-//
-//    fun updateCheckedItems(newCheckedItems: List<Item>) {
-//        Log.d("Adapter", "updateCheckedItems called")
-//        Log.d("Adapter", "Before update, checkedItems: $checkedItems")
-//
-//        val diffCallback = ShopSpecificItemDiffCallback(checkedItems, newCheckedItems)
-//        val diffResult = DiffUtil.calculateDiff(diffCallback)
-//
-//        checkedItems = newCheckedItems
-//        diffResult.dispatchUpdatesTo(this)
-//
-//        Log.d("Adapter", "After update, checkedItems: $checkedItems")
+//        Log.d("AdapterLog", "Items after update: ${items.map { it.name + ": " + it.isPurchased }}")
 //    }
 //
 //    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-//        val itemView = LayoutInflater.from(parent.context).inflate(
-//            R.layout.item_shop_specific,
-//            parent,
-//            false
-//        )
-//        return ItemViewHolder(itemView)
+//        val binding =
+//            ItemShopSpecificBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+//        return ItemViewHolder(binding)
 //    }
 //
 //    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
 //        val item = items[position]
-//        holder.bind(item, checkedItems.contains(item)) // Pass the checked state
-//        Log.d("ShopSpecificItemAdapter", "onBindViewHolder called for position $position")
-//
+//        Log.i("DOH!", "items are now $item")
+//        holder.bind(item)
 //    }
 //
 //    override fun getItemCount(): Int {
+////        Log.i("DOH!","Item count is ${items.size}")
 //        return items.size
 //    }
 //
-//    inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-//        private val itemNameTextView: TextView = itemView.findViewById(R.id.tv_item_for_shop)
-//        private val checkBox: CheckBox = itemView.findViewById(R.id.cb_purchased)
+//    inner class ItemViewHolder(private val binding: ItemShopSpecificBinding) :
+//        RecyclerView.ViewHolder(binding.root) {
 //
-//        fun bind(item: Item, isChecked: Boolean) {
-//            itemNameTextView.text = item.name
-//            checkBox.isChecked = isChecked
+//        fun bind(item: Item) {
+//            binding.tvItemForShop.text = item.name
+//            binding.cbPurchased.isChecked = item.isPurchased
 //
-//            checkBox.setOnCheckedChangeListener { _, isChecked ->
+//            // Clear previous listeners and set new ones
+//            binding.cbPurchased.setOnCheckedChangeListener(null)
+//            binding.cbPurchased.setOnCheckedChangeListener { _, isChecked ->
 //                if (isChecked) {
 //                    onItemCheckedListener(item)
-//                    Log.d("ShopSpecificItemAdapter", "Checkbox clicked for item ${item.id}")
-//                } else {
-//                    // Handle the case where the checkbox is unchecked
-//                    // For example, remove the item from the checked items list
-////                    val newCheckedItems = checkedItems.toMutableList()
-////                    newCheckedItems.remove(item)
-////                    updateCheckedItems(newCheckedItems) // Update the dataset and notify the adapter
 //                }
 //            }
-//
-//
-////            checkBox.setOnCheckedChangeListener { _, isChecked ->
-////                if (isChecked) {
-////                    onItemCheckedListener(item)
-////                    Log.d("ShopSpecificItemAdapter", "Checkbox clicked for item ${item.id}")
-////                }
-////            }
 //        }
 //    }
 //
 //    private class ShopSpecificItemDiffCallback(
-//        private val oldList: List<Item>,
-//        private val newList: List<Item>
+//        private val oldItems: List<Item>,
+//        private val newItems: List<Item>
 //    ) : DiffUtil.Callback() {
 //
-//        override fun getOldListSize(): Int = oldList.size
-//        override fun getNewListSize(): Int = newList.size
+//        override fun getOldListSize(): Int = oldItems.size
+//        override fun getNewListSize(): Int = newItems.size
 //
-//        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-//            val oldItem = oldList[oldItemPosition]
-//            val newItem = newList[newItemPosition]
-//            val areItemsTheSame = oldItem.id == newItem.id // Use a unique identifier for items
-//            Log.d("DiffCallback", "areItemsTheSame: ${oldItem.id} == ${newItem.id}, position: $oldItemPosition -> $newItemPosition")
-//            return areItemsTheSame
-//        }
+//        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+//            oldItems[oldItemPosition].id == newItems[newItemPosition].id
 //
-//        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-//            val oldItem = oldList[oldItemPosition]
-//            val newItem = newList[newItemPosition]
-//            val areContentsTheSame = oldItem == newItem
-//            Log.d("DiffCallback", "areContentsTheSame: $oldItem == $newItem, position: $oldItemPosition -> $newItemPosition")
-//            return areContentsTheSame
-//        }
+//        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+//            oldItems[oldItemPosition] == newItems[newItemPosition]
 //    }
-//
 //}
+
+
 
 
 

@@ -1,6 +1,7 @@
 package com.thatwaz.shoppuppet.presentation.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.thatwaz.shoppuppet.R
+
+import com.thatwaz.shoppuppet.databinding.FragmentShopSpecificListBinding
 import com.thatwaz.shoppuppet.presentation.adapters.PurchasedItemsAdapter
 import com.thatwaz.shoppuppet.presentation.adapters.ShopSpecificItemAdapter
 import com.thatwaz.shoppuppet.presentation.viewmodel.ShopSpecificListViewModel
@@ -20,60 +21,161 @@ import dagger.hilt.android.AndroidEntryPoint
 class ShopSpecificListFragment : Fragment() {
 
     private val viewModel: ShopSpecificListViewModel by viewModels()
-    private lateinit var shopSpecificItemAdapter: ShopSpecificItemAdapter
-    private lateinit var purchasedItemsAdapter: PurchasedItemsAdapter
+//    private lateinit var shopSpecificItemAdapter: ShopSpecificItemAdapter
+//    private lateinit var purchasedItemsAdapter: PurchasedItemsAdapter
+
+    private var shopSpecificItemAdapter: ShopSpecificItemAdapter? = null
+    private var purchasedItemsAdapter: PurchasedItemsAdapter? = null
 
     private val navigationArgs: ShopSpecificListFragmentArgs by navArgs()
+
+    private var _binding: FragmentShopSpecificListBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_shop_specific_list, container, false)
+        _binding = FragmentShopSpecificListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.d("FragmentLifecycle", "onViewCreated called for ShopSpecificListFragment")
+
         val shopId = navigationArgs.shopId
-        viewModel.fetchShopSpecificItems(shopId)
-        setupAdapters()
-        setupRecyclerViews(view)
+        Log.d("FragmentLifecycle", "Fetching items for shop ID: $shopId")
+
+        viewModel.fetchShopSpecificItems(shopId) // This fetches data on view creation
         observeLiveData()
+        setupAdapters()
+        setupRecyclerViews()
+
+
+
+        Log.d("FragmentLifecycle", "Adapters and RecyclerViews set up, LiveData observed")
+
     }
 
     private fun setupAdapters() {
         shopSpecificItemAdapter = ShopSpecificItemAdapter { item ->
-            viewModel.handleUnpurchasedItemChecked(item)
+            if (!item.isPurchased) {
+                viewModel.handleUnpurchasedItemChecked(item)
+                Log.d("AdapterLog", "Unpurchased item checked: ${item.name}")
+            }
         }
 
         purchasedItemsAdapter = PurchasedItemsAdapter { item ->
-            viewModel.handlePurchasedItemChecked(item)
+            if (item.isPurchased) {
+                viewModel.handlePurchasedItemChecked(item)
+                Log.d("AdapterLog", "Purchased item unchecked: ${item.name}")
+            }
         }
     }
 
-    private fun setupRecyclerViews(view: View) {
-        view.findViewById<RecyclerView>(R.id.rv_unpurchased_items).apply {
+    private fun setupRecyclerViews() {
+        binding.rvUnpurchasedItems.apply {
             adapter = shopSpecificItemAdapter
             layoutManager = LinearLayoutManager(context)
         }
 
-        view.findViewById<RecyclerView>(R.id.rv_purchased_items).apply {
+        binding.rvPurchasedItems.apply {
             adapter = purchasedItemsAdapter
             layoutManager = LinearLayoutManager(context)
         }
     }
 
+
+
+
     private fun observeLiveData() {
         viewModel.unpurchasedItems.observe(viewLifecycleOwner) { items ->
-            shopSpecificItemAdapter.updateUnpurchasedCheckedItems(items)
+            shopSpecificItemAdapter?.submitList(items)
+//            Log.i("DOH!","this things are: ${viewModel.purchasedItems.value}")
+            Log.d("FragmentLog", "Unpurchased items updated post-rotation: ${items.map { it.name }}")
         }
 
         viewModel.purchasedItems.observe(viewLifecycleOwner) { items ->
-            purchasedItemsAdapter.submitItems(items)
+            purchasedItemsAdapter?.submitList(items)
+            Log.i("DOH!","this things are: ${viewModel.purchasedItems.value}")
+            Log.d("FragmentLog", "Purchased items updated post-rotation: ${items.map { it.name }}")
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        shopSpecificItemAdapter = null
+        purchasedItemsAdapter = null
+        Log.d("FragmentLifecycle", "onDestroyView called for ShopSpecificListFragment")
+    }
+
+
 }
+
+
+
+
+//@AndroidEntryPoint
+//class ShopSpecificListFragment : Fragment() {
+//
+//    private val viewModel: ShopSpecificListViewModel by viewModels()
+//    private lateinit var shopSpecificItemAdapter: ShopSpecificItemAdapter
+//    private lateinit var purchasedItemsAdapter: PurchasedItemsAdapter
+//
+//    private val navigationArgs: ShopSpecificListFragmentArgs by navArgs()
+//
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        return inflater.inflate(R.layout.fragment_shop_specific_list, container, false)
+//    }
+//
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//
+//        val shopId = navigationArgs.shopId
+//        viewModel.fetchShopSpecificItems(shopId)
+//        setupAdapters()
+//        setupRecyclerViews(view)
+//        observeLiveData()
+//    }
+//
+//    private fun setupAdapters() {
+//        shopSpecificItemAdapter = ShopSpecificItemAdapter { item ->
+//            viewModel.handleUnpurchasedItemChecked(item)
+//        }
+//
+//        purchasedItemsAdapter = PurchasedItemsAdapter { item ->
+//            viewModel.handlePurchasedItemChecked(item)
+//        }
+//    }
+//
+//    private fun setupRecyclerViews(view: View) {
+//        view.findViewById<RecyclerView>(R.id.rv_unpurchased_items).apply {
+//            adapter = shopSpecificItemAdapter
+//            layoutManager = LinearLayoutManager(context)
+//        }
+//
+//        view.findViewById<RecyclerView>(R.id.rv_purchased_items).apply {
+//            adapter = purchasedItemsAdapter
+//            layoutManager = LinearLayoutManager(context)
+//        }
+//    }
+//
+//    private fun observeLiveData() {
+//        viewModel.unpurchasedItems.observe(viewLifecycleOwner) { items ->
+//            shopSpecificItemAdapter.updateUnpurchasedCheckedItems(items)
+//        }
+//
+//        viewModel.purchasedItems.observe(viewLifecycleOwner) { items ->
+//            purchasedItemsAdapter.submitItems(items)
+//        }
+//    }
+//}
 
 //@AndroidEntryPoint
 //class ShopSpecificListFragment : Fragment() {

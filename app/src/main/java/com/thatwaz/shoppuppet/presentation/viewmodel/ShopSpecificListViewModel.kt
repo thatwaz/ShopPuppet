@@ -1,5 +1,6 @@
 package com.thatwaz.shoppuppet.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,6 +17,9 @@ class ShopSpecificListViewModel @Inject constructor(
     private val repository: ItemRepository
 ) : ViewModel() {
 
+
+    private var currentShopId: Long? = null
+
     // LiveData for unpurchased items
     private val _unpurchasedItems = MutableLiveData<List<Item>>()
     val unpurchasedItems: LiveData<List<Item>> = _unpurchasedItems
@@ -26,28 +30,61 @@ class ShopSpecificListViewModel @Inject constructor(
 
     // Function to fetch all items from the repository
     fun fetchShopSpecificItems(shopId: Long) {
+        currentShopId = shopId
         viewModelScope.launch {
             val result = repository.getItemsByShop(shopId)
-            _unpurchasedItems.value = result.filter { !it.isPurchased }
-            _purchasedItems.value = result.filter { it.isPurchased }
+
+            // Filter and set the values for unpurchased and purchased items
+            val unpurchasedItems = result.filter { !it.isPurchased }
+            val purchasedItems = result.filter { it.isPurchased }
+            _unpurchasedItems.value = unpurchasedItems
+            _purchasedItems.value = purchasedItems
+
+            // Log the lists of unpurchased and purchased items
+            Log.d("ViewModelLog", "Unpurchased Items: ${unpurchasedItems.joinToString { it.name }}")
+            Log.d("ViewModelLog", "Purchased Items: ${purchasedItems.joinToString { it.name }}")
         }
     }
 
+
     fun handleUnpurchasedItemChecked(item: Item) {
         item.isPurchased = true
-        updateLists()
+        Log.d("ViewModelLog", "Item checked as purchased: ${item.name}, isPurchased: ${item.isPurchased}")
+        viewModelScope.launch {
+            repository.updateItem(item)
+            updateLists()
+        }
+
     }
 
     fun handlePurchasedItemChecked(item: Item) {
         item.isPurchased = false
-        updateLists()
+        Log.d("ViewModelLog", "Item unchecked as purchased: ${item.name}, isPurchased: ${item.isPurchased}")
+        viewModelScope.launch {
+            repository.updateItem(item)
+            updateLists()
+        }
     }
 
+
+
     private fun updateLists() {
-        val allItems = (_unpurchasedItems.value.orEmpty() + _purchasedItems.value.orEmpty())
-        _unpurchasedItems.value = allItems.filter { !it.isPurchased }
-        _purchasedItems.value = allItems.filter { it.isPurchased }
+        currentShopId?.let { shopId ->
+            viewModelScope.launch {
+                val allItems = repository.getItemsByShop(shopId)
+                _unpurchasedItems.value = allItems.filter { !it.isPurchased }
+                _purchasedItems.value = allItems.filter { it.isPurchased }
+            }
+        } ?: Log.d("ViewModelLog", "Shop ID not set")
     }
+
+
+//    private fun updateLists() {
+//        val allItems = (_unpurchasedItems.value.orEmpty() + _purchasedItems.value.orEmpty())
+//        _unpurchasedItems.value = allItems.filter { !it.isPurchased }
+//        _purchasedItems.value = allItems.filter { it.isPurchased }
+//        Log.i("ViewModelLog","updating lists, purchased is ${_purchasedItems.value}")
+//    }
 }
 
 

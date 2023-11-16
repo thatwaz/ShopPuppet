@@ -1,5 +1,6 @@
 package com.thatwaz.shoppuppet.data.repository
 
+import android.util.Log
 import com.thatwaz.shoppuppet.data.db.dao.ItemDao
 import com.thatwaz.shoppuppet.data.db.dao.ItemShopCrossRefDao
 import com.thatwaz.shoppuppet.domain.model.Item
@@ -36,7 +37,15 @@ class ItemRepository @Inject constructor(
 
 
     // Update an item's details
-    suspend fun updateItem(item: Item) = itemDao.updateItem(item)
+//    suspend fun updateItem(item: Item) = itemDao.updateItem(item)
+
+
+    suspend fun updateItem(item: Item) {
+        Log.d("RepositoryLog", "Updating item in database: ${item.name}")
+        Log.d("RepositoryLog", "Updating purchase status in database: ${item.isPurchased}")
+        val result = itemDao.updateItem(item)
+        Log.d("RepositoryLog", "Item update completed. Rows affected: $result")
+    }
 
     // Delete an item
     suspend fun deleteItem(item: Item) = itemDao.deleteItem(item)
