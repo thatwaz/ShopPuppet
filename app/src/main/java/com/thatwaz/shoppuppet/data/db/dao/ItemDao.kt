@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.thatwaz.shoppuppet.domain.model.Item
 
@@ -61,13 +62,26 @@ interface ItemDao {
     @Query("SELECT * FROM Items WHERE isPurchased = 1")
     suspend fun getPurchasedItems(): List<Item>
 
-    // Get items purchased within the last 30 days
-//    @Query("SELECT * FROM items WHERE lastPurchasedDate >= :dateCutoff")
-//    suspend fun getRecentPurchases(dateCutoff: Date): List<Item>
-//
-//    // Update the last purchased date for an item
-//    @Query("UPDATE Items SET lastPurchasedDate = :date WHERE id = :itemId")
-//    suspend fun updateLastPurchasedDate(itemId: Long, date: Date)
+    @Transaction
+    suspend fun deleteItemsWithShopAssociation(itemIds: List<Long>) {
+        // Step 1: Delete associations in item_shop_cross_ref
+        itemIds.forEach { itemId ->
+            deleteCrossRef(itemId)
+        }
 
+        // Step 2: Delete the items themselves
+        deleteItemsByIds(itemIds)
+    }
+
+    // Helper method to delete cross references
+    @Query("DELETE FROM item_shop_cross_ref WHERE itemId = :itemId")
+    suspend fun deleteCrossRef(itemId: Long)
+
+    // Method to delete items by their IDs
+    @Query("DELETE FROM items WHERE id IN (:itemIds)")
+    suspend fun deleteItemsByIds(itemIds: List<Long>)
 }
+
+
+
 

@@ -78,6 +78,14 @@ class ShopSpecificListViewModel @Inject constructor(
         } ?: Log.d("ViewModelLog", "Shop ID not set")
     }
 
+    fun deleteCheckedItems(items: List<Item>) {
+        viewModelScope.launch {
+            repository.deleteItemsWithShopAssociation(items)
+            currentShopId?.let { fetchShopSpecificItems(it) }
+            // Refresh data or notify UI about changes as needed
+        }
+    }
+
 
 //    private fun updateLists() {
 //        val allItems = (_unpurchasedItems.value.orEmpty() + _purchasedItems.value.orEmpty())

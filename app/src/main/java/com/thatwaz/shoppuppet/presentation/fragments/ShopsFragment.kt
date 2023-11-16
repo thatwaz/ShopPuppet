@@ -1,6 +1,9 @@
 package com.thatwaz.shoppuppet.presentation.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,6 +41,13 @@ class ShopsFragment : Fragment() {
         observeShopData()
         setupAddShopButton()
 
+        val content = SpannableString(binding.tvEditDeleteInfo.text)
+        content.setSpan(UnderlineSpan(), 0, content.length, 0)
+        binding.tvEditDeleteInfo.text = content
+
+        binding.tvEditDeleteInfo.setOnClickListener {
+            showEditDeleteInstructionsDialog()
+        }
 
         shopAdapter.onShopItemClickListener = object : ShopAdapter.OnShopItemClickListener {
             override fun onShopItemClick(shop: Shop) {
@@ -50,6 +60,15 @@ class ShopsFragment : Fragment() {
 //                findNavController().navigate(action)
             }
         }
+        shopAdapter.onShopItemLongClickListener = object : ShopAdapter.OnShopItemLongClickListener {
+            override fun onShopItemLongClick(shop: Shop) {
+                // Handle long press here
+                // For example, show a dialog, start a Contextual Action Mode, or navigate to another fragment
+                // Example: Show a dialog to confirm deletion or offer other actions
+                showLongPressDialog(shop)
+            }
+        }
+
     }
 
     private fun setupRecyclerView() {
@@ -72,6 +91,36 @@ class ShopsFragment : Fragment() {
             findNavController().navigate(action)
         }
     }
+
+    private fun showLongPressDialog(shop: Shop) {
+        val context = requireContext()
+        AlertDialog.Builder(context)
+            .setTitle("Shop Actions")
+            .setMessage("Choose an action for ${shop.name}")
+            .setPositiveButton("Delete") { dialog, _ ->
+                // Handle delete action
+                // Call ViewModel to delete the shop
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setNeutralButton("Edit") { dialog, _ ->
+                // Handle edit action
+                // Navigate to edit fragment or show another dialog for editing
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
+    private fun showEditDeleteInstructionsDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Edit/Delete Shop")
+            .setMessage("Long press on a shop to edit or delete it.")
+            .setPositiveButton("OK", null)
+            .show()
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -3,15 +3,19 @@ package com.thatwaz.shoppuppet.presentation.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.thatwaz.shoppuppet.databinding.ItemShopSpecificBinding
 import com.thatwaz.shoppuppet.domain.model.Item
-import androidx.recyclerview.widget.ListAdapter
 
 
 class PurchasedItemsAdapter(
     private val onItemCheckedListener: (Item) -> Unit
 ) : ListAdapter<Item, PurchasedItemsAdapter.ItemViewHolder>(PurchasedItemsDiffCallback) {
+
+    fun getCheckedItems(): List<Item> {
+        return currentList.filter { it.isPurchased }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = ItemShopSpecificBinding.inflate(LayoutInflater.from(parent.context), parent, false)

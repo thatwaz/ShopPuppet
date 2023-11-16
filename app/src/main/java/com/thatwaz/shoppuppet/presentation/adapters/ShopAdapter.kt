@@ -27,7 +27,14 @@ class ShopAdapter : ListAdapter<Shop, ShopAdapter.ShopViewHolder>(ShopDiffCallba
          fun onShopItemClick(shop: Shop)
      }
 
+     interface OnShopItemLongClickListener {
+         fun onShopItemLongClick(shop: Shop)
+     }
+
+
      var onShopItemClickListener: OnShopItemClickListener? = null
+     var onShopItemLongClickListener: OnShopItemLongClickListener? = null
+
 
 
      inner class ShopViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -41,7 +48,19 @@ class ShopAdapter : ListAdapter<Shop, ShopAdapter.ShopViewHolder>(ShopDiffCallba
                      onShopItemClickListener?.onShopItemClick(shop)
                  }
              }
+             itemView.setOnLongClickListener {
+                 val position = adapterPosition
+                 if (position != RecyclerView.NO_POSITION) {
+                     val shop = getItem(position)
+                     onShopItemLongClickListener?.onShopItemLongClick(shop)
+                     true  // Return true to indicate that the long press event is consumed.
+                 } else {
+                     false
+                 }
+             }
          }
+
+
         val shopIconImageView: ImageView = itemView.findViewById(R.id.shop_icon)
         val shopNameTextView: TextView = itemView.findViewById(R.id.shop_name)
         val shopIconInitials: TextView = itemView.findViewById(R.id.shop_icon_initials)

@@ -35,6 +35,11 @@ class ItemRepository @Inject constructor(
         itemDao.deleteItem(item)
     }
 
+    suspend fun deleteItemsWithShopAssociation(items: List<Item>) {
+        val itemIds = items.map { it.id }
+        itemDao.deleteItemsWithShopAssociation(itemIds)
+    }
+
 
     // Update an item's details
 //    suspend fun updateItem(item: Item) = itemDao.updateItem(item)

@@ -9,10 +9,10 @@
         android:id="@+id/tv_unpurchased_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="8dp"
         android:text="Unpurchased Items"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:padding="8dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_unpurchased_items"
@@ -20,24 +20,36 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/tv_unpurchased_label"
-        tools:listitem="@layout/item_shop_specific"/>
+        tools:listitem="@layout/item_shop_specific" />
 
     <TextView
         android:id="@+id/tv_purchased_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="8dp"
         android:text="Purchased Items"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rv_unpurchased_items"
-        android:padding="8dp"/>
+        app:layout_constraintTop_toBottomOf="@id/rv_unpurchased_items" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_purchased_items"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_purchased_label"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/item_shop_specific"/>
+        app:layout_constraintTop_toBottomOf="@id/tv_purchased_label"
+        tools:listitem="@layout/item_shop_specific" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_delete_purchased_items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_delete"
+        app:fabSize="normal"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:layout_marginBottom="90dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+

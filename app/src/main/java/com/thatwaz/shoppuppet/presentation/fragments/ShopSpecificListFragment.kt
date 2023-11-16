@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-
 import com.thatwaz.shoppuppet.databinding.FragmentShopSpecificListBinding
 import com.thatwaz.shoppuppet.presentation.adapters.PurchasedItemsAdapter
 import com.thatwaz.shoppuppet.presentation.adapters.ShopSpecificItemAdapter
@@ -21,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class ShopSpecificListFragment : Fragment() {
 
     private val viewModel: ShopSpecificListViewModel by viewModels()
+
 //    private lateinit var shopSpecificItemAdapter: ShopSpecificItemAdapter
 //    private lateinit var purchasedItemsAdapter: PurchasedItemsAdapter
 
@@ -53,6 +53,11 @@ class ShopSpecificListFragment : Fragment() {
         setupAdapters()
         setupRecyclerViews()
 
+        binding.fabDeletePurchasedItems.setOnClickListener {
+            val checkedItems = purchasedItemsAdapter?.getCheckedItems() ?: listOf()
+            // Pass checkedItems to ViewModel for deletion
+            viewModel.deleteCheckedItems(checkedItems)
+        }
 
 
         Log.d("FragmentLifecycle", "Adapters and RecyclerViews set up, LiveData observed")
@@ -103,6 +108,12 @@ class ShopSpecificListFragment : Fragment() {
             Log.d("FragmentLog", "Purchased items updated post-rotation: ${items.map { it.name }}")
         }
     }
+
+    private fun deleteCheckedItems() {
+        val checkedItems = purchasedItemsAdapter?.getCheckedItems() ?: return
+        viewModel.deleteCheckedItems(checkedItems)
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
