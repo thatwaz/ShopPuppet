@@ -1,5 +1,6 @@
 package com.thatwaz.shoppuppet.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,6 +29,7 @@ class ShopsViewModel @Inject constructor(
     private fun fetchShops() {
         viewModelScope.launch {
             _shops.value = shopRepository.getAllShops()
+            Log.i("DOH!","Shops are ${_shops.value}")
         }
     }
 

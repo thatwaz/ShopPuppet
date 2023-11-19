@@ -1,10 +1,12 @@
 package com.thatwaz.shoppuppet.presentation.fragments
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -37,6 +39,7 @@ class ShopSpecificListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentShopSpecificListBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -46,6 +49,15 @@ class ShopSpecificListFragment : Fragment() {
         Log.d("FragmentLifecycle", "onViewCreated called for ShopSpecificListFragment")
 
         val shopId = navigationArgs.shopId
+        val shopName = navigationArgs.shopName
+        val shopColor = navigationArgs.shopColorResId
+
+        binding.tvShopName.text = shopName
+        binding.clShopName.setBackgroundColor(ContextCompat.getColor(requireContext(), shopColor))
+
+        // Set the background color of the FloatingActionButton
+        binding.fabDeletePurchasedItems.backgroundTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), shopColor))
         Log.d("FragmentLifecycle", "Fetching items for shop ID: $shopId")
 
         viewModel.fetchShopSpecificItems(shopId) // This fetches data on view creation
@@ -93,18 +105,19 @@ class ShopSpecificListFragment : Fragment() {
     }
 
 
-
-
     private fun observeLiveData() {
         viewModel.unpurchasedItems.observe(viewLifecycleOwner) { items ->
             shopSpecificItemAdapter?.submitList(items)
 //            Log.i("DOH!","this things are: ${viewModel.purchasedItems.value}")
-            Log.d("FragmentLog", "Unpurchased items updated post-rotation: ${items.map { it.name }}")
+            Log.d(
+                "FragmentLog",
+                "Unpurchased items updated post-rotation: ${items.map { it.name }}"
+            )
         }
 
         viewModel.purchasedItems.observe(viewLifecycleOwner) { items ->
             purchasedItemsAdapter?.submitList(items)
-            Log.i("DOH!","this things are: ${viewModel.purchasedItems.value}")
+            Log.i("DOH!", "this things are: ${viewModel.purchasedItems.value}")
             Log.d("FragmentLog", "Purchased items updated post-rotation: ${items.map { it.name }}")
         }
     }
@@ -125,8 +138,6 @@ class ShopSpecificListFragment : Fragment() {
 
 
 }
-
-
 
 
 //@AndroidEntryPoint
@@ -273,7 +284,6 @@ class ShopSpecificListFragment : Fragment() {
 //}
 
 
-
 //@AndroidEntryPoint
 //class ShopSpecificListFragment : Fragment() {
 //
@@ -347,9 +357,6 @@ class ShopSpecificListFragment : Fragment() {
 //        }
 //    }
 //}
-
-
-
 
 
 //@AndroidEntryPoint

@@ -44,21 +44,40 @@ class MainActivity : AppCompatActivity() {
         // Set the title of ActionBar based on the label of the current destination
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.addShopFragment-> {
+                R.id.addShopFragment -> {
                     // Hide the BottomNavigationView when in AddShopsFragment
                     binding.bnvShopPuppet.visibility = View.GONE
                 }
-
-
+                R.id.shopSpecificListFragment -> {
+                    // Hide the toolbar when in ShopSpecificListFragment
+                    supportActionBar?.hide()
+                }
                 else -> {
-                    // Show the BottomNavigationView for all other fragments
+                    // Show the BottomNavigationView and toolbar for all other fragments
                     binding.bnvShopPuppet.visibility = View.VISIBLE
+                    supportActionBar?.show()
+                    supportActionBar?.title = destination.label
                 }
             }
-
-
-            supportActionBar?.title = destination.label
         }
+
+//        navController.addOnDestinationChangedListener { _, destination, _ ->
+//            when (destination.id) {
+//                R.id.addShopFragment-> {
+//                    // Hide the BottomNavigationView when in AddShopsFragment
+//                    binding.bnvShopPuppet.visibility = View.GONE
+//                }
+//
+//
+//                else -> {
+//                    // Show the BottomNavigationView for all other fragments
+//                    binding.bnvShopPuppet.visibility = View.VISIBLE
+//                }
+//            }
+//
+//
+//            supportActionBar?.title = destination.label
+//        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
