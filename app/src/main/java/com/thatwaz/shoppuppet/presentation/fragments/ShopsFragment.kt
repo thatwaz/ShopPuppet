@@ -79,7 +79,7 @@ class ShopsFragment : Fragment() {
     }
 
     private fun observeShopData() {
-        viewModel.allShops.observe(viewLifecycleOwner) { shopList ->
+        viewModel.shops.observe(viewLifecycleOwner) { shopList ->
             shopAdapter.submitList(shopList)
         }
     }
@@ -100,6 +100,7 @@ class ShopsFragment : Fragment() {
             .setPositiveButton("Delete") { dialog, _ ->
                 // Handle delete action
                 // Call ViewModel to delete the shop
+                viewModel.deleteShop(shop)
                 dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, _ ->
@@ -120,6 +121,7 @@ class ShopsFragment : Fragment() {
             .setPositiveButton("OK", null)
             .show()
     }
+
 
 
     override fun onDestroyView() {

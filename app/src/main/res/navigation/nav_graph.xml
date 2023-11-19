@@ -28,7 +28,7 @@
     <fragment
         android:id="@+id/listFragment"
         android:name="com.thatwaz.shoppuppet.presentation.fragments.ListFragment"
-        android:label="fragment_list"
+        android:label="My Shopping List"
         tools:layout="@layout/fragment_list" >
         <action
             android:id="@+id/action_listFragment_to_shopsFragment"
@@ -63,7 +63,7 @@
     <fragment
         android:id="@+id/addItemFragment"
         android:name="com.thatwaz.shoppuppet.presentation.fragments.AddItemFragment"
-        android:label="fragment_add_item"
+        android:label="Add New Item To Shopping List"
         tools:layout="@layout/fragment_add_item" >
         <action
             android:id="@+id/action_addItemFragment_to_listFragment"
@@ -77,7 +77,7 @@
     <fragment
         android:id="@+id/tagItemToShopsFragment"
         android:name="com.thatwaz.shoppuppet.presentation.fragments.TagItemToShopsFragment"
-        android:label="fragment_tag_item_to_shops"
+        android:label="Tag Item To Shops"
         tools:layout="@layout/fragment_tag_item_to_shops" >
         <action
             android:id="@+id/action_tagItemToShopsFragment_to_listFragment"

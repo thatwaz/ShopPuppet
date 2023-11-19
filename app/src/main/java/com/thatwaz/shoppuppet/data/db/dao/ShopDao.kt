@@ -25,6 +25,8 @@ interface ShopDao {
     @Update
     suspend fun updateShop(shop: Shop): Int
 
+
+
     @Delete
     suspend fun deleteShop(shop: Shop): Int
 
