@@ -1,6 +1,7 @@
 package com.thatwaz.shoppuppet.presentation.fragments
 
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -62,7 +63,7 @@ class ShopSpecificListFragment : Fragment() {
 
         viewModel.fetchShopSpecificItems(shopId) // This fetches data on view creation
         observeLiveData()
-        setupAdapters()
+        setupAdapters(shopColor)
         setupRecyclerViews()
 
         binding.fabDeletePurchasedItems.setOnClickListener {
@@ -74,17 +75,33 @@ class ShopSpecificListFragment : Fragment() {
 
         Log.d("FragmentLifecycle", "Adapters and RecyclerViews set up, LiveData observed")
 
+
     }
 
-    private fun setupAdapters() {
-        shopSpecificItemAdapter = ShopSpecificItemAdapter { item ->
+    private fun createCheckboxColorStateList(shopColor: Int): ColorStateList {
+        return ColorStateList(
+            arrayOf(
+                intArrayOf(-android.R.attr.state_checked), // unchecked
+                intArrayOf(android.R.attr.state_checked) // checked
+            ),
+            intArrayOf(
+                Color.LTGRAY, // Color for unchecked
+                ContextCompat.getColor(requireContext(), shopColor) // Color for checked
+            )
+        )
+    }
+
+
+    private fun setupAdapters(shopColor: Int) {
+        val colorStateList = createCheckboxColorStateList(shopColor)
+        shopSpecificItemAdapter = ShopSpecificItemAdapter(colorStateList) { item ->
             if (!item.isPurchased) {
                 viewModel.handleUnpurchasedItemChecked(item)
                 Log.d("AdapterLog", "Unpurchased item checked: ${item.name}")
             }
         }
 
-        purchasedItemsAdapter = PurchasedItemsAdapter { item ->
+        purchasedItemsAdapter = PurchasedItemsAdapter(colorStateList){ item ->
             if (item.isPurchased) {
                 viewModel.handlePurchasedItemChecked(item)
                 Log.d("AdapterLog", "Purchased item unchecked: ${item.name}")

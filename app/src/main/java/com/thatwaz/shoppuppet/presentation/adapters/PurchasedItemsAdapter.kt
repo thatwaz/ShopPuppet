@@ -1,5 +1,6 @@
 package com.thatwaz.shoppuppet.presentation.adapters
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -10,6 +11,7 @@ import com.thatwaz.shoppuppet.domain.model.Item
 
 
 class PurchasedItemsAdapter(
+    private val colorStateList: ColorStateList,
     private val onItemCheckedListener: (Item) -> Unit
 ) : ListAdapter<Item, PurchasedItemsAdapter.ItemViewHolder>(PurchasedItemsDiffCallback) {
 
@@ -31,6 +33,7 @@ class PurchasedItemsAdapter(
         fun bind(item: Item) {
             binding.tvItemForShop.text = item.name
             binding.cbPurchased.isChecked = item.isPurchased
+            binding.cbPurchased.buttonTintList = colorStateList
 
             // Clear previous listeners and set new ones
             binding.cbPurchased.setOnCheckedChangeListener(null)
