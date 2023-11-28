@@ -21,6 +21,7 @@ import com.thatwaz.shoppuppet.presentation.viewmodel.TagItemToShopsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
+
 @AndroidEntryPoint
 class TagItemToShopsFragment() : Fragment(R.layout.fragment_tag_item_to_shops) {
 
@@ -44,6 +45,9 @@ class TagItemToShopsFragment() : Fragment(R.layout.fragment_tag_item_to_shops) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+//        observeSelectedShops()
+
+
         Log.d("TagItemToShopsFragment", "onViewCreated called")
 
         // Retrieve the item name from fragment arguments
@@ -59,21 +63,45 @@ class TagItemToShopsFragment() : Fragment(R.layout.fragment_tag_item_to_shops) {
         observeShopData()
 
         shopSelectionAdapter.onItemClick = { selectedShop ->
-            selectedShopsViewModel.addSelectedShop(selectedShop)
-
-            binding.btnSave.setOnClickListener {
-                val newItemName = Item(name = newItem, description = "")
-                val selectedShopIds =
-                    selectedShopsViewModel.selectedShops.value?.map { it.id } ?: emptyList()
-                itemViewModel.insertItemWithShops(newItemName, selectedShopIds)
-                val action = TagItemToShopsFragmentDirections
-                    .actionTagItemToShopsFragmentToListFragment()
-                findNavController().navigate(action)
-
+            if (selectedShopsViewModel.isSelected(selectedShop)) {
+                selectedShopsViewModel.addSelectedShop(selectedShop)
+            } else {
+                selectedShopsViewModel.removeSelectedShop(selectedShop)
             }
+            Log.i("ShopSelection", "Selected shops updated")
+                        Log.i("Goose","sel shop is $selectedShop")
+        }
 
+
+//        shopSelectionAdapter.onItemClick = { selectedShop ->
+//            selectedShopsViewModel.addSelectedShop(selectedShop)
+//            Log.i("Goose","sel shop is $selectedShop")
+//        }
+
+        // Setting the save button click listener
+        binding.btnSave.setOnClickListener {
+            val newItemName = Item(name = newItem, description = "")
+            val selectedShopIds = selectedShopsViewModel.selectedShops.value?.map { it.id } ?: emptyList()
+
+            Log.d("TagItemToShopsFragment", "Save button clicked. Item: $newItemName, Selected shops: $selectedShopIds")
+
+            itemViewModel.insertItemWithShops(newItemName, selectedShopIds)
+            val action = TagItemToShopsFragmentDirections.actionTagItemToShopsFragmentToListFragment()
+            findNavController().navigate(action)
         }
     }
+
+//    private fun observeSelectedShops() {
+//        selectedShopsViewModel.selectedShops.observe(viewLifecycleOwner) { selectedShops ->
+//
+//            // This block will be called whenever the selected shops change
+//            // Perform your database update logic here
+//            Log.i("Crow","This shops are $selectedShops")
+//
+//
+//
+//        }
+//    }
 
     private fun setupRecyclerView() {
         val recyclerView: RecyclerView = binding.rvShopsToTag

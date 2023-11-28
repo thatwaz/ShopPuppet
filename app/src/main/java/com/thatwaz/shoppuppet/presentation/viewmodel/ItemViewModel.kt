@@ -45,30 +45,20 @@ class ItemViewModel @Inject constructor(
 
         Log.i("DOH!", "updateItemName called with itemName: $itemName")
         Log.i("DOH!", "itemNameLiveData value: ${itemNameLiveData.value}")
+
     }
-    
-
-
-    fun getItemNameLiveData(): LiveData<String> {
-        return _itemNameLiveData
-    }
-
-    
     init {
+        logItemsWithAssociatedShops()
         fetchAllItems()
         fetchAllShops()
+
     }
 
-    fun fetchAllItems() {
+    fun refreshData() {
         viewModelScope.launch {
-            val allItems = itemRepository.getAllItems()
-            _items.value = allItems
-
-
-            // Log items
-            allItems.forEach { item ->
-                Log.d("ItemViewModel", "Item name: ${item.name}, Item description: ${item.description}")
-            }
+            fetchAllItems()
+            fetchAllShops()
+            logItemsWithAssociatedShops()
         }
     }
 
@@ -82,36 +72,8 @@ class ItemViewModel @Inject constructor(
             // Delete the item and its associated shops
             itemRepository.deleteItemWithShops(item)
 
-            // Fetch the updated list of items and update
-
-
-
-            //*********************************  FOR DELETING SHOPS IN REAL TIME
-//            val updatedItems = itemRepository.getAllItems()
-//            _itemUiModels.value = convertItemsToUiModels(updatedItems)
         }
     }
-
-//    private fun convertItemsToUiModels(updatedItems: List<Item>): List<ItemUiModel> {
-//        val itemUiModels = mutableListOf<ItemUiModel>()
-//
-//        for (item in updatedItems) {
-//            // Create an ItemUiModel based on the properties of the Item
-//            val itemUiModel = ItemUiModel(
-//                itemId = item.id, // Assuming there is a unique identifier for items
-//                itemName = item.name,
-//                shopNames = getShopNamesForItem(item) // You need to implement this function
-//            )
-//
-//            itemUiModels.add(itemUiModel)
-//        }
-//
-//        return itemUiModels
-//    }
-
-    //********************************************* END
-
-
 
     fun fetchAllShops() {
         viewModelScope.launch {
@@ -125,142 +87,105 @@ class ItemViewModel @Inject constructor(
         }
     }
 
-    fun refreshData() {
-        // Update the LiveData with the latest data
-        fetchAllItems()
-        fetchAllShops()
+    fun fetchAllItems() {
+        viewModelScope.launch {
+            val allItems = itemRepository.getAllItems()
+            // Process all items first
+            allItems.forEach { item ->
+                // Log each item
+                Log.d("ItemViewModel", "Item name: ${item.name}, Item description: ${item.description}")
+            }
+            // After processing all items, update LiveData
+            _items.postValue(allItems)
+        }
     }
 
-
-
-    // Function to insert an item and associate it with given shops
-
-    // Function to insert an item and associate it with given shops
     fun insertItemWithShops(item: Item, shopIds: List<Long>) {
         viewModelScope.launch {
+            // Insert the item and get its ID
             val itemId = itemRepository.insertItem(item)
+
+            // Associate item with each shop
             shopIds.forEach { shopId ->
                 crossRefRepository.associateItemWithShop(itemId, shopId)
             }
-            // After the insertion, fetch all items again and update the _items LiveData
 
+            // Fetch all items again to update the _items LiveData
+            fetchAllItems()
+            logItemsWithAssociatedShops()
         }
-        fetchAllItems()
     }
 
-//    fun insertItemWithShops(item: Item, shopIds: List<Long>) {
-//        viewModelScope.launch {
-//            val itemId = itemRepository.insertItem(item)
-//            shopIds.forEach { shopId ->
-//                crossRefRepository.associateItemWithShop(itemId, shopId)
-//            }
-//        }
-//    }
+
 
 
     fun logItemsWithAssociatedShops() {
         viewModelScope.launch {
+            // Fetch all items first
             val allItems = itemRepository.getAllItems()
 
-            val uiModels = allItems.map { item ->
+            // Prepare a list to hold the UI models
+            val uiModels = mutableListOf<ItemUiModel>()
+
+            // Iterate over each item and fetch associated shops
+            for (item in allItems) {
                 val associatedShopIds = crossRefRepository.getShopIdsForItem(item.id)
                 val associatedShops = shopRepository.getShopsByIds(associatedShopIds)
 
-                ItemUiModel(itemId = item.id, itemName = item.name, shopNames = associatedShops)
+                // Logging associated shops for each item
+                Log.i("Crispy", "Associated shops for item ${item.name} are $associatedShops")
+
+                // Create and add the UI model to the list
+                uiModels.add(ItemUiModel(itemId = item.id, itemName = item.name, shopNames = associatedShops))
             }
 
+            // Now, update the LiveData with the list of UI models
+            // This is done after all the asynchronous work is complete
+            _itemUiModels.postValue(uiModels)
 
-            allItems.forEach { item ->
-                val associatedShopIds = crossRefRepository.getShopIdsForItem(item.id)
-                val associatedShops = shopRepository.getShopsByIds(associatedShopIds)
-                Log.d("ItemViewModel", "Item name: ${item.name}, Associated Shops: ${associatedShops.joinToString { it.name }}")
-
-            }
-            _itemUiModels.value = uiModels
+            // Logging after updating LiveData
+            Log.i("Crispy", "UI models updated: $uiModels")
         }
     }
+
+
+//    fun logItemsWithAssociatedShops() {
+//        viewModelScope.launch {
+//            // Fetch all items first
+//            val allItems = itemRepository.getAllItems()
+//
+//            // Prepare a list to hold the UI models, but don't update LiveData yet
+//            val uiModels = mutableListOf<ItemUiModel>()
+//
+//            // Iterate over each item and fetch associated shops
+//            for (item in allItems) {
+//                val associatedShopIds = crossRefRepository.getShopIdsForItem(item.id)
+//                val associatedShops = shopRepository.getShopsByIds(associatedShopIds)
+//
+//                // Logging associated shops for each item
+//                Log.i("Crispy", "Associated shops for item ${item.name} are $associatedShops")
+//
+//                // Create and add the UI model to the list
+//                uiModels.add(ItemUiModel(itemId = item.id, itemName = item.name, shopNames = associatedShops))
+//            }
+//
+//            // Now, update the LiveData with the list of UI models
+//            _itemUiModels.postValue(uiModels)
+//
+//            // Logging after updating LiveData
+//            Log.i("Crispy", "UI models updated: $uiModels")
+//        }
+//    }
+
 
 }
 
 
 
 
-//@HiltViewModel
-//class ItemViewModel @Inject constructor(
-//    private val itemRepository: ItemRepository
-//) : ViewModel() {
-//
-//    // Live data to observe changes in items
-//    private val _items = MutableLiveData<List<Item>>()
-//    val items: LiveData<List<Item>> get() = _items
-//
-//    // Function to fetch all items
-//    fun fetchAllItems() {
-//        viewModelScope.launch {
-//            _items.value = itemRepository.getAllItems()
-//        }
-//    }
-//
-//    // Other functions to handle add, update, delete operations, etc.
-//    // ...
-//}
 
 
 
 
 
 
-
-//@HiltViewModel
-//class ItemViewModel @Inject constructor(
-//    private val itemRepository: ItemRepository
-//) : ViewModel() {
-//
-//    val items = MutableLiveData<List<Item>>()
-//
-//    fun fetchItems() {
-//        viewModelScope.launch {
-//            items.value = itemRepository.getAllItems()
-//        }
-//    }
-//
-//    fun fetchItemsByShop(shopId: Long) {
-//        viewModelScope.launch {
-//            items.value = itemRepository.getItemsByShop(shopId)
-//        }
-//    }
-//
-//    fun addItem(item: Item) {
-//        viewModelScope.launch {
-//            itemRepository.insertItem(item)
-//            // Optionally, refresh the items after adding.
-//            fetchItems()
-//        }
-//    }
-//
-//    fun updateItem(item: Item) {
-//        viewModelScope.launch {
-//            itemRepository.updateItem(item)
-//            // Optionally, refresh the items after updating.
-//            fetchItems()
-//        }
-//    }
-//
-//    fun deleteItem(item: Item) {
-//        viewModelScope.launch {
-//            itemRepository.deleteItem(item)
-//            // Optionally, refresh the items after deletion.
-//            fetchItems()
-//        }
-//    }
-//
-//    fun setItemPurchased(itemId: Long, purchased: Boolean) {
-//        viewModelScope.launch {
-//            itemRepository.setItemPurchased(itemId, purchased)
-//            // Optionally, refresh the items after changing purchase status.
-//            fetchItems()
-//        }
-//    }
-//
-//    // ... You can add other functions as needed based on your app's functionality.
-//}

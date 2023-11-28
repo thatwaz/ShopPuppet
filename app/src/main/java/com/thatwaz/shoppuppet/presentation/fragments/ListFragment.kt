@@ -1,21 +1,20 @@
 package com.thatwaz.shoppuppet.presentation.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.thatwaz.shoppuppet.databinding.FragmentListBinding
 import com.thatwaz.shoppuppet.domain.model.ItemUiModel
-import com.thatwaz.shoppuppet.domain.model.Shop
 import com.thatwaz.shoppuppet.presentation.adapters.ListAdapter
 import com.thatwaz.shoppuppet.presentation.viewmodel.ItemViewModel
 import dagger.hilt.android.AndroidEntryPoint
-
 
 
 @AndroidEntryPoint
@@ -23,14 +22,13 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener  {
 
         private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
-    private val adapter = ListAdapter(this)
+//    private val adapter = ListAdapter(this)
+    private lateinit var listAdapter: ListAdapter
 
     // Injecting the ViewModel
     private val viewModel: ItemViewModel by viewModels()
 
-    private var allShops: List<Shop> = emptyList()
 
-    private val itemListLiveData = MutableLiveData<List<ItemUiModel>>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,41 +41,54 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener  {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-                itemListLiveData.observe(viewLifecycleOwner) { itemList ->
-            // Update your RecyclerView adapter with the latest data
-            adapter.submitList(itemList)
-        }
-
-        viewModel.itemUiModels.observe(viewLifecycleOwner) { itemUiModels ->
-            adapter.submitList(itemUiModels)
-        }
-
-        viewModel.shops.observe(viewLifecycleOwner) { shops ->
-            // Update the allShops variable here
-            allShops = shops
-        }
-//        }
-
-        viewModel.fetchAllItems()
         viewModel.logItemsWithAssociatedShops()
-//
-//        adapter = ListAdapter(listOf())
-        binding.rvShoppingList.adapter = adapter
-        binding.rvShoppingList.layoutManager = LinearLayoutManager(context)
+
+
+
+        setupRecyclerView()
+        observeListData()
 
 
         binding.fabAddItem.setOnClickListener {
             val action = ListFragmentDirections
                 .actionListFragmentToAddItemFragment()
             findNavController().navigate(action)
-//            showShopListDialog()
+
         }
-
-
     }
 
 
 
+    private fun setupRecyclerView() {
+        val recyclerView: RecyclerView = binding.rvShoppingList
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        listAdapter = ListAdapter(this)
+        recyclerView.adapter = listAdapter
+    }
+
+
+    private fun observeListData() {
+        viewModel.itemUiModels.observe(viewLifecycleOwner) { shopList ->
+            // Check if shopList is not empty or null (based on your logic)
+            if (shopList.isNotEmpty()) {
+                listAdapter.submitList(shopList)
+                Log.i("Crispy", "Shoplist is $shopList")
+            }
+        }
+    }
+
+//    private fun observeListData() {
+//        viewModel.itemUiModels.observe(viewLifecycleOwner) { shopList ->
+//            listAdapter.submitList(shopList)
+//            Log.i("Crispy","shoplist is $shopList")
+//        }
+//    }
+
+//    override fun onResume() {
+//        super.onResume()
+//        Log.i("Crispy","onResume called")
+//        viewModel.refreshData()
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -96,9 +107,5 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener  {
         }
     }
 
-
-//    override fun onDeleteItem(item: ItemUiModel) {
-//        viewModel.deleteItemWithShops(item)
-//    }
 }
 
