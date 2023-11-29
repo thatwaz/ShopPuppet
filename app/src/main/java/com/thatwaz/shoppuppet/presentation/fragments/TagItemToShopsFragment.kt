@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +20,7 @@ import com.thatwaz.shoppuppet.presentation.viewmodel.ItemViewModel
 import com.thatwaz.shoppuppet.presentation.viewmodel.SelectedShopsViewModel
 import com.thatwaz.shoppuppet.presentation.viewmodel.TagItemToShopsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -69,7 +70,7 @@ class TagItemToShopsFragment() : Fragment(R.layout.fragment_tag_item_to_shops) {
                 selectedShopsViewModel.removeSelectedShop(selectedShop)
             }
             Log.i("ShopSelection", "Selected shops updated")
-                        Log.i("Goose","sel shop is $selectedShop")
+            Log.i("Goose", "sel shop is $selectedShop")
         }
 
 
@@ -79,17 +80,36 @@ class TagItemToShopsFragment() : Fragment(R.layout.fragment_tag_item_to_shops) {
 //        }
 
         // Setting the save button click listener
+
+
+        // todo need to make user add at least 1 shop before saving or show toast
         binding.btnSave.setOnClickListener {
             val newItemName = Item(name = newItem, description = "")
-            val selectedShopIds = selectedShopsViewModel.selectedShops.value?.map { it.id } ?: emptyList()
+            val selectedShopIds =
+                selectedShopsViewModel.selectedShops.value?.map { it.id } ?: emptyList()
 
-            Log.d("TagItemToShopsFragment", "Save button clicked. Item: $newItemName, Selected shops: $selectedShopIds")
+            lifecycleScope.launch {
+                itemViewModel.insertItemWithShopsAsync(newItemName, selectedShopIds).await()
 
-            itemViewModel.insertItemWithShops(newItemName, selectedShopIds)
-            val action = TagItemToShopsFragmentDirections.actionTagItemToShopsFragmentToListFragment()
-            findNavController().navigate(action)
+                // Navigate back to ListFragment
+                val action =
+                    TagItemToShopsFragmentDirections.actionTagItemToShopsFragmentToListFragment()
+                findNavController().navigate(action)
+            }
         }
     }
+
+//        binding.btnSave.setOnClickListener {
+//            val newItemName = Item(name = newItem, description = "")
+//            val selectedShopIds = selectedShopsViewModel.selectedShops.value?.map { it.id } ?: emptyList()
+//
+//            Log.d("TagItemToShopsFragment", "Save button clicked. Item: $newItemName, Selected shops: $selectedShopIds")
+//
+//            itemViewModel.insertItemWithShops(newItemName, selectedShopIds)
+//            val action = TagItemToShopsFragmentDirections.actionTagItemToShopsFragmentToListFragment()
+//            findNavController().navigate(action)
+//        }
+//    }
 
 //    private fun observeSelectedShops() {
 //        selectedShopsViewModel.selectedShops.observe(viewLifecycleOwner) { selectedShops ->
