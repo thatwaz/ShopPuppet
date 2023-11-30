@@ -65,6 +65,9 @@
             android:id="@+id/action_shopsFragment_to_shopSpecificListFragment"
             app:destination="@id/shopSpecificListFragment">
         </action>
+        <action
+            android:id="@+id/action_shopSpecificListFragment_to_shopsFragment"
+            app:destination="@id/shopsFragment" />
     </fragment>
     <fragment
         android:id="@+id/addItemFragment"

@@ -73,7 +73,6 @@ class ItemViewModel @Inject constructor(
         viewModelScope.launch {
             // Delete the item and its associated shops
             itemRepository.deleteItemWithShops(item)
-
         }
     }
 
@@ -119,22 +118,6 @@ class ItemViewModel @Inject constructor(
         logItemsWithAssociatedShops()
     }
 
-//    fun insertItemWithShops(item: Item, shopIds: List<Long>) {
-//        viewModelScope.launch {
-//            // Insert the item and get its ID
-//            val itemId = itemRepository.insertItem(item)
-//
-//            // Associate item with each shop
-//            shopIds.forEach { shopId ->
-//                crossRefRepository.associateItemWithShop(itemId, shopId)
-//            }
-//
-//            // Fetch all items again to update the _items LiveData
-//            fetchAllItems()
-//            logItemsWithAssociatedShops()
-//        }
-//    }
-
 
     fun logItemsWithAssociatedShops() {
         viewModelScope.launch {
@@ -162,67 +145,9 @@ class ItemViewModel @Inject constructor(
 
             // Logging after updating LiveData
             Log.i("Crispy", "UI models updated: $uiModels")
+            fetchAllItems()
         }
     }
-
-//    fun logItemsWithAssociatedShops() {
-//        viewModelScope.launch {
-//            // Fetch all items first
-//            val allItems = itemRepository.getAllItems()
-//
-//            // Prepare a list to hold the UI models
-//            val uiModels = mutableListOf<ItemUiModel>()
-//
-//            // Iterate over each item and fetch associated shops
-//            for (item in allItems) {
-//                val associatedShopIds = crossRefRepository.getShopIdsForItem(item.id)
-//                val associatedShops = shopRepository.getShopsByIds(associatedShopIds)
-//
-//                // Logging associated shops for each item
-//                Log.i("Crispy", "Associated shops for item ${item.name} are $associatedShops")
-//
-//                // Create and add the UI model to the list
-//                uiModels.add(ItemUiModel(itemId = item.id, itemName = item.name, shopNames = associatedShops))
-//            }
-//
-//            // Now, update the LiveData with the list of UI models
-//            // This is done after all the asynchronous work is complete
-//            _itemUiModels.postValue(uiModels)
-//
-//            // Logging after updating LiveData
-//            Log.i("Crispy", "UI models updated: $uiModels")
-//        }
-//    }
-
-
-//    fun logItemsWithAssociatedShops() {
-//        viewModelScope.launch {
-//            // Fetch all items first
-//            val allItems = itemRepository.getAllItems()
-//
-//            // Prepare a list to hold the UI models, but don't update LiveData yet
-//            val uiModels = mutableListOf<ItemUiModel>()
-//
-//            // Iterate over each item and fetch associated shops
-//            for (item in allItems) {
-//                val associatedShopIds = crossRefRepository.getShopIdsForItem(item.id)
-//                val associatedShops = shopRepository.getShopsByIds(associatedShopIds)
-//
-//                // Logging associated shops for each item
-//                Log.i("Crispy", "Associated shops for item ${item.name} are $associatedShops")
-//
-//                // Create and add the UI model to the list
-//                uiModels.add(ItemUiModel(itemId = item.id, itemName = item.name, shopNames = associatedShops))
-//            }
-//
-//            // Now, update the LiveData with the list of UI models
-//            _itemUiModels.postValue(uiModels)
-//
-//            // Logging after updating LiveData
-//            Log.i("Crispy", "UI models updated: $uiModels")
-//        }
-//    }
-
 
 }
 

@@ -78,6 +78,7 @@ class ShopSpecificListViewModel @Inject constructor(
         } ?: Log.d("ViewModelLog", "Shop ID not set")
     }
 
+    // todo Diagnose why last item in list does not disappear in ui immediately
     fun deleteCheckedItems(items: List<Item>) {
         viewModelScope.launch {
             repository.deleteItemsWithShopAssociation(items)

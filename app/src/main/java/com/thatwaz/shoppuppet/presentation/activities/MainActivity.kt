@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.shopSpecificListFragment -> {
                     // Hide the toolbar when in ShopSpecificListFragment
                     supportActionBar?.hide()
+                    binding.bnvShopPuppet.visibility = View.GONE
                 }
                 else -> {
                     // Show the BottomNavigationView and toolbar for all other fragments
@@ -61,23 +62,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-//        navController.addOnDestinationChangedListener { _, destination, _ ->
-//            when (destination.id) {
-//                R.id.addShopFragment-> {
-//                    // Hide the BottomNavigationView when in AddShopsFragment
-//                    binding.bnvShopPuppet.visibility = View.GONE
-//                }
-//
-//
-//                else -> {
-//                    // Show the BottomNavigationView for all other fragments
-//                    binding.bnvShopPuppet.visibility = View.VISIBLE
-//                }
-//            }
-//
-//
-//            supportActionBar?.title = destination.label
-//        }
+
     }
 
     override fun onSupportNavigateUp(): Boolean {

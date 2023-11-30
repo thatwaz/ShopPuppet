@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thatwaz.shoppuppet.databinding.FragmentShopSpecificListBinding
@@ -23,6 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class ShopSpecificListFragment : Fragment() {
 
     private val viewModel: ShopSpecificListViewModel by viewModels()
+
 
 //    private lateinit var shopSpecificItemAdapter: ShopSpecificItemAdapter
 //    private lateinit var purchasedItemsAdapter: PurchasedItemsAdapter
@@ -70,6 +72,14 @@ class ShopSpecificListFragment : Fragment() {
             val checkedItems = purchasedItemsAdapter?.getCheckedItems() ?: listOf()
             // Pass checkedItems to ViewModel for deletion
             viewModel.deleteCheckedItems(checkedItems)
+
+        }
+
+        binding.btnBackToShops.setOnClickListener {
+            val action = ShopSpecificListFragmentDirections
+                .actionShopSpecificListFragmentToShopsFragment()
+            findNavController().navigate(action)
+
         }
 
 

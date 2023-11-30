@@ -69,13 +69,35 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener  {
 
     private fun observeListData() {
         viewModel.itemUiModels.observe(viewLifecycleOwner) { shopList ->
-            // Check if shopList is not empty or null (based on your logic)
             if (shopList.isNotEmpty()) {
+                // Update the adapter with the new list if it's not empty
                 listAdapter.submitList(shopList)
                 Log.i("Crispy", "Shoplist is $shopList")
+            } else {
+                // Handle the empty list case
+                // Update the adapter with an empty list to clear the RecyclerView
+                listAdapter.submitList(emptyList())
+
+                // Optionally, display a message or a view indicating the list is empty
+                // For example, show an empty state view or hide certain UI elements
+                // (Assuming you have an 'emptyListView' or similar in your layout)
+//                binding.emptyListView.visibility = View.VISIBLE
+
+                Log.i("Crispy", "Shoplist is empty")
             }
         }
     }
+
+
+//    private fun observeListData() {
+//        viewModel.itemUiModels.observe(viewLifecycleOwner) { shopList ->
+//            // Check if shopList is not empty or null (based on your logic)
+//            if (shopList.isNotEmpty()) {
+//                listAdapter.submitList(shopList)
+//                Log.i("Crispy", "Shoplist is $shopList")
+//            }
+//        }
+//    }
 
 //    private fun observeListData() {
 //        viewModel.itemUiModels.observe(viewLifecycleOwner) { shopList ->
@@ -102,9 +124,11 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener  {
         if (item != null) {
             // Call the deleteItemWithShops function with the Item object
             viewModel.deleteItemWithShops(item)
+
         } else {
             // Handle the case where the corresponding Item object is not found
         }
+
     }
 
 }

@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -46,9 +47,6 @@ class TagItemToShopsFragment() : Fragment(R.layout.fragment_tag_item_to_shops) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        observeSelectedShops()
-
-
         Log.d("TagItemToShopsFragment", "onViewCreated called")
 
         // Retrieve the item name from fragment arguments
@@ -74,54 +72,30 @@ class TagItemToShopsFragment() : Fragment(R.layout.fragment_tag_item_to_shops) {
         }
 
 
-//        shopSelectionAdapter.onItemClick = { selectedShop ->
-//            selectedShopsViewModel.addSelectedShop(selectedShop)
-//            Log.i("Goose","sel shop is $selectedShop")
-//        }
-
-        // Setting the save button click listener
 
 
-        // todo need to make user add at least 1 shop before saving or show toast
         binding.btnSave.setOnClickListener {
-            val newItemName = Item(name = newItem, description = "")
-            val selectedShopIds =
-                selectedShopsViewModel.selectedShops.value?.map { it.id } ?: emptyList()
+            val selectedShopIds = selectedShopsViewModel.selectedShops.value?.map { it.id } ?: emptyList()
 
-            lifecycleScope.launch {
-                itemViewModel.insertItemWithShopsAsync(newItemName, selectedShopIds).await()
+            if (selectedShopIds.isEmpty()) {
+                // Show a Toast message if no shops are selected
+                Toast.makeText(context, "Please select at least one shop", Toast.LENGTH_SHORT).show()
+            } else {
+                // Continue with the saving process
+                val newItemName = Item(name = newItem, description = "")
 
-                // Navigate back to ListFragment
-                val action =
-                    TagItemToShopsFragmentDirections.actionTagItemToShopsFragmentToListFragment()
-                findNavController().navigate(action)
+                lifecycleScope.launch {
+                    itemViewModel.insertItemWithShopsAsync(newItemName, selectedShopIds).await()
+
+                    // Navigate back to ListFragment
+                    val action = TagItemToShopsFragmentDirections.actionTagItemToShopsFragmentToListFragment()
+                    findNavController().navigate(action)
+                }
             }
         }
+
     }
 
-//        binding.btnSave.setOnClickListener {
-//            val newItemName = Item(name = newItem, description = "")
-//            val selectedShopIds = selectedShopsViewModel.selectedShops.value?.map { it.id } ?: emptyList()
-//
-//            Log.d("TagItemToShopsFragment", "Save button clicked. Item: $newItemName, Selected shops: $selectedShopIds")
-//
-//            itemViewModel.insertItemWithShops(newItemName, selectedShopIds)
-//            val action = TagItemToShopsFragmentDirections.actionTagItemToShopsFragmentToListFragment()
-//            findNavController().navigate(action)
-//        }
-//    }
-
-//    private fun observeSelectedShops() {
-//        selectedShopsViewModel.selectedShops.observe(viewLifecycleOwner) { selectedShops ->
-//
-//            // This block will be called whenever the selected shops change
-//            // Perform your database update logic here
-//            Log.i("Crow","This shops are $selectedShops")
-//
-//
-//
-//        }
-//    }
 
     private fun setupRecyclerView() {
         val recyclerView: RecyclerView = binding.rvShopsToTag

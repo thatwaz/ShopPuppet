@@ -25,6 +25,17 @@
         android:background="@color/shop_fashion_red"
         app:layout_constraintTop_toBottomOf="@id/cl_top">
 
+        <ImageButton
+            android:id="@+id/btn_back_to_shops"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:background="@null"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_arrow_back"/>
+
         <TextView
             android:id="@+id/tv_shop_name"
             android:layout_width="wrap_content"
