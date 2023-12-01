@@ -2,6 +2,7 @@ package com.thatwaz.shoppuppet.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.thatwaz.shoppuppet.databinding.ItemShopsToTagBinding
@@ -12,7 +13,7 @@ import com.thatwaz.shoppuppet.presentation.viewmodel.SelectedShopsViewModel
 class ShopSelectionAdapter(
     var onItemClick: (Shop) -> Unit,
     private val selectedShopsViewModel: SelectedShopsViewModel
-) : ListAdapter<Shop, ShopSelectionAdapter.ViewHolder>(ShopAdapter.ShopDiffCallback()) {
+) : ListAdapter<Shop, ShopSelectionAdapter.ViewHolder>(ShopDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemShopsToTagBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -46,6 +47,15 @@ class ShopSelectionAdapter(
                 // Optional: Notify an external listener about the selection
                 onItemClick(shop)
             }
+        }
+    }
+    class ShopDiffCallback : DiffUtil.ItemCallback<Shop>() {
+        override fun areItemsTheSame(oldItem: Shop, newItem: Shop): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Shop, newItem: Shop): Boolean {
+            return oldItem == newItem
         }
     }
 }

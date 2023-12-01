@@ -40,7 +40,8 @@ class ShopsFragment : Fragment() {
         setupRecyclerView()
         observeShopData()
         setupAddShopButton()
-
+        //refreshes item count for each shop
+        viewModel.fetchShopsWithItemCount()
         val content = SpannableString(binding.tvEditDeleteInfo.text)
         content.setSpan(UnderlineSpan(), 0, content.length, 0)
         binding.tvEditDeleteInfo.text = content
@@ -57,7 +58,7 @@ class ShopsFragment : Fragment() {
                 findNavController().navigate(action)
 //
 //                val action = ShopsFragmentDirections.actionShopsFragmentToStoreSpecificListFragment()
-//                findNavController().navigate(action)
+//
             }
         }
         shopAdapter.onShopItemLongClickListener = object : ShopAdapter.OnShopItemLongClickListener {
@@ -79,10 +80,17 @@ class ShopsFragment : Fragment() {
     }
 
     private fun observeShopData() {
-        viewModel.shops.observe(viewLifecycleOwner) { shopList ->
-            shopAdapter.submitList(shopList)
+        viewModel.shopsWithItemCount.observe(viewLifecycleOwner) { shopListWithItemCount ->
+            shopAdapter.submitList(shopListWithItemCount)
         }
     }
+
+
+//    private fun observeShopData() {
+//        viewModel.shops.observe(viewLifecycleOwner) { shopList ->
+//            shopAdapter.submitList(shopList)
+//        }
+//    }
 
     private fun setupAddShopButton() {
         binding.btnAddShop.setOnClickListener {

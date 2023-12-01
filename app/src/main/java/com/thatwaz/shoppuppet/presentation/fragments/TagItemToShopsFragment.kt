@@ -113,6 +113,7 @@ class TagItemToShopsFragment() : Fragment(R.layout.fragment_tag_item_to_shops) {
         viewModel.shops.observe(viewLifecycleOwner) { shops ->
             Log.d("DOH!", "Shops are this $shops")
             shopSelectionAdapter.submitList(shops)
+
         }
     }
 
