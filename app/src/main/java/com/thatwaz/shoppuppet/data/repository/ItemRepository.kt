@@ -22,7 +22,7 @@ class ItemRepository @Inject constructor(
     // Insert a new item
     suspend fun insertItem(item: Item): Long = itemDao.insert(item)
 
-    suspend fun getItemById(itemId: Long): Item? = itemDao.getItemById(itemId)
+//    suspend fun getItemById(itemId: Long): Item? = itemDao.getItemById(itemId)
 
     suspend fun deleteItemWithShops(item: Item) {
         // Step 1: Delete associations in item_shop_cross_ref
@@ -56,16 +56,16 @@ class ItemRepository @Inject constructor(
     suspend fun deleteItem(item: Item) = itemDao.deleteItem(item)
 
     // Delete items by a specific shop
-    suspend fun deleteItemsByShop(shopId: Long) = itemDao.deleteItemsByShop(shopId)
-
-    // Get the count of items for a specific shop
-    suspend fun getItemsCountForShop(shopId: Long): Int = itemDao.getItemsCountForShop(shopId)
-
-    // Set item as purchased or not
-    suspend fun setItemPurchased(itemId: Long, purchased: Boolean) =
-        itemDao.setItemPurchasedStatus(itemId, purchased)
-
-    // Get all purchased items
-    suspend fun getPurchasedItems(): List<Item> = itemDao.getPurchasedItems()
+//    suspend fun deleteItemsByShop(shopId: Long) = itemDao.deleteItemsByShop(shopId)
+//
+//    // Get the count of items for a specific shop
+//    suspend fun getItemsCountForShop(shopId: Long): Int = itemDao.getItemsCountForShop(shopId)
+//
+//    // Set item as purchased or not
+//    suspend fun setItemPurchased(itemId: Long, purchased: Boolean) =
+//        itemDao.setItemPurchasedStatus(itemId, purchased)
+//
+//    // Get all purchased items
+//    suspend fun getPurchasedItems(): List<Item> = itemDao.getPurchasedItems()
 }
 

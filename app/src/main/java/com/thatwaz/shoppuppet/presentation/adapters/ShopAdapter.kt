@@ -115,9 +115,7 @@ class ShopAdapter : ListAdapter<ShopWithItemCount, ShopAdapter.ShopViewHolder>(S
         // Bind the shop and item count data to the view holder
         holder.bind(shopWithItemCount)
     }
-//    override fun onBindViewHolder(holder: ShopViewHolder, position: Int) {
-//        holder.bind(getItem(position))
-//    }
+
 
     class ShopDiffCallback : DiffUtil.ItemCallback<ShopWithItemCount>() {
         override fun areItemsTheSame(oldItem: ShopWithItemCount, newItem: ShopWithItemCount): Boolean {

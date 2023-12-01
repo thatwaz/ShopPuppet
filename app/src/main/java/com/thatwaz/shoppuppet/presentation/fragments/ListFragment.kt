@@ -22,10 +22,8 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener  {
 
         private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
-//    private val adapter = ListAdapter(this)
     private lateinit var listAdapter: ListAdapter
 
-    // Injecting the ViewModel
     private val viewModel: ItemViewModel by viewModels()
 
 
@@ -40,11 +38,7 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener  {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewModel.logItemsWithAssociatedShops()
-
-
-
         setupRecyclerView()
         observeListData()
 
@@ -56,9 +50,6 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener  {
 
         }
     }
-
-
-
     private fun setupRecyclerView() {
         val recyclerView: RecyclerView = binding.rvShoppingList
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -66,7 +57,7 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener  {
         recyclerView.adapter = listAdapter
     }
 
-
+// todo TRY TO REMOVE IF ELSE STATEMENT
     private fun observeListData() {
         viewModel.itemUiModels.observe(viewLifecycleOwner) { shopList ->
             if (shopList.isNotEmpty()) {
@@ -74,49 +65,18 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener  {
                 listAdapter.submitList(shopList)
                 Log.i("Crispy", "Shoplist is $shopList")
             } else {
-                // Handle the empty list case
-                // Update the adapter with an empty list to clear the RecyclerView
                 listAdapter.submitList(emptyList())
-
-                // Optionally, display a message or a view indicating the list is empty
-                // For example, show an empty state view or hide certain UI elements
-                // (Assuming you have an 'emptyListView' or similar in your layout)
-//                binding.emptyListView.visibility = View.VISIBLE
-
                 Log.i("Crispy", "Shoplist is empty")
             }
         }
     }
-
-
-//    private fun observeListData() {
-//        viewModel.itemUiModels.observe(viewLifecycleOwner) { shopList ->
-//            // Check if shopList is not empty or null (based on your logic)
-//            if (shopList.isNotEmpty()) {
-//                listAdapter.submitList(shopList)
-//                Log.i("Crispy", "Shoplist is $shopList")
-//            }
-//        }
-//    }
-
-//    private fun observeListData() {
-//        viewModel.itemUiModels.observe(viewLifecycleOwner) { shopList ->
-//            listAdapter.submitList(shopList)
-//            Log.i("Crispy","shoplist is $shopList")
-//        }
-//    }
-
-//    override fun onResume() {
-//        super.onResume()
-//        Log.i("Crispy","onResume called")
-//        viewModel.refreshData()
-//    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
+
+    // todo why is this an override method?
     override fun onDeleteItem(itemUiModel: ItemUiModel) {
         // Find the corresponding Item object from the ViewModel's data
         val item = viewModel.findItemByUiModel(itemUiModel)

@@ -56,13 +56,6 @@ class ItemViewModel @Inject constructor(
 
     }
 
-    fun refreshData() {
-        viewModelScope.launch {
-            fetchAllItems()
-            fetchAllShops()
-            logItemsWithAssociatedShops()
-        }
-    }
 
     fun findItemByUiModel(itemUiModel: ItemUiModel): Item? {
         return items.value?.find { it.id == itemUiModel.itemId }

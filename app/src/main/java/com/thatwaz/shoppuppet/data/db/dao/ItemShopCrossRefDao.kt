@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.thatwaz.shoppuppet.domain.model.ItemShopCrossRef
-import com.thatwaz.shoppuppet.domain.model.Shop
 
 @Dao
 interface ItemShopCrossRefDao {
@@ -15,8 +14,8 @@ interface ItemShopCrossRefDao {
     @Query("DELETE FROM item_shop_cross_ref WHERE itemId = :itemId AND shopId = :shopId")
     suspend fun deleteCrossRef(itemId: Long, shopId: Long)
 
-    @Query("SELECT * FROM item_shop_cross_ref")
-    suspend fun getAllAssociations(): List<ItemShopCrossRef>
+//    @Query("SELECT * FROM item_shop_cross_ref")
+//    suspend fun getAllAssociations(): List<ItemShopCrossRef>
 
 
 
@@ -26,5 +25,4 @@ interface ItemShopCrossRefDao {
 
 
 
-    // Query for items based on shopId and vice versa as needed
 }

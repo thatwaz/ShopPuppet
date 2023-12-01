@@ -37,5 +37,4 @@ object AppModule {
         return database.itemShopCrossRefDao()
     }
 
-    // ... similarly, provide repositories or other services as needed
 }

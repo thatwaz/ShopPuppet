@@ -46,24 +46,6 @@ class ShopsViewModel @Inject constructor(
         }
     }
 
-//    init {
-//        fetchShops()
-//    }
-
-//    private fun fetchShops() {
-//        viewModelScope.launch {
-//            val shops = shopRepository.getAllShops()
-//            val shopsWithItemCount = shops.map { shop ->
-//                ShopWithItemCount(
-//                    shop = shop,
-//                    itemCount = shopRepository.getItemsCountForShop(shop.id)
-//                )
-//            }
-//            _shopsWithItemCount.value = shopsWithItemCount
-//            Log.i("DOH!", "Shops with item count: $shopsWithItemCount")
-//        }
-//    }
-
     private fun fetchShops() {
         viewModelScope.launch {
             _shops.value = shopRepository.getAllShops()
@@ -81,58 +63,4 @@ class ShopsViewModel @Inject constructor(
 
 }
 
-//@HiltViewModel
-//class ShopsViewModel @Inject constructor(
-//    private val shopRepository: ShopRepository
-//) : ViewModel() {
-//
-//    private val _shops = MutableLiveData<List<Shop>>()
-//    val shops: LiveData<List<Shop>> get() = _shops
-//
-//    val allShops: LiveData<List<Shop>> = liveData {
-//        emit(shopRepository.getAllShops())
-//    }
-//
-//    // This function may not be necessary if you use the liveData builder as above
-//    fun fetchShops() {
-//        viewModelScope.launch {
-//            _shops.value = shopRepository.getAllShops()
-//        }
-//    }
-//
-//    fun deleteShop(shop: Shop) {
-//        viewModelScope.launch {
-//            try {
-//                shopRepository.deleteShop(shop)
-//                val updatedShops = shopRepository.getAllShops()
-////                _allShops.value = updatedShops
-//
-//                // Optionally, refresh the list of shops or post a success message
-//            } catch (e: Exception) {
-//                // Handle any exceptions, e.g., show an error message
-//            }
-//        }
-//    }
-//}
 
-
-
-
-
-
-
-//@HiltViewModel
-//class ShopViewModel @Inject constructor(
-//    private val shopRepository: ShopRepository
-//) : ViewModel() {
-//
-//    val shops = MutableLiveData<List<Shop>>()
-//
-//    fun fetchShops() {
-//        viewModelScope.launch {
-//            shops.value = shopRepository.getAllShops()
-//        }
-//    }
-//
-//
-//}

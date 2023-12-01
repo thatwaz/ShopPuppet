@@ -29,9 +29,6 @@ class SelectedShopsViewModel @Inject constructor() : ViewModel() {
         _selectedShops.value = newList
     }
 
-//    fun removeSelectedShop(shop: Shop) {
-//        _selectedShops.value = _selectedShops.value.orEmpty().filter { it != shop }
-//    }
 
     fun isSelected(shop: Shop): Boolean {
         Log.i("Crow","Checked shop is ${_selectedShops.value}")
@@ -41,18 +38,3 @@ class SelectedShopsViewModel @Inject constructor() : ViewModel() {
 
 
 
-//@HiltViewModel
-//class SelectedShopsViewModel @Inject constructor() : ViewModel() {
-//    private val _selectedShops = MutableLiveData<List<Shop>>()
-//    val selectedShops: LiveData<List<Shop>> get() = _selectedShops
-//
-//    fun addSelectedShop(shop: Shop) {
-//        val currentList = _selectedShops.value ?: emptyList()
-//        _selectedShops.value = currentList + shop
-//    }
-//
-//    fun removeSelectedShop(shop: Shop) {
-//        val currentList = _selectedShops.value ?: emptyList()
-//        _selectedShops.value = currentList - shop
-//    }
-//}

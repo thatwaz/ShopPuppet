@@ -51,10 +51,10 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         super.onViewCreated(view, savedInstanceState)
         initializeViews()
 
-        viewModel.allShops.observe(viewLifecycleOwner, { shops ->
+        viewModel.allShops.observe(viewLifecycleOwner) { shops ->
             Log.d("ShopsFragment", "Observed shops: $shops")
             // Your logic to display the shops in the UI, e.g., updating a RecyclerView.
-        })
+        }
 
         viewModel.shopName.observe(viewLifecycleOwner) { name ->
             binding.shopNamePreview.text = name

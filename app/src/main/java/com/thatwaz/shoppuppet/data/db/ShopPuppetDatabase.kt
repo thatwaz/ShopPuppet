@@ -13,7 +13,7 @@ import com.thatwaz.shoppuppet.domain.model.Item
 import com.thatwaz.shoppuppet.domain.model.ItemShopCrossRef
 import com.thatwaz.shoppuppet.domain.model.Shop
 
-
+// todo need migration strategy
 @Database(entities = [Item::class, Shop::class, ItemShopCrossRef::class], version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class ShopPuppetDatabase : RoomDatabase() {
@@ -44,27 +44,4 @@ abstract class ShopPuppetDatabase : RoomDatabase() {
 }
 
 
-//@Database(entities = [Item::class, Shop::class], version = 1, exportSchema = false)
-//@TypeConverters(Converters::class)
-//abstract class ShopPuppetDatabase : RoomDatabase() {
-//
-//    abstract fun itemDao(): ItemDao
-//    abstract fun shopDao(): ShopDao
-//
-//    companion object {
-//        @Volatile
-//        private var INSTANCE: ShopPuppetDatabase? = null
-//
-//        fun getDatabase(context: Context): ShopPuppetDatabase {
-//            return INSTANCE ?: synchronized(this) {
-//                val instance = Room.databaseBuilder(
-//                    context.applicationContext,
-//                    ShopPuppetDatabase::class.java,
-//                    "shop_puppet_database"
-//                ).build()
-//                INSTANCE = instance
-//                instance
-//            }
-//        }
-//    }
-//}
+

@@ -24,6 +24,7 @@ class CustomIconDialogFragment : DialogFragment() {
         if (parentFragment is CustomIconDialogListener) {
             listener = parentFragment as CustomIconDialogListener
         }
+            // todo test this
         // If the dialog is shown from an activity
         else if (context is CustomIconDialogListener) {
             listener = context

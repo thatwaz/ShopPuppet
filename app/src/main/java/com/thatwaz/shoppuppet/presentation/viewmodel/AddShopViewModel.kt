@@ -31,7 +31,7 @@ class AddShopViewModel @Inject constructor(
     private val _selectedIconRef = MutableLiveData<Int>()
     val selectedIconRef: LiveData<Int> get() = _selectedIconRef
 
-    private val _selectedColor = MutableLiveData<Int>(R.color.black)
+    private val _selectedColor = MutableLiveData(R.color.black)
     val selectedColor: LiveData<Int> get() = _selectedColor
 
     private val _shopInitials = MutableLiveData<String?>()

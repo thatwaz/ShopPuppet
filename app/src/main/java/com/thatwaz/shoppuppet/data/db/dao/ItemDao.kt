@@ -26,8 +26,6 @@ interface ItemDao {
     suspend fun getItemsByShop(shopId: Long): List<Item>
 
 
-//    @Query("SELECT * FROM items WHERE shopId = :shopId")
-//    suspend fun getItemsByShop(shopId: Long): List<Item>
 
     @Update
     suspend fun updateItem(item: Item): Int
@@ -39,9 +37,6 @@ interface ItemDao {
     suspend fun deleteItemsByShop(shopId: Long): Int
 
 
-//    @Query("DELETE FROM items WHERE shopId = :shopId")
-//    suspend fun deleteItemsByShop(shopId: Long): Int
-
     @Query("""
     SELECT COUNT(items.id) FROM items 
     INNER JOIN item_shop_cross_ref ON items.id = item_shop_cross_ref.itemId 
@@ -50,8 +45,7 @@ interface ItemDao {
     suspend fun getItemsCountForShop(shopId: Long): Int
 
 
-//    @Query("SELECT COUNT(*) FROM items WHERE shopId = :shopId")
-//    suspend fun getItemsCountForShop(shopId: Long): Int
+
 
     @Query("SELECT * FROM items WHERE id = :itemId")
     suspend fun getItemById(itemId: Long): Item?
@@ -59,8 +53,8 @@ interface ItemDao {
     @Query("UPDATE Items SET isPurchased = :purchased WHERE id = :itemId")
     suspend fun setItemPurchasedStatus(itemId: Long, purchased: Boolean)
 
-    @Query("SELECT * FROM Items WHERE isPurchased = 1")
-    suspend fun getPurchasedItems(): List<Item>
+//    @Query("SELECT * FROM Items WHERE isPurchased = 1")
+//    suspend fun getPurchasedItems(): List<Item>
 
     @Transaction
     suspend fun deleteItemsWithShopAssociation(itemIds: List<Long>) {

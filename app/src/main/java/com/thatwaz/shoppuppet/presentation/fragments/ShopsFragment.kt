@@ -52,13 +52,10 @@ class ShopsFragment : Fragment() {
 
         shopAdapter.onShopItemClickListener = object : ShopAdapter.OnShopItemClickListener {
             override fun onShopItemClick(shop: Shop) {
-                // Here you define your navigation logic
-//                val shopId: Long = 1// get the shop ID from the selected shop
+
                 val action = ShopsFragmentDirections.actionShopsFragmentToShopSpecificListFragment(shop.name,shop.colorResId,shop.id)
                 findNavController().navigate(action)
-//
-//                val action = ShopsFragmentDirections.actionShopsFragmentToStoreSpecificListFragment()
-//
+
             }
         }
         shopAdapter.onShopItemLongClickListener = object : ShopAdapter.OnShopItemLongClickListener {
@@ -85,12 +82,6 @@ class ShopsFragment : Fragment() {
         }
     }
 
-
-//    private fun observeShopData() {
-//        viewModel.shops.observe(viewLifecycleOwner) { shopList ->
-//            shopAdapter.submitList(shopList)
-//        }
-//    }
 
     private fun setupAddShopButton() {
         binding.btnAddShop.setOnClickListener {
@@ -129,61 +120,8 @@ class ShopsFragment : Fragment() {
             .setPositiveButton("OK", null)
             .show()
     }
-
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
-
-
-
-
-
-
-
-
-//class ShopsFragment : Fragment() {
-//
-//
-//
-//    private var _binding: FragmentShopsBinding? = null
-//    private val binding get() = _binding!!
-//    private lateinit var viewModel: ShopViewModel
-//    private lateinit var shopAdapter: ShopAdapter
-//
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        // Inflate the layout for this fragment
-//        _binding = FragmentShopsBinding.inflate(inflater,container,false)
-//
-//        return binding.root
-//    }
-//
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//        // Initialize your RecyclerView and its adapter
-//        val recyclerView: RecyclerView = view.findViewById(R.id.shopsRecyclerView)
-//        recyclerView.layoutManager = GridLayoutManager(context,3)
-//
-//
-//        // Create mock data or retrieve it from a ViewModel
-//        val shops = MockDataStore.getShops()
-//        shopAdapter = ShopAdapter(shops)
-//        recyclerView.adapter = shopAdapter
-//
-//
-//
-//        binding.btnAddShop.setOnClickListener {
-//            val action = ShopsFragmentDirections
-//                .actionShopsFragmentToAddShopFragment()
-//            findNavController().navigate(action)
-//        }
-//
-//    }
-//}
