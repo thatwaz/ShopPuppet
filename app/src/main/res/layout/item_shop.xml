@@ -27,6 +27,17 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/shop_red" />
 
+        <ImageView
+            android:id="@+id/iv_priority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_star"
+            app:tint="@color/colorAccent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
         <TextView
             android:id="@+id/shop_icon_initials"
             android:layout_width="wrap_content"
@@ -47,10 +58,11 @@
             android:text="6"
             android:gravity="center"
             android:textStyle="bold"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="4dp"
             android:textColor="@color/black"
             android:textSize="14sp"
-            app:layout_constraintStart_toEndOf="@+id/shop_icon"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 

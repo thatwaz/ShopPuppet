@@ -35,32 +35,32 @@ class TagItemToShopsViewModel @Inject constructor(
         }
     }
     // Function to fetch the list of shops using a coroutine
-    suspend fun fetchShops(): List<Shop> {
-        try {
-            val shopsList = repository.getAllShops()
-            Log.d("TagItemToShopsViewModel", "Fetched ${shopsList.size} shops")
-            Log.d("TagItemToShopsViewModel", "Shops are $shopsList")
-            _shops.postValue(shopsList)
-
-            return shopsList
-        } catch (e: Exception) {
-            // Handle the exception, e.g., log it or display an error message
-            throw e // Rethrow the exception to indicate the error
-        }
-    }
+//    suspend fun fetchShops(): List<Shop> {
+//        try {
+//            val shopsList = repository.getAllShops()
+//            Log.d("TagItemToShopsViewModel", "Fetched ${shopsList.size} shops")
+//            Log.d("TagItemToShopsViewModel", "Shops are $shopsList")
+//            _shops.postValue(shopsList)
+//
+//            return shopsList
+//        } catch (e: Exception) {
+//            // Handle the exception, e.g., log it or display an error message
+//            throw e // Rethrow the exception to indicate the error
+//        }
+//    }
 
 
     // Method to handle shop selection
-    fun selectShop(shop: Shop) {
-        val currentSelectedShops = _selectedShops.value.orEmpty().toMutableList()
-
-        if (currentSelectedShops.contains(shop)) {
-            currentSelectedShops.remove(shop)
-        } else {
-            currentSelectedShops.add(shop)
-        }
-
-        _selectedShops.value = currentSelectedShops
-    }
+//    fun selectShop(shop: Shop) {
+//        val currentSelectedShops = _selectedShops.value.orEmpty().toMutableList()
+//
+//        if (currentSelectedShops.contains(shop)) {
+//            currentSelectedShops.remove(shop)
+//        } else {
+//            currentSelectedShops.add(shop)
+//        }
+//
+//        _selectedShops.value = currentSelectedShops
+//    }
 
 }

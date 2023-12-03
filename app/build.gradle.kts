@@ -49,6 +49,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.core:core-ktx:+")
     implementation("androidx.core:core-ktx:+")
+    implementation("androidx.test.ext:junit-ktx:1.1.5")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:4.2.0")
     testImplementation("com.google.truth:truth:4.1.0")
@@ -76,6 +77,18 @@ dependencies {
 
     implementation("com.google.dagger:hilt-android:2.48.1")
     kapt("com.google.dagger:hilt-compiler:2.48.1")
+
+    // AndroidX Test - Instrumented testing
+    androidTestImplementation ("androidx.test:core:1.3.0")
+    androidTestImplementation ("androidx.test.ext:junit:1.1.2")
+    androidTestImplementation ("androidx.test:runner:1.3.0")
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.3.0")
+
+    // Room Testing
+    androidTestImplementation ("androidx.room:room-testing:2.2.5")
+
+    // JUnit
+    testImplementation ("junit:junit:4.13.2")
 
 
 }

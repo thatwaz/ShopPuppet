@@ -11,7 +11,8 @@ data class Shop(
     val name: String,
     val iconRef: Int,
     val colorResId: Int,
-    val initials: String? = null
+    val initials: String? = null,
+    val isPriority: Boolean = false
 
 )
 

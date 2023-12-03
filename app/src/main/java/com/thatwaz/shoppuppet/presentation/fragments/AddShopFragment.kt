@@ -112,7 +112,8 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         val shopName = binding.etShopName.text.toString()
         if (shopName.isNotBlank()) {
             viewModel.updateShopName(shopName)
-            viewModel.updateSelectedIconRef(selectedIconRef ?: R.drawable.ic_grocery_store)
+            // Check if selectedIconRef is not null before updating
+            viewModel.updateSelectedIconRef(selectedIconRef ?: 0) // Use 0 or your 'no icon' indicator
             viewModel.updateSelectedColor(selectedColor)
             viewModel.updateShopInitials(shopInitials)
 
@@ -126,6 +127,26 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
             Toast.makeText(context, "Please enter a valid shop name.", Toast.LENGTH_SHORT).show()
         }
     }
+
+
+//    private fun handleShopSave() {
+//        val shopName = binding.etShopName.text.toString()
+//        if (shopName.isNotBlank()) {
+//            viewModel.updateShopName(shopName)
+//            viewModel.updateSelectedIconRef(selectedIconRef ?: R.drawable.ic_grocery_store)
+//            viewModel.updateSelectedColor(selectedColor)
+//            viewModel.updateShopInitials(shopInitials)
+//
+//            if (viewModel.saveShop()) {
+//                Toast.makeText(context, "Shop saved!", Toast.LENGTH_SHORT).show()
+//                navigateToShopsFragment()
+//            } else {
+//                Toast.makeText(context, "Failed to save shop. Try again.", Toast.LENGTH_SHORT).show()
+//            }
+//        } else {
+//            Toast.makeText(context, "Please enter a valid shop name.", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
 
 

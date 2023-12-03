@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.FragmentTagItemToShopsBinding
 import com.thatwaz.shoppuppet.domain.model.Item
 import com.thatwaz.shoppuppet.presentation.adapters.ShopSelectionAdapter
@@ -25,7 +24,7 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class TagItemToShopsFragment() : Fragment(R.layout.fragment_tag_item_to_shops) {
+class TagItemToShopsFragment() : Fragment() {
 
     private var _binding: FragmentTagItemToShopsBinding? = null
     private val binding get() = _binding!!

@@ -28,8 +28,11 @@ class AddShopViewModel @Inject constructor(
     private val _shopName = MutableLiveData<String?>()
     val shopName: LiveData<String?> get() = _shopName
 
-    private val _selectedIconRef = MutableLiveData<Int>()
-    val selectedIconRef: LiveData<Int> get() = _selectedIconRef
+//    private val _selectedIconRef = MutableLiveData<Int>()
+//    val selectedIconRef: LiveData<Int> get() = _selectedIconRef
+
+    private val _selectedIconRef = MutableLiveData<Int?>()
+    val selectedIconRef: LiveData<Int?> get() = _selectedIconRef
 
     private val _selectedColor = MutableLiveData(R.color.black)
     val selectedColor: LiveData<Int> get() = _selectedColor
@@ -48,7 +51,11 @@ class AddShopViewModel @Inject constructor(
         _shopName.value = name
     }
 
-    fun updateSelectedIconRef(iconRef: Int) {
+//    fun updateSelectedIconRef(iconRef: Int) {
+//        _selectedIconRef.value = iconRef
+//    }
+
+    fun updateSelectedIconRef(iconRef: Int?) {
         _selectedIconRef.value = iconRef
     }
 
@@ -60,13 +67,14 @@ class AddShopViewModel @Inject constructor(
         _shopInitials.value = initials
     }
 
+
     fun saveShop(): Boolean {
         // Validation, ensuring all necessary details are available
         if (shopName.value.isNullOrBlank()) return false
 
         val shop = Shop(
             name = shopName.value!!,
-            iconRef = selectedIconRef.value ?: R.drawable.ic_grocery_store,
+            iconRef = selectedIconRef.value ?: 0, // Use 0 or a similar indicator for no icon
             colorResId = selectedColor.value!!,
             initials = shopInitials.value
         )
@@ -80,5 +88,26 @@ class AddShopViewModel @Inject constructor(
 
         return true
     }
+
+//    fun saveShop(): Boolean {
+//        // Validation, ensuring all necessary details are available
+//        if (shopName.value.isNullOrBlank()) return false
+//
+//        val shop = Shop(
+//            name = shopName.value!!,
+//            iconRef = selectedIconRef.value ?: R.drawable.ic_grocery_store,
+//            colorResId = selectedColor.value!!,
+//            initials = shopInitials.value
+//        )
+//
+//        // Save to your database using the repository
+//        viewModelScope.launch {
+//            withContext(Dispatchers.IO) {
+//                repository.insertShop(shop)
+//            }
+//        }
+//
+//        return true
+//    }
 
 }
