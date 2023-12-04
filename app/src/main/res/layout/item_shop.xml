@@ -27,16 +27,16 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/shop_red" />
 
-        <ImageView
-            android:id="@+id/iv_priority"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="4dp"
-            android:src="@drawable/ic_star"
-            app:tint="@color/colorAccent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_priority"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:layout_marginStart="4dp"-->
+<!--            android:src="@drawable/ic_star"-->
+<!--            app:tint="@color/colorAccent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"/>-->
 
         <TextView
             android:id="@+id/shop_icon_initials"

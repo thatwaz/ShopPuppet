@@ -1,6 +1,7 @@
-package com
+package com.thatwaz.shoppuppet
 
 import androidx.room.Room
+
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry

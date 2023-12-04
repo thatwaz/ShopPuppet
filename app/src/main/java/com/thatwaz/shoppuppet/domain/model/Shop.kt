@@ -13,7 +13,6 @@ data class Shop(
     val colorResId: Int,
     val initials: String? = null,
     val isPriority: Boolean = false
-
 )
 
 
