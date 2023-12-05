@@ -17,7 +17,10 @@ import com.thatwaz.shoppuppet.domain.model.Shop
 
 // todo need migration strategy
 
-@Database(entities = [Item::class, Shop::class, ItemShopCrossRef::class], version = 3, exportSchema = true)
+
+
+
+@Database(entities = [Item::class, Shop::class, ItemShopCrossRef::class], version = 4, exportSchema = true)
 @TypeConverters(Converters::class)
 abstract class ShopPuppetDatabase : RoomDatabase() {
 
@@ -29,12 +32,25 @@ abstract class ShopPuppetDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: ShopPuppetDatabase? = null
 
-        // Publicly accessible migration object
+        // Migration from version 2 to 3
         val MIGRATION_2_3: Migration = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE shops ADD COLUMN isPriority INTEGER NOT NULL DEFAULT 0")
+                // Migration logic for version 2 to 3
             }
         }
+
+        // Migration from version 3 to 4 (new)
+        val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE items ADD COLUMN isPriorityItem INTEGER NOT NULL DEFAULT 0")
+            }
+        }
+
+//        val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+//            override fun migrate(database: SupportSQLiteDatabase) {
+//                database.execSQL("ALTER TABLE Item ADD COLUMN isPriorityItem INTEGER NOT NULL DEFAULT 0")
+//            }
+//        }
 
         fun getDatabase(context: Context): ShopPuppetDatabase {
             return INSTANCE ?: synchronized(this) {
@@ -43,7 +59,7 @@ abstract class ShopPuppetDatabase : RoomDatabase() {
                     ShopPuppetDatabase::class.java,
                     "shop_puppet_database"
                 )
-                    .addMigrations(MIGRATION_2_3) // Use the migration
+                    .addMigrations(MIGRATION_2_3, MIGRATION_3_4) // Use both migrations
                     .fallbackToDestructiveMigration()
                     .build()
 
@@ -53,6 +69,42 @@ abstract class ShopPuppetDatabase : RoomDatabase() {
         }
     }
 }
+//@Database(entities = [Item::class, Shop::class, ItemShopCrossRef::class], version = 3, exportSchema = true)
+//@TypeConverters(Converters::class)
+//abstract class ShopPuppetDatabase : RoomDatabase() {
+//
+//    abstract fun itemDao(): ItemDao
+//    abstract fun shopDao(): ShopDao
+//    abstract fun itemShopCrossRefDao(): ItemShopCrossRefDao
+//
+//    companion object {
+//        @Volatile
+//        private var INSTANCE: ShopPuppetDatabase? = null
+//
+//        // Publicly accessible migration object
+//        val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+//            override fun migrate(database: SupportSQLiteDatabase) {
+//                database.execSQL("ALTER TABLE shops ADD COLUMN isPriority INTEGER NOT NULL DEFAULT 0")
+//            }
+//        }
+//
+//        fun getDatabase(context: Context): ShopPuppetDatabase {
+//            return INSTANCE ?: synchronized(this) {
+//                val instance = Room.databaseBuilder(
+//                    context.applicationContext,
+//                    ShopPuppetDatabase::class.java,
+//                    "shop_puppet_database"
+//                )
+//                    .addMigrations(MIGRATION_2_3) // Use the migration
+//                    .fallbackToDestructiveMigration()
+//                    .build()
+//
+//                INSTANCE = instance
+//                instance
+//            }
+//        }
+//    }
+//}
 
 //@Database(entities = [Item::class, Shop::class, ItemShopCrossRef::class], version = 2, exportSchema = false)
 //@TypeConverters(Converters::class)

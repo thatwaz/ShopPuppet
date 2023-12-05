@@ -48,6 +48,9 @@ class MainActivity : AppCompatActivity() {
                     // Hide the BottomNavigationView when in AddShopsFragment
                     binding.bnvShopPuppet.visibility = View.GONE
                 }
+                R.id.tagItemToShopsFragment -> {
+                    binding.bnvShopPuppet.visibility = View.GONE
+                }
                 R.id.shopSpecificListFragment -> {
                     // Hide the toolbar when in ShopSpecificListFragment
                     supportActionBar?.hide()

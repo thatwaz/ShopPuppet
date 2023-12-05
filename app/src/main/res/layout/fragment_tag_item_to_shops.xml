@@ -17,33 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Priority TextView -->
-    <TextView
-        android:id="@+id/tv_priority_label"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:textSize="18sp"
-        android:textColor="@color/inactive_grey"
-        android:text="Mark this item as a priority"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_item_name" />
 
-    <!-- Priority Star ImageView -->
-    <ImageView
-        android:id="@+id/iv_priority_star"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:src="@drawable/ic_star_outline"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintBottom_toBottomOf="@id/tv_priority_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_priority_label"
-        app:tint="@color/inactive_grey" />
 
     <!-- List of Shops with Checkboxes -->
     <androidx.recyclerview.widget.RecyclerView
@@ -52,22 +26,68 @@
         android:layout_height="0dp"
         android:layout_marginBottom="16dp"
         android:paddingBottom="56dp"
-        app:layout_constraintBottom_toTopOf="@id/btn_save"
+        app:layout_constraintBottom_toTopOf="@id/cl_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_priority_label"
+        app:layout_constraintTop_toBottomOf="@id/tv_item_name"
         tools:listitem="@layout/item_shops_to_tag" />
 
-    <!-- Save Button -->
-    <Button
-        android:id="@+id/btn_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save"
-        android:layout_marginBottom="75dp"
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:backgroundTint="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/cl_bottom"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:padding="26dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Priority TextView -->
+        <TextView
+            android:id="@+id/tv_priority_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/darker_grey"
+            android:text="Mark item as priority"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Priority Star ImageView -->
+        <ImageView
+            android:id="@+id/iv_priority_star"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_star_outline"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintStart_toStartOf="@id/tv_priority_label"
+            app:layout_constraintEnd_toEndOf="@id/tv_priority_label"
+            app:layout_constraintTop_toTopOf="@id/btn_save"
+            app:layout_constraintBottom_toBottomOf="@id/btn_save"
+            app:tint="@color/darker_grey" />
+
+
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:layout_marginTop="6dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_priority_label"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
