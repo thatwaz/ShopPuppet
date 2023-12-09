@@ -50,6 +50,8 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.tagItemToShopsFragment -> {
                     binding.bnvShopPuppet.visibility = View.GONE
+                    supportActionBar?.show()
+                    supportActionBar?.title = destination.label
                 }
                 R.id.shopSpecificListFragment -> {
                     // Hide the toolbar when in ShopSpecificListFragment

@@ -1,5 +1,6 @@
 package com.thatwaz.shoppuppet.data.db.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -8,6 +9,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.thatwaz.shoppuppet.domain.model.Item
+import com.thatwaz.shoppuppet.domain.model.ShopWithItemCount
 
 @Dao
 interface ItemDao {
@@ -43,6 +45,9 @@ interface ItemDao {
     WHERE item_shop_cross_ref.shopId = :shopId
 """)
     suspend fun getItemsCountForShop(shopId: Long): Int
+
+
+
 
 
 

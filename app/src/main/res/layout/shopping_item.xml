@@ -1,92 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
+    <ImageView
+        android:id="@+id/img_star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleX=".50"
+        android:scaleY=".50"
+        android:src="@drawable/ic_star"
+        app:layout_constraintBottom_toBottomOf="@id/tv_item_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_item_name"
+        app:tint="@color/colorAccent" />
 
+    <!-- Item Name -->
+    <TextView
+        android:id="@+id/tv_item_name"
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:text="Item Name"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/img_star"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/btn_delete_item"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:src="@drawable/ic_edit"
+        app:layout_constraintStart_toEndOf="@id/tv_item_name"
+        app:layout_constraintTop_toTopOf="@id/tv_item_name"
+        app:tint="@color/colorPrimaryDark" />
+
+    <ImageView
+        android:id="@+id/img_drop_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/ic_arrow_down"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_delete_item"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_delete_item"
+        app:layout_constraintTop_toTopOf="@+id/btn_delete_item"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <ImageView
+        android:id="@+id/imgArrowUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ic_arrow_up"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_item_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_item_name"
+        app:layout_constraintTop_toTopOf="@+id/tv_item_name"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <!-- ChipGroup for Shops -->
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupShops"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:chipSpacingHorizontal="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_item_name">
+
+        <!-- Example Chip, this will be dynamically added based on the shops the item is available in -->
+        <com.google.android.material.chip.Chip
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:text="Shop Name" />
 
-            <ImageButton
-                android:id="@+id/btn_delete_item"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/ic_edit"
-                app:layout_constraintStart_toEndOf="@id/tv_item_name"
-                app:layout_constraintTop_toTopOf="@id/tv_item_name"
-                app:tint="@color/colorPrimaryDark" />
+    </com.google.android.material.chip.ChipGroup>
 
-            <!-- Item Name -->
-            <TextView
-                android:id="@+id/tv_item_name"
-                android:layout_width="275dp"
-                android:layout_height="wrap_content"
-                android:text="Item Name"
-                android:textSize="16sp"
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider_unpurchased_items"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/chipGroupShops" />
 
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/img_drop_down"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/ic_arrow_down"
-                app:layout_constraintBottom_toBottomOf="@+id/btn_delete_item"
-                app:layout_constraintStart_toEndOf="@+id/btn_delete_item"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/btn_delete_item"
-                app:layout_constraintVertical_bias="0.5" />
 
-            <ImageView
-                android:id="@+id/imgArrowUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:src="@drawable/ic_arrow_up"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_item_name"
-                app:layout_constraintStart_toEndOf="@+id/tv_item_name"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_item_name"
-                app:layout_constraintVertical_bias="0.5" />
 
-            <!-- ChipGroup for Shops -->
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroupShops"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:visibility="gone"
-                app:chipSpacingHorizontal="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_item_name">
-
-                <!-- Example Chip, this will be dynamically added based on the shops the item is available in -->
-                <com.google.android.material.chip.Chip
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Shop Name" />
-
-            </com.google.android.material.chip.ChipGroup>
-
-            <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/divider_unpurchased_items"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/chipGroupShops"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 

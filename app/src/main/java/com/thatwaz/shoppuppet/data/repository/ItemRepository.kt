@@ -55,6 +55,17 @@ class ItemRepository @Inject constructor(
     // Delete an item
     suspend fun deleteItem(item: Item) = itemDao.deleteItem(item)
 
+
+    suspend fun updateItemPriority(itemId: Long, isPriority: Boolean) {
+        val item = itemDao.getItemById(itemId)
+        if (item != null) {
+            item.isPriorityItem = isPriority
+            itemDao.updateItem(item)
+            Log.d("RepositoryLog", "Updated item's priority status: $isPriority")
+        }
+    }
+}
+
     // Delete items by a specific shop
 //    suspend fun deleteItemsByShop(shopId: Long) = itemDao.deleteItemsByShop(shopId)
 //
@@ -67,5 +78,5 @@ class ItemRepository @Inject constructor(
 //
 //    // Get all purchased items
 //    suspend fun getPurchasedItems(): List<Item> = itemDao.getPurchasedItems()
-}
+
 

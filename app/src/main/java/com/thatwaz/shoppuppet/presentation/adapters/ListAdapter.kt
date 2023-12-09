@@ -30,10 +30,17 @@ class ListAdapter(private val itemClickListener: ItemClickListener
         val chipGroupShops: ChipGroup = itemView.findViewById(R.id.chipGroupShops)
         val imgDropdown: ImageView = itemView.findViewById(R.id.img_drop_down)
         val btnDeleteItem: ImageButton = itemView.findViewById(R.id.btn_delete_item)
+        val imgPriorityStar: ImageView = itemView.findViewById(R.id.img_star)
 
 
         fun bind(itemUiModel: ItemUiModel) {
             tvItemName.text = itemUiModel.itemName
+
+            if (itemUiModel.isPriorityItem) {
+                imgPriorityStar.visibility = View.VISIBLE
+            } else {
+                imgPriorityStar.visibility = View.INVISIBLE
+            }
 
             // Clear any existing chips
             chipGroupShops.removeAllViews()

@@ -49,11 +49,17 @@ class ItemViewModel @Inject constructor(
         Log.i("DOH!", "itemNameLiveData value: ${itemNameLiveData.value}")
 
     }
+
     init {
         logItemsWithAssociatedShops()
         fetchAllItems()
         fetchAllShops()
 
+    }
+
+    suspend fun insertNewItem(itemName: String): Long {
+        val newItem = Item(name = itemName, description = "")
+        return itemRepository.insertItem(newItem)
     }
 
 
@@ -87,29 +93,54 @@ class ItemViewModel @Inject constructor(
             // Process all items first
             allItems.forEach { item ->
                 // Log each item
-                Log.d("ItemViewModel", "Item name: ${item.name}, Item description: ${item.description}")
+                Log.d(
+                    "ItemViewModel",
+                    "Item name: ${item.name}, Item description: ${item.description}"
+                )
             }
             // After processing all items, update LiveData
             _items.postValue(allItems)
         }
     }
 
-    fun insertItemWithShopsAsync(item: Item, shopIds: List<Long>): Deferred<Unit> = viewModelScope.async {
-        // Insert the item and get its ID
-        val itemId = itemRepository.insertItem(item)
+    fun insertItemWithShopsAsync(item: Item, shopIds: List<Long>): Deferred<Long> =
+        viewModelScope.async {
+            // Insert the item and get its ID
+            val itemId = itemRepository.insertItem(item)
 
-        // Create a list to hold all deferred association operations
-        val associationDeferred = shopIds.map { shopId ->
-            async { crossRefRepository.associateItemWithShop(itemId, shopId) }
+            // If insertion was successful (itemId is not -1), associate item with shops
+            if (itemId != -1L) {
+                // Create and await all association operations
+                shopIds.forEach { shopId ->
+                    crossRefRepository.associateItemWithShop(itemId, shopId)
+                }
+            }
+
+            // Fetch all items again to update the _items LiveData
+            fetchAllItems()
+            logItemsWithAssociatedShops()
+
+            // Return the generated item ID
+            itemId
         }
 
-        // Await all association operations to complete
-        associationDeferred.forEach { it.await() }
 
-        // Fetch all items again to update the _items LiveData
-        fetchAllItems()
-        logItemsWithAssociatedShops()
-    }
+//    fun insertItemWithShopsAsync(item: Item, shopIds: List<Long>): Deferred<Long> = viewModelScope.async {
+//        // Insert the item and get its ID
+//        val itemId = itemRepository.insertItem(item)
+//
+//        // Create a list to hold all deferred association operations
+//        val associationDeferred = shopIds.map { shopId ->
+//            async { crossRefRepository.associateItemWithShop(itemId, shopId) }
+//        }
+//
+//        // Await all association operations to complete
+//        associationDeferred.forEach { it.await() }
+//
+//        // Fetch all items again to update the _items LiveData
+//        fetchAllItems()
+//        logItemsWithAssociatedShops()
+//    }
 
 
     fun logItemsWithAssociatedShops() {
@@ -129,7 +160,14 @@ class ItemViewModel @Inject constructor(
                 Log.i("Crispy", "Associated shops for item ${item.name} are $associatedShops")
 
                 // Create and add the UI model to the list
-                uiModels.add(ItemUiModel(itemId = item.id, itemName = item.name, shopNames = associatedShops))
+                uiModels.add(
+                    ItemUiModel(
+                        itemId = item.id,
+                        itemName = item.name,
+                        shopNames = associatedShops,
+                        isPriorityItem = item.isPriorityItem
+                    )
+                )
             }
 
             // Now, update the LiveData with the list of UI models
@@ -141,6 +179,7 @@ class ItemViewModel @Inject constructor(
             fetchAllItems()
         }
     }
+
 
 }
 

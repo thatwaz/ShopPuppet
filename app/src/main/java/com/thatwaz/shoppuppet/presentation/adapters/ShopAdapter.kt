@@ -40,7 +40,7 @@ class ShopAdapter : ListAdapter<ShopWithItemCount, ShopAdapter.ShopViewHolder>(S
 
     inner class ShopViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-
+        val priorityImageView: ImageView = itemView.findViewById(R.id.iv_priority)
         init {
             itemView.setOnClickListener {
                 val position = adapterPosition
@@ -76,6 +76,12 @@ class ShopAdapter : ListAdapter<ShopWithItemCount, ShopAdapter.ShopViewHolder>(S
             shopNameTextView.text = shop.name
             val color = ContextCompat.getColor(itemView.context, shop.colorResId)
             val cardView: CardView = itemView.findViewById(R.id.cv_shop)
+
+            if (shopWithItemCount.hasPriorityItem) {
+                priorityImageView.visibility = View.VISIBLE
+            } else {
+                priorityImageView.visibility = View.INVISIBLE
+            }
 
             // If the shop has initials, display them and hide the icon
             if (!shop.initials.isNullOrEmpty()) {

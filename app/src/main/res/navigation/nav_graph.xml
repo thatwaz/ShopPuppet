@@ -88,13 +88,17 @@
         android:name="com.thatwaz.shoppuppet.presentation.fragments.TagItemToShopsFragment"
         android:label="Tag Item To Shops"
         tools:layout="@layout/fragment_tag_item_to_shops" >
-        <action
-            android:id="@+id/action_tagItemToShopsFragment_to_listFragment"
-            app:destination="@id/listFragment" />
         <argument
             android:name="itemName"
             app:argType="string"
             android:defaultValue=""/>
+<!--        <argument-->
+<!--            android:name="itemId"-->
+<!--            app:argType="long"-->
+<!--            android:defaultValue="-1L"/>-->
+        <action
+            android:id="@+id/action_tagItemToShopsFragment_to_listFragment"
+            app:destination="@id/listFragment" />
     </fragment>
 
 </navigation>

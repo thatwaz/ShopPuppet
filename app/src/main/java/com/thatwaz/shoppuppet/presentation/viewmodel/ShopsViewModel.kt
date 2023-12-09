@@ -34,17 +34,26 @@ class ShopsViewModel @Inject constructor(
 
     fun fetchShopsWithItemCount() {
         viewModelScope.launch {
-            val shops = shopRepository.getAllShops()
-            val shopsWithItemCount = shops.map { shop ->
-                ShopWithItemCount(
-                    shop = shop,
-                    itemCount = shopRepository.getItemsCountForShop(shop.id) // Assuming this method exists
-                )
-            }
+            // Fetch shops with item count and priority status
+            val shopsWithItemCount = shopRepository.getShopsWithItemCountAndPriorityStatus()
             _shopsWithItemCount.value = shopsWithItemCount
-
         }
     }
+
+
+//    fun fetchShopsWithItemCount() {
+//        viewModelScope.launch {
+//            val shops = shopRepository.getAllShops()
+//            val shopsWithItemCount = shops.map { shop ->
+//                ShopWithItemCount(
+//                    shop = shop,
+//                    itemCount = shopRepository.getItemsCountForShop(shop.id) // Assuming this method exists
+//                )
+//            }
+//            _shopsWithItemCount.value = shopsWithItemCount
+//
+//        }
+//    }
 
     private fun fetchShops() {
         viewModelScope.launch {
