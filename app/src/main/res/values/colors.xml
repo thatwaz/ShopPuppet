@@ -21,10 +21,14 @@
     <color name="colorSecondaryLight">#FFECB3</color> <!-- Amber Light -->
     <color name="colorSecondaryDark">#FFA000</color> <!-- Amber Dark -->
     <color name="badge">#E9EBEF</color> <!-- Light Gray -->
+    <color name="const_layout">#D8DBDE</color> <!-- Transition -->
 
     <!-- Background Color -->
     <color name="card_view">#FAFAFA</color> <!-- Alabaster -->
     <color name="card_view2">#FAFAFA</color> <!-- Alabaster -->
+
+
+
 
 
     <color name="colorBackground">#FAFAFA</color> <!-- Alabaster -->

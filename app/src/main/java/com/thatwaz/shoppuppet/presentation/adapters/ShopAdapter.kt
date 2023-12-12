@@ -40,7 +40,7 @@ class ShopAdapter : ListAdapter<ShopWithItemCount, ShopAdapter.ShopViewHolder>(S
 
     inner class ShopViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val priorityImageView: ImageView = itemView.findViewById(R.id.iv_priority)
+//        val priorityImageView: ImageView = itemView.findViewById(R.id.iv_priority)
         init {
             itemView.setOnClickListener {
                 val position = adapterPosition
@@ -77,11 +77,19 @@ class ShopAdapter : ListAdapter<ShopWithItemCount, ShopAdapter.ShopViewHolder>(S
             val color = ContextCompat.getColor(itemView.context, shop.colorResId)
             val cardView: CardView = itemView.findViewById(R.id.cv_shop)
 
-            if (shopWithItemCount.hasPriorityItem) {
-                priorityImageView.visibility = View.VISIBLE
+//            if (shopWithItemCount.hasPriorityItem) {
+//                priorityImageView.visibility = View.VISIBLE
+//            } else {
+//                priorityImageView.visibility = View.INVISIBLE
+//            }
+
+            val backgroundResId = if (shopWithItemCount.hasPriorityItem) {
+                R.drawable.badge_background_priority // Replace with your priority drawable resource ID
             } else {
-                priorityImageView.visibility = View.INVISIBLE
+                R.drawable.badge_background // Replace with your non-priority drawable resource ID
             }
+            badgeCountTextView.setBackgroundResource(backgroundResId)
+
 
             // If the shop has initials, display them and hide the icon
             if (!shop.initials.isNullOrEmpty()) {

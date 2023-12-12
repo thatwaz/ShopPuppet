@@ -7,7 +7,7 @@
     android:layout_marginBottom="24dp"
     android:layout_height="wrap_content"
     android:minHeight="125dp"
-    android:background="@color/white"
+    android:background="@color/card_view"
     app:cardCornerRadius="6dp"
     app:cardElevation="8dp">
 
@@ -27,18 +27,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/shop_red" />
 
-        <ImageView
-            android:id="@+id/iv_priority"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginStart="2dp"
-            android:visibility="invisible"
 
-            android:src="@drawable/ic_star_30"
-            app:tint="@color/colorAccent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
             android:id="@+id/shop_icon_initials"
