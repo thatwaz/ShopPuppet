@@ -66,7 +66,7 @@ class ItemRepository @Inject constructor(
     }
 }
 
-    // Delete items by a specific shop
+// Delete items by a specific shop
 //    suspend fun deleteItemsByShop(shopId: Long) = itemDao.deleteItemsByShop(shopId)
 //
 //    // Get the count of items for a specific shop

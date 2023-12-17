@@ -2,6 +2,7 @@ package com.thatwaz.shoppuppet.presentation.adapters
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,21 +34,26 @@ class ShopSelectionAdapter(
 
     inner class ViewHolder(private val binding: ItemShopsToTagBinding) : RecyclerView.ViewHolder(binding.root) {
 
+
         fun bind(shop: Shop, isSelected: Boolean) {
             binding.tvShopToTag.text = shop.name
 
+            // Convert the color resource name to an actual color resource ID
+            val colorResId = binding.root.context.resources.getIdentifier(shop.colorResName, "color", binding.root.context.packageName)
+            val color = if (colorResId != 0) ContextCompat.getColor(binding.root.context, colorResId) else Color.BLACK // Fallback to a default color if not found
+
             // Set checkbox color
-            val checkboxColorStateList = getCheckboxColorStateList(binding.root.context, shop.colorResId)
+            val checkboxColorStateList = getCheckboxColorStateList(binding.root.context, color)
             binding.cbTagShop.buttonTintList = checkboxColorStateList
 
             // Check if an icon is set
-            if (shop.iconRef != 0) {
+            val iconResId = binding.root.context.resources.getIdentifier(shop.iconResName, "drawable", binding.root.context.packageName)
+            if (iconResId != 0) {
                 // Get and set the icon drawable
-                val iconDrawable = ContextCompat.getDrawable(binding.root.context, shop.iconRef)
+                val iconDrawable = ContextCompat.getDrawable(binding.root.context, iconResId)
                 iconDrawable?.let {
                     val wrappedDrawable = DrawableCompat.wrap(it)
-                    val iconColor = ContextCompat.getColor(binding.root.context, shop.colorResId)
-                    DrawableCompat.setTint(wrappedDrawable, iconColor)
+                    DrawableCompat.setTint(wrappedDrawable, color)
                     binding.ivShopIcon.setImageDrawable(wrappedDrawable)
                 }
 
@@ -58,8 +64,6 @@ class ShopSelectionAdapter(
                 // Use initials if icon is not provided
                 shop.initials?.let {
                     binding.tvShopInitials.text = it
-                    // Set the text color using colorResId
-                    val color = ContextCompat.getColor(binding.root.context, shop.colorResId)
                     binding.tvShopInitials.setTextColor(color)
                 }
 
@@ -68,10 +72,8 @@ class ShopSelectionAdapter(
                 binding.tvShopInitials.visibility = View.VISIBLE
             }
 
-            // Set text color using colorResId
-            val color = ContextCompat.getColor(binding.root.context, shop.colorResId)
+            // Set text color using color
             binding.tvShopToTag.setTextColor(color)
-
 
 
             // Remove any previous listeners
@@ -92,22 +94,39 @@ class ShopSelectionAdapter(
                 onItemClick(shop)
             }
         }
-    }
 
-    private fun getCheckboxColorStateList(context: Context, colorResId: Int): ColorStateList {
-        val states = arrayOf(
-            intArrayOf(-android.R.attr.state_enabled), // disabled
-            intArrayOf(android.R.attr.state_checked),  // checked
-            intArrayOf()                               // default
-        )
 
-        val colors = intArrayOf(
-            ContextCompat.getColor(context, R.color.black), // Disabled color
-            ContextCompat.getColor(context, colorResId),                          // Checked color
-            ContextCompat.getColor(context, colorResId)   // Default color
-        )
+        private fun getCheckboxColorStateList(context: Context, color: Int): ColorStateList {
+            val states = arrayOf(
+                intArrayOf(-android.R.attr.state_enabled), // disabled
+                intArrayOf(android.R.attr.state_checked),  // checked
+                intArrayOf()                               // default (unchecked)
+            )
 
-        return ColorStateList(states, colors)
+            val colors = intArrayOf(
+                ContextCompat.getColor(context, R.color.black), // Disabled color
+                color,                                                   // Checked color
+                color                                                    // Default (unchecked) color
+            )
+
+            return ColorStateList(states, colors)
+        }
+
+
+//    private fun getCheckboxColorStateList(context: Context, colorResId: Int): ColorStateList {
+//        val states = arrayOf(
+//            intArrayOf(-android.R.attr.state_enabled), // disabled
+//            intArrayOf(android.R.attr.state_checked),  // checked
+//            intArrayOf()                               // default
+//        )
+////todo figure out color issue
+//        val colors = intArrayOf(
+//            ContextCompat.getColor(context, R.color.black), // Disabled color
+//            ContextCompat.getColor(context, colorResId),                          // Checked color
+//            ContextCompat.getColor(context, colorResId)   // Default color
+//        )
+//
+//        return ColorStateList(states, colors)
     }
 
     class ShopDiffCallback : DiffUtil.ItemCallback<Shop>() {

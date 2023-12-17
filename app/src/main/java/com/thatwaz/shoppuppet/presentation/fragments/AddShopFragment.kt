@@ -29,14 +29,28 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
     private var selectedIconRef: Int? = null
     private var selectedColor: Int = R.color.black
     private var shopInitials: String? = null
+//
+//    private val iconClickListener = View.OnClickListener { view ->
+//        val iconResId = IconUtils.getIconResId(view.id)
+//        iconResId?.let {
+//            updatePreviewIcon(it)
+//            selectedIconRef = it
+//        }
+//    }
 
     private val iconClickListener = View.OnClickListener { view ->
-        val iconResId = IconUtils.getIconResId(view.id)
-        iconResId?.let {
-            updatePreviewIcon(it)
-            selectedIconRef = it
+        val iconResName = IconUtils.getIconResName(view.id)
+        iconResName?.let { resName ->
+            // Convert the resource name to an actual drawable resource ID
+            val iconResId = resources.getIdentifier(resName, "drawable", context?.packageName ?: "")
+            if (iconResId != 0) { // Check if resource ID is valid
+                updatePreviewIcon(iconResId)
+                selectedIconRef = iconResId
+                Log.i("POOP","Icon is $iconResId")
+            }
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -113,8 +127,8 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         if (shopName.isNotBlank()) {
             viewModel.updateShopName(shopName)
             // Check if selectedIconRef is not null before updating
-            viewModel.updateSelectedIconRef(selectedIconRef ?: 0) // Use 0 or your 'no icon' indicator
-            viewModel.updateSelectedColor(selectedColor)
+            viewModel.updateSelectedIconRef((selectedIconRef ?: 0).toString()) // Use 0 or your 'no icon' indicator
+            viewModel.updateSelectedColor(selectedColor.toString())
             viewModel.updateShopInitials(shopInitials)
 
             if (viewModel.saveShop()) {

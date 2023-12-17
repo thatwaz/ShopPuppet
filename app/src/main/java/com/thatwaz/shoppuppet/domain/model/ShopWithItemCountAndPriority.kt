@@ -3,8 +3,8 @@ package com.thatwaz.shoppuppet.domain.model
 data class ShopWithItemCountAndPriority(
     val id: Long,
     val name: String,
-    val iconRef: Int,
-    val colorResId: Int,
+    val iconResName: String,
+    val colorResName: String,
     val initials: String? = null,
     val itemCount: Int,
     val hasPriorityItem: Boolean

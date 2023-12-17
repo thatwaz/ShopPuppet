@@ -40,14 +40,26 @@ interface ShopDao {
 """)
     suspend fun getItemsCountForShop(shopId: Long): Int
 
-    @Query("SELECT s.*, \n" +
-            "       COUNT(i.id) AS itemCount, \n" +
-            "       MAX(i.isPriorityItem) AS hasPriorityItem\n" +
-            "FROM shops s\n" +
-            "LEFT JOIN item_shop_cross_ref isr ON s.id = isr.shopId\n" +
-            "LEFT JOIN items i ON isr.itemId = i.id\n" +
-            "GROUP BY s.id\n")
+    @Query("""
+    SELECT s.id, s.name, s.iconResName, s.colorResName, s.initials, s.isPriority, 
+           COUNT(i.id) AS itemCount, 
+           MAX(i.isPriorityItem) AS hasPriorityItem
+    FROM shops s
+    LEFT JOIN item_shop_cross_ref isr ON s.id = isr.shopId
+    LEFT JOIN items i ON isr.itemId = i.id
+    GROUP BY s.id
+""")
     suspend fun getShopsWithItemCountAndPriorityStatus(): List<ShopWithItemCountAndPriority>
+
+
+//    @Query("SELECT s.*, \n" +
+//            "       COUNT(i.id) AS itemCount, \n" +
+//            "       MAX(i.isPriorityItem) AS hasPriorityItem\n" +
+//            "FROM shops s\n" +
+//            "LEFT JOIN item_shop_cross_ref isr ON s.id = isr.shopId\n" +
+//            "LEFT JOIN items i ON isr.itemId = i.id\n" +
+//            "GROUP BY s.id\n")
+//    suspend fun getShopsWithItemCountAndPriorityStatus(): List<ShopWithItemCountAndPriority>
 
     @Query("UPDATE shops SET isPriority = :isPriority WHERE id IN (:shopIds)")
     suspend fun updatePriorityStatus(shopIds: List<Long>, isPriority: Boolean)

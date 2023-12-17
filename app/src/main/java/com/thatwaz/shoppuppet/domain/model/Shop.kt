@@ -9,8 +9,8 @@ data class Shop(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val name: String,
-    val iconRef: Int,
-    val colorResId: Int,
+    val iconResName: String,
+    val colorResName: String,
     val initials: String? = null,
     val isPriority: Boolean = false
 )

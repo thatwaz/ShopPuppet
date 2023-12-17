@@ -57,7 +57,7 @@
             app:argType="string" />
         <argument
             android:name="shopColorResId"
-            app:argType="integer" />
+            app:argType="string" />
         <argument
             android:name="shopId"
             app:argType="long"/>

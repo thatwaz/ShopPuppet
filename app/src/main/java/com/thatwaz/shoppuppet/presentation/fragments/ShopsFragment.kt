@@ -53,7 +53,7 @@ class ShopsFragment : Fragment() {
         shopAdapter.onShopItemClickListener = object : ShopAdapter.OnShopItemClickListener {
             override fun onShopItemClick(shop: Shop) {
 
-                val action = ShopsFragmentDirections.actionShopsFragmentToShopSpecificListFragment(shop.name,shop.colorResId,shop.id)
+                val action = ShopsFragmentDirections.actionShopsFragmentToShopSpecificListFragment(shop.name,shop.colorResName,shop.id)
                 findNavController().navigate(action)
 
             }

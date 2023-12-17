@@ -30,6 +30,12 @@ class ShopSpecificListFragment : Fragment() {
 
     private val navigationArgs: ShopSpecificListFragmentArgs by navArgs()
 
+ //   val colorResId = requireContext().resources.getIdentifier(shopColorResName, "color", requireContext().packageName)
+
+
+//    val colorResId = requireContext().resources.getIdentifier(shopColorResName, "color", requireContext().packageName)
+
+
     private var _binding: FragmentShopSpecificListBinding? = null
     private val binding get() = _binding!!
 
@@ -49,19 +55,24 @@ class ShopSpecificListFragment : Fragment() {
 
         val shopId = navigationArgs.shopId
         val shopName = navigationArgs.shopName
-        val shopColor = navigationArgs.shopColorResId
+        val shopColorResName = navigationArgs.shopColorResId
+//        val colorResId = requireContext().resources.getIdentifier(shopColorResName, "color", requireContext().packageName)
 
+
+        // Convert the color resource name to an actual color resource ID
+        val colorResId = requireContext().resources.getIdentifier(shopColorResName, "color", requireContext().packageName)
+        val color = if (colorResId != 0) ContextCompat.getColor(requireContext(), colorResId) else Color.BLACK // Fallback to a default color if not found
+        Log.i("POOP","Shop color name is $colorResId")
         binding.tvShopName.text = shopName
-        binding.clShopName.setBackgroundColor(ContextCompat.getColor(requireContext(), shopColor))
+        binding.clShopName.setBackgroundColor(color)
 
         // Set the background color of the FloatingActionButton
-        binding.fabDeletePurchasedItems.backgroundTintList =
-            ColorStateList.valueOf(ContextCompat.getColor(requireContext(), shopColor))
+        binding.fabDeletePurchasedItems.backgroundTintList = ColorStateList.valueOf(color)
         Log.d("FragmentLifecycle", "Fetching items for shop ID: $shopId")
 
         viewModel.fetchShopSpecificItems(shopId) // This fetches data on view creation
         observeLiveData()
-        setupAdapters(shopColor)
+        setupAdapters(colorResId) // Pass color instead of shopColorResId
         setupRecyclerViews()
 
         binding.fabDeletePurchasedItems.setOnClickListener {
@@ -84,7 +95,9 @@ class ShopSpecificListFragment : Fragment() {
 
     }
 
-    private fun createCheckboxColorStateList(shopColor: Int): ColorStateList {
+
+    private fun createCheckboxColorStateList(shopColorResId: Int): ColorStateList {
+        val shopColor = if (shopColorResId != 0) ContextCompat.getColor(requireContext(), shopColorResId) else Color.LTGRAY // Fallback to gray if not found
         return ColorStateList(
             arrayOf(
                 intArrayOf(-android.R.attr.state_checked), // unchecked
@@ -92,10 +105,23 @@ class ShopSpecificListFragment : Fragment() {
             ),
             intArrayOf(
                 Color.LTGRAY, // Color for unchecked
-                ContextCompat.getColor(requireContext(), shopColor) // Color for checked
+                shopColor // Color for checked
             )
         )
     }
+
+//    private fun createCheckboxColorStateList(shopColor: Int): ColorStateList {
+//        return ColorStateList(
+//            arrayOf(
+//                intArrayOf(-android.R.attr.state_checked), // unchecked
+//                intArrayOf(android.R.attr.state_checked) // checked
+//            ),
+//            intArrayOf(
+//                Color.LTGRAY, // Color for unchecked
+//                ContextCompat.getColor(requireContext(), shopColor) // Color for checked
+//            )
+//        )
+//    }
 
 
     private fun setupAdapters(shopColor: Int) {
@@ -103,11 +129,11 @@ class ShopSpecificListFragment : Fragment() {
         shopSpecificItemAdapter = ShopSpecificItemAdapter(colorStateList) { item ->
             if (!item.isPurchased) {
                 viewModel.handleUnpurchasedItemChecked(item)
-                Log.d("AdapterLog", "Unpurchased item checked: ${item.name}")
+                Log.d("AdapterLog", "Unpurchased item checked: ${item}")
             }
         }
 
-        purchasedItemsAdapter = PurchasedItemsAdapter(colorStateList){ item ->
+        purchasedItemsAdapter = PurchasedItemsAdapter(colorStateList) { item ->
             if (item.isPurchased) {
                 viewModel.handlePurchasedItemChecked(item)
                 Log.d("AdapterLog", "Purchased item unchecked: ${item.name}")

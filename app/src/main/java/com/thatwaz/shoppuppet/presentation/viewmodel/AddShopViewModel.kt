@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.data.repository.ShopRepository
 import com.thatwaz.shoppuppet.domain.model.Shop
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,11 +30,19 @@ class AddShopViewModel @Inject constructor(
 //    private val _selectedIconRef = MutableLiveData<Int>()
 //    val selectedIconRef: LiveData<Int> get() = _selectedIconRef
 
-    private val _selectedIconRef = MutableLiveData<Int?>()
-    val selectedIconRef: LiveData<Int?> get() = _selectedIconRef
+//    private val _selectedIconRef = MutableLiveData<Int?>()
+//    val selectedIconRef: LiveData<Int?> get() = _selectedIconRef
 
-    private val _selectedColor = MutableLiveData(R.color.black)
-    val selectedColor: LiveData<Int> get() = _selectedColor
+    private val _selectedIconResName = MutableLiveData<String?>()
+    val selectedIconResName: LiveData<String?> get() = _selectedIconResName
+
+
+
+    private val _selectedColorResName = MutableLiveData<String?>()
+    val selectedColorResName: LiveData<String?> get() = _selectedColorResName
+
+//    private val _selectedColor = MutableLiveData(R.color.black)
+//    val selectedColor: LiveData<Int> get() = _selectedColor
 
     private val _shopInitials = MutableLiveData<String?>()
     val shopInitials: LiveData<String?> get() = _shopInitials
@@ -55,12 +62,12 @@ class AddShopViewModel @Inject constructor(
 //        _selectedIconRef.value = iconRef
 //    }
 
-    fun updateSelectedIconRef(iconRef: Int?) {
-        _selectedIconRef.value = iconRef
+    fun updateSelectedIconRef(iconRef: String) {
+        _selectedIconResName.value = iconRef
     }
 
-    fun updateSelectedColor(color: Int) {
-        _selectedColor.value = color
+    fun updateSelectedColor(color: String) {
+        _selectedColorResName.value = color
     }
 
     fun updateShopInitials(initials: String?) {
@@ -72,12 +79,21 @@ class AddShopViewModel @Inject constructor(
         // Validation, ensuring all necessary details are available
         if (shopName.value.isNullOrBlank()) return false
 
+        // Ensure the icon resource name and color resource name are set
+//        val iconResName = selectedIconResName.value ?: "" // Replace with a default icon name or leave blank
+        //todo below needs investigating
+
+        val iconResName = selectedIconResName.value ?: "default_icon"
+//        val iconResName = getIconResName(R.id.ib_store) ?: ""
+        val colorResName = selectedColorResName.value ?: "" // Replace with a default color name or leave blank
+
         val shop = Shop(
             name = shopName.value!!,
-            iconRef = selectedIconRef.value ?: 0, // Use 0 or a similar indicator for no icon
-            colorResId = selectedColor.value!!,
+            iconResName = iconResName,
+            colorResName = colorResName,
             initials = shopInitials.value
         )
+        Log.d("AddShopViewModel", "IconResName: ${selectedIconResName.value}, ColorResName: ${selectedColorResName.value}")
 
         // Save to your database using the repository
         viewModelScope.launch {
@@ -88,6 +104,28 @@ class AddShopViewModel @Inject constructor(
 
         return true
     }
+
+
+//    fun saveShop(): Boolean {
+//        // Validation, ensuring all necessary details are available
+//        if (shopName.value.isNullOrBlank()) return false
+//
+//        val shop = Shop(
+//            name = shopName.value!!,
+//            iconRef = selectedIconRef.value ?: 0, // Use 0 or a similar indicator for no icon
+//            colorResId = selectedColor.value!!,
+//            initials = shopInitials.value
+//        )
+//
+//        // Save to your database using the repository
+//        viewModelScope.launch {
+//            withContext(Dispatchers.IO) {
+//                repository.insertShop(shop)
+//            }
+//        }
+//
+//        return true
+//    }
 
 //    fun saveShop(): Boolean {
 //        // Validation, ensuring all necessary details are available

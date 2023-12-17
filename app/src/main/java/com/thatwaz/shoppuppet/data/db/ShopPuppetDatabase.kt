@@ -20,7 +20,7 @@ import com.thatwaz.shoppuppet.domain.model.Shop
 
 
 
-@Database(entities = [Item::class, Shop::class, ItemShopCrossRef::class], version = 4, exportSchema = true)
+@Database(entities = [Item::class, Shop::class, ItemShopCrossRef::class], version = 5, exportSchema = true)
 @TypeConverters(Converters::class)
 abstract class ShopPuppetDatabase : RoomDatabase() {
 

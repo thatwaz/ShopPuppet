@@ -7,6 +7,8 @@ data class ItemUiModel(
     val itemName: String,
     val shopNames: List<Shop>,
     val isPriorityItem: Boolean,
+    var isPurchased: Boolean = false,
+
 
     )
 

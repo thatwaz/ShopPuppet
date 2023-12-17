@@ -30,6 +30,7 @@ class ShopRepository @Inject constructor(private val shopDao: ShopDao) {
     // Retrieve the number of items associated with a shop (assuming this method exists in your ShopDao)
     suspend fun getItemsCountForShop(shopId: Long): Int = shopDao.getItemsCountForShop(shopId)
 
+
     suspend fun getShopsWithItemCountAndPriorityStatus(): List<ShopWithItemCount> {
         return shopDao.getShopsWithItemCountAndPriorityStatus().map { shopWithItemCountAndPriority ->
             Log.d("ShopRepo", "Shop: ${shopWithItemCountAndPriority.name}, hasPriorityItem: ${shopWithItemCountAndPriority.hasPriorityItem}")
@@ -38,8 +39,8 @@ class ShopRepository @Inject constructor(private val shopDao: ShopDao) {
                 shop = Shop(
                     id = shopWithItemCountAndPriority.id,
                     name = shopWithItemCountAndPriority.name,
-                    iconRef = shopWithItemCountAndPriority.iconRef,
-                    colorResId = shopWithItemCountAndPriority.colorResId,
+                    iconResName = shopWithItemCountAndPriority.iconResName, // Updated to use iconResName
+                    colorResName = shopWithItemCountAndPriority.colorResName, // Updated to use colorResName
                     initials = shopWithItemCountAndPriority.initials,
                     isPriority = shopWithItemCountAndPriority.hasPriorityItem
                 ),
@@ -48,6 +49,24 @@ class ShopRepository @Inject constructor(private val shopDao: ShopDao) {
             )
         }
     }
+//    suspend fun getShopsWithItemCountAndPriorityStatus(): List<ShopWithItemCount> {
+//        return shopDao.getShopsWithItemCountAndPriorityStatus().map { shopWithItemCountAndPriority ->
+//            Log.d("ShopRepo", "Shop: ${shopWithItemCountAndPriority.name}, hasPriorityItem: ${shopWithItemCountAndPriority.hasPriorityItem}")
+//
+//            ShopWithItemCount(
+//                shop = Shop(
+//                    id = shopWithItemCountAndPriority.id,
+//                    name = shopWithItemCountAndPriority.name,
+//                    iconRef = shopWithItemCountAndPriority.iconRef,
+//                    colorResId = shopWithItemCountAndPriority.colorResId,
+//                    initials = shopWithItemCountAndPriority.initials,
+//                    isPriority = shopWithItemCountAndPriority.hasPriorityItem
+//                ),
+//                itemCount = shopWithItemCountAndPriority.itemCount,
+//                hasPriorityItem = shopWithItemCountAndPriority.hasPriorityItem
+//            )
+//        }
+//    }
 
     suspend fun updatePriorityStatusForShops(shopIds: List<Long>, isPriority: Boolean) {
         shopDao.updatePriorityStatus(shopIds, isPriority)
