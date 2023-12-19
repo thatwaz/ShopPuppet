@@ -26,6 +26,12 @@ class ShopsFragment : Fragment() {
     private val viewModel: ShopsViewModel by viewModels()
     private lateinit var shopAdapter: ShopAdapter
 
+//    interface ShopFragmentListener {
+//        fun onAddItemClicked()
+//    }
+//
+//    private var listener: ShopFragmentListener? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,6 +46,7 @@ class ShopsFragment : Fragment() {
         setupRecyclerView()
         observeShopData()
         setupAddShopButton()
+
         //refreshes item count for each shop
         viewModel.fetchShopsWithItemCount()
         val content = SpannableString(binding.tvEditDeleteInfo.text)
@@ -53,7 +60,11 @@ class ShopsFragment : Fragment() {
         shopAdapter.onShopItemClickListener = object : ShopAdapter.OnShopItemClickListener {
             override fun onShopItemClick(shop: Shop) {
 
-                val action = ShopsFragmentDirections.actionShopsFragmentToShopSpecificListFragment(shop.name,shop.colorResName,shop.id)
+                val action = ShopsFragmentDirections.actionShopsFragmentToShopSpecificListFragment(
+                    shop.name,
+                    shop.colorResName,
+                    shop.id
+                )
                 findNavController().navigate(action)
 
             }
@@ -91,6 +102,8 @@ class ShopsFragment : Fragment() {
         }
     }
 
+
+
     private fun showLongPressDialog(shop: Shop) {
         val context = requireContext()
         AlertDialog.Builder(context)
@@ -113,6 +126,7 @@ class ShopsFragment : Fragment() {
             .create()
             .show()
     }
+
     private fun showEditDeleteInstructionsDialog() {
         AlertDialog.Builder(requireContext())
             .setTitle("Edit/Delete Shop")
@@ -120,6 +134,21 @@ class ShopsFragment : Fragment() {
             .setPositiveButton("OK", null)
             .show()
     }
+
+//    override fun onAttach(context: Context) {
+//        super.onAttach(context)
+//        if (context is ShopFragmentListener) {
+//            listener = context
+//        } else {
+//            throw RuntimeException("$context must implement ShopFragmentListener")
+//        }
+//    }
+//
+//    override fun onDetach() {
+//        super.onDetach()
+//        listener = null
+//    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

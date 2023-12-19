@@ -2,6 +2,7 @@ package com.thatwaz.shoppuppet.presentation.adapters
 
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -29,6 +30,7 @@ class ShopSpecificItemAdapter(
     inner class ItemViewHolder(private val binding: ItemShopSpecificBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Item) {
             binding.tvItemForShop.text = item.name
+            binding.ivShopSpecificStar.visibility = if (item.isPriorityItem) View.VISIBLE else View.INVISIBLE
             binding.cbPurchased.isChecked = item.isPurchased
             binding.cbPurchased.buttonTintList = colorStateList
 
