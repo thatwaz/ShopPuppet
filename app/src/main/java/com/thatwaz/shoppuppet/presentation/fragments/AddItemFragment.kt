@@ -36,10 +36,33 @@ class AddItemFragment : Fragment() {
             val itemName = binding.etItemName.text.toString()
             viewModel.updateItemName(itemName)
 
-            // Navigate to the next fragment with item name as an argument
-            val action = AddItemFragmentDirections.actionAddItemFragmentToTagItemToShopsFragment(itemName)
+            // Set default values for other arguments
+            val itemId = -1L // Default ID for new item
+            val isPriority = false // Default priority status for new item
+            val associatedShopIds = longArrayOf() // Empty array for new item
+
+            // Navigate to the next fragment with all arguments
+            val action = AddItemFragmentDirections.actionAddItemFragmentToTagItemToShopsFragment(
+                itemName = itemName,
+                itemId = itemId,
+                isPriority = isPriority,
+                associatedShopIds = associatedShopIds
+            )
             findNavController().navigate(action)
         }
+
+
+//        binding.btnNext.setOnClickListener {
+//            val itemName = binding.etItemName.text.toString()
+//            viewModel.updateItemName(itemName)
+//
+//            // Navigate to the next fragment with item name as an argument
+//            val action = AddItemFragmentDirections.actionAddItemFragmentToTagItemToShopsFragment(
+//                itemName = itemName,
+//                associatedShopIds = longArrayOf() // Empty array for a new item
+//            )
+//            findNavController().navigate(action)
+
 
 
 //        binding.btnNext.setOnClickListener {

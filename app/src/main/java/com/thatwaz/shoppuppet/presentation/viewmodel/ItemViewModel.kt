@@ -25,11 +25,15 @@ class ItemViewModel @Inject constructor(
     private val crossRefRepository: ItemShopCrossRefRepository
 ) : ViewModel() {
 
+
     private val _itemName = MutableLiveData("")
     var itemName: LiveData<String> = _itemName
 
     private val _itemNameLiveData = MutableLiveData<String>()
     var itemNameLiveData: MutableLiveData<String> = _itemNameLiveData
+
+//    private val _selectedShops = MutableLiveData<List<Shop>>()
+//    val selectedShops: LiveData<List<Shop>> = _selectedShops
 
     // LiveData to observe changes in items
     private val _items = MutableLiveData<List<Item>>()
@@ -57,12 +61,14 @@ class ItemViewModel @Inject constructor(
 
     }
 
-    suspend fun insertNewItem(itemName: String): Long {
-        val newItem = Item(name = itemName, description = "")
-        return itemRepository.insertItem(newItem)
-    }
+//    suspend fun insertNewItem(itemName: String): Long {
+//        val newItem = Item(name = itemName, description = "")
+//        return itemRepository.insertItem(newItem)
+//    }
+//
+//
 
-
+    //used for delete logic in list fragment -------
     fun findItemByUiModel(itemUiModel: ItemUiModel): Item? {
         return items.value?.find { it.id == itemUiModel.itemId }
     }
@@ -74,7 +80,7 @@ class ItemViewModel @Inject constructor(
             itemRepository.deleteItemWithShops(item)
         }
     }
-
+// end------------------------------------------
     fun fetchAllShops() {
         viewModelScope.launch {
             _shops.value = shopRepository.getAllShops()
@@ -125,22 +131,7 @@ class ItemViewModel @Inject constructor(
         }
 
 
-//    fun insertItemWithShopsAsync(item: Item, shopIds: List<Long>): Deferred<Long> = viewModelScope.async {
-//        // Insert the item and get its ID
-//        val itemId = itemRepository.insertItem(item)
-//
-//        // Create a list to hold all deferred association operations
-//        val associationDeferred = shopIds.map { shopId ->
-//            async { crossRefRepository.associateItemWithShop(itemId, shopId) }
-//        }
-//
-//        // Await all association operations to complete
-//        associationDeferred.forEach { it.await() }
-//
-//        // Fetch all items again to update the _items LiveData
-//        fetchAllItems()
-//        logItemsWithAssociatedShops()
-//    }
+
 
 
     fun logItemsWithAssociatedShops() {
@@ -179,6 +170,88 @@ class ItemViewModel @Inject constructor(
             fetchAllItems()
         }
     }
+
+
+
+    fun updateItem(itemId: Long, itemName: String, shopIds: List<Long>, isPriority: Boolean) {
+        viewModelScope.launch {
+            // Fetch the existing item
+            val currentItem = itemRepository.getItemById(itemId)
+            currentItem?.let { item ->
+                item.name = itemName
+                item.isPriorityItem = isPriority
+                // Update any other fields if necessary
+
+                // Update the item in the database
+                itemRepository.updateItem(item)
+
+                // Update the associations with shops
+                updateShopAssociations(item.id, shopIds)
+            }
+        }
+    }
+
+    private fun updateShopAssociations(itemId: Long, newShopIds: List<Long>) {
+        viewModelScope.launch {
+            // Clear existing associations
+//            crossRefRepository.deleteCrossRefsForItem(itemId)
+
+            // Create new associations
+            newShopIds.forEach { shopId ->
+                crossRefRepository.associateItemWithShop(itemId, shopId)
+            }
+
+            // Optionally, refresh the item list
+            fetchAllItems()
+        }
+    }
+
+//    fun fetchAndSetSelectedShops(itemId: Long) {
+//        viewModelScope.launch {
+//            try {
+//                // Log the itemId received
+//                Log.i("Crappy", "Fetching associated shops for itemId: $itemId")
+//
+//                // Get the list of shop IDs associated with the item
+//                val associatedShopIds = crossRefRepository.getShopIdsForItem(itemId)
+//
+//                // Log the associated shop IDs
+//                Log.i("Crappy", "Associated shop IDs: $associatedShopIds")
+//
+//                // Fetch shops by their IDs
+//                val associatedShops = shopRepository.getShopsByIds(associatedShopIds)
+//
+//                // Log the associated shops
+//                Log.i("Crappy", "Associated shops: $associatedShops")
+//
+//                // Update the selected shops
+//                _selectedShops.postValue(associatedShops)
+//            } catch (e: Exception) {
+//                // Handle any exceptions, such as logging or showing an error message
+//                Log.e("Crappy", "Error fetching associated shops: ${e.message}")
+//            }
+//        }
+//    }
+
+
+//    fun fetchAndSetSelectedShops(itemId: Long) {
+//        viewModelScope.launch {
+//            try {
+//                // Get the list of shop IDs associated with the item
+//                val associatedShopIds = crossRefRepository.getShopIdsForItem(itemId)
+//
+//                // Fetch shops by their IDs
+//                val associatedShops = shopRepository.getShopsByIds(associatedShopIds)
+//
+//                // Update the selected shops
+//                _selectedShops.postValue(associatedShops)
+//            } catch (e: Exception) {
+//                // Handle any exceptions, such as logging or showing an error message
+//                Log.e("ItemViewModel", "Error fetching associated shops: ${e.message}")
+//            }
+//        }
+//    }
+
 
 
 }

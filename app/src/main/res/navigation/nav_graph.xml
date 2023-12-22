@@ -3,17 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/shopsFragment">
+    app:startDestination="@id/listFragment">
 
     <fragment
         android:id="@+id/shopsFragment"
         android:name="com.thatwaz.shoppuppet.presentation.fragments.ShopsFragment"
         android:label="My Shops"
         tools:layout="@layout/fragment_shops" >
-<!--        <argument-->
-<!--            android:name="shopId"-->
-<!--            app:argType="long"-->
-<!--            android:defaultValue="-1" />-->
         <action
             android:id="@+id/action_shopsFragment_to_addShopFragment"
             app:destination="@id/addShopFragment" />
@@ -23,10 +19,6 @@
         <action
             android:id="@+id/action_shopsFragment_to_shopSpecificListFragment"
             app:destination="@id/shopSpecificListFragment" />
-        <action
-            android:id="@+id/action_shopsFragment_to_addItemFragment"
-            app:destination="@id/addItemFragment" />
-
     </fragment>
     <fragment
         android:id="@+id/listFragment"
@@ -39,6 +31,9 @@
         <action
             android:id="@+id/action_listFragment_to_addItemFragment"
             app:destination="@id/addItemFragment" />
+        <action
+            android:id="@+id/action_listFragment_to_tagItemToShopsFragment"
+            app:destination="@id/tagItemToShopsFragment" />
 
     </fragment>
     <fragment
@@ -95,10 +90,19 @@
             android:name="itemName"
             app:argType="string"
             android:defaultValue=""/>
-<!--        <argument-->
-<!--            android:name="itemId"-->
-<!--            app:argType="long"-->
-<!--            android:defaultValue="-1L"/>-->
+        <!-- New Arguments -->
+        <argument
+            android:name="itemId"
+            app:argType="long"/>
+
+        <argument
+            android:name="isPriority"
+            app:argType="boolean"
+            android:defaultValue="false"/>
+
+        <argument
+            android:name="associatedShopIds"
+            app:argType="long[]"/>
         <action
             android:id="@+id/action_tagItemToShopsFragment_to_listFragment"
             app:destination="@id/listFragment" />

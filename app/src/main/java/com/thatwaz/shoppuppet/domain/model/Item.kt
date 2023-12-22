@@ -9,9 +9,9 @@ import java.util.Date
 data class Item(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val name: String,
+    var name: String,
     // set description in case it's needed in the future
-    val description: String,
+    var description: String,
     var isPurchased: Boolean = false,
     var isPriorityItem: Boolean = false,
     val lastPurchasedDate: Date? = null, // This will store the last purchase date. Null means the item hasn't been purchased yet.

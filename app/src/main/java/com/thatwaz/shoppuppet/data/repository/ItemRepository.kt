@@ -22,7 +22,7 @@ class ItemRepository @Inject constructor(
     // Insert a new item
     suspend fun insertItem(item: Item): Long = itemDao.insert(item)
 
-//    suspend fun getItemById(itemId: Long): Item? = itemDao.getItemById(itemId)
+    suspend fun getItemById(itemId: Long): Item? = itemDao.getItemById(itemId)
 
     suspend fun deleteItemWithShops(item: Item) {
         // Step 1: Delete associations in item_shop_cross_ref
@@ -64,7 +64,27 @@ class ItemRepository @Inject constructor(
             Log.d("RepositoryLog", "Updated item's priority status: $isPriority")
         }
     }
+
+    suspend fun editItemDetails(
+        itemId: Long,
+        newName: String?,
+        newDescription: String?,
+        newPriorityStatus: Boolean?
+    ) {
+        val currentItem = itemDao.getItemById(itemId)
+        currentItem?.let { item ->
+            newName?.let { item.name = it }
+            newDescription?.let { item.description = it }
+            newPriorityStatus?.let { item.isPriorityItem = it }
+
+            updateItem(item)
+            Log.d("RepositoryLog", "Edited item details in database for item ID: $itemId")
+        }
+    }
+
 }
+
+
 
 // Delete items by a specific shop
 //    suspend fun deleteItemsByShop(shopId: Long) = itemDao.deleteItemsByShop(shopId)

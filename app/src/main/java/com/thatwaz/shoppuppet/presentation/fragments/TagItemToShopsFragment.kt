@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.FragmentTagItemToShopsBinding
 import com.thatwaz.shoppuppet.domain.model.Item
+import com.thatwaz.shoppuppet.domain.model.ShopWithSelection
 import com.thatwaz.shoppuppet.presentation.adapters.ShopSelectionAdapter
 import com.thatwaz.shoppuppet.presentation.viewmodel.ItemViewModel
 import com.thatwaz.shoppuppet.presentation.viewmodel.SelectedShopsViewModel
@@ -50,134 +51,133 @@ class TagItemToShopsFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("TagItemToShopsFragment", "onViewCreated called")
 
         // Retrieve the item name from fragment arguments
         val itemName = arguments?.getString("itemName")
 
         // Set the item name in your TextView
-        binding.tvItemName.text = itemName
+        // changed to edit text to handle name edit
+        binding.tvItemName.setText(itemName)
 
         val newItem = navigationArgs.itemName
         Log.i("DOH!", "New item is $newItem")
 
-//        val itemId = navigationArgs.itemId // Assuming you pass the item ID via navigation args
+        viewModel.fetchAndSetSelectedShops(itemId)
+
+
+
+
+        itemId = navigationArgs.itemId
+        isPriority = navigationArgs.isPriority
+
+        if (itemId != -1L) { // If editing an existing item
+            viewModel.fetchAndSetSelectedShops(itemId)
+            viewModel.selectedShops.observe(viewLifecycleOwner) { shops ->
+                // Initialize the SelectedShopsViewModel with these shops
+                val selectedShopIds = shops.map { it.id }
+                selectedShopsViewModel.setSelectedShopIds(selectedShopIds)
+                selectedShopsViewModel.initializeSelectedShops(shops)
+            }
+//            viewModel.selectedShops.observe(viewLifecycleOwner) { shops ->
+//                // Now synchronize this data to SelectedShopsViewModel
+//
+//            }
+        }
+
+
+        viewModel.selectedShops.observe(viewLifecycleOwner) { selectedShops ->
+            Log.i("Crappy", "Selected Shops are $selectedShops")
+
+            // Assuming viewModel.shops holds the full list of shops
+            viewModel.shops.value?.let { fullShopsList ->
+                // Create a Set of selected Shop IDs for faster lookup
+                val selectedShopIds = selectedShops.map { it.id }.toSet()
+
+                // Transform the full list of shops into a list of ShopWithSelection
+                val shopsWithSelection = fullShopsList.map { shop ->
+                    ShopWithSelection(
+                        shop = shop,
+                        isSelected = selectedShopIds.contains(shop.id)
+                    )
+                }
+
+                // Submit the updated list to the adapter
+                (binding.rvShopsToTag.adapter as? ShopSelectionAdapter)?.submitList(
+                    shopsWithSelection
+                )
+            }
+        }
+
+        updatePriorityIcon()
+
         binding.ivPriorityStar.setOnClickListener {
             // Toggle the priority status
             isPriority = !isPriority
             updatePriorityIcon()
         }
 
-//        binding.ivPriorityStar.setOnClickListener {
-//            // Toggle the priority status
-//            Log.i("DebugLog", "Priority star clicked")
-//            isPriority = !isPriority
-//            updatePriorityIcon()
-//
-//            // Update the priority status in the ViewModel
-//            if (itemId != -1L) {
-//                viewModel.updateItemPriority(itemId, isPriority)
-
-//            }
-//        }
-//        binding.ivPriorityStar.setOnClickListener {
-//            // Toggle the priority status
-//            isPriority = !isPriority
-//            updatePriorityIcon()
-//
-//            // Update the priority status in the ViewModel
-//            viewModel.updateItemPriority(itemId, isPriority)
-//            Log.i("Flanders", "Item name $itemName is now priority: $isPriority")
-//        }
-
         setupRecyclerView()
         observeShopData()
 
+
+        //todo This might have something to do with the log showing added and removed at the same time
         shopSelectionAdapter.onItemClick = { selectedShop ->
+            // Correctly toggle the selection state
             if (selectedShopsViewModel.isSelected(selectedShop)) {
-                selectedShopsViewModel.addSelectedShop(selectedShop)
-            } else {
+                // If the shop is already selected, remove it from the selection
                 selectedShopsViewModel.removeSelectedShop(selectedShop)
+            } else {
+                // If the shop is not selected, add it to the selection
+                selectedShopsViewModel.addSelectedShop(selectedShop)
             }
-            Log.i("ShopSelection", "Selected shops updated")
-            Log.i("Goose", "sel shop is $selectedShop")
+            Log.i(
+                "ShopSelection",
+                "Selected shops updated: ${selectedShopsViewModel.selectedShops.value}"
+            )
+            Log.i("Goose", "Selected shop is $selectedShop")
         }
 
-
+        // Assuming selectedShopsLiveData holds a list of ShopWithSelection
+        viewModel.selectedShopsLiveData.observe(viewLifecycleOwner) { shopsWithSelection ->
+            // Submit the new list to the adapter
+            shopSelectionAdapter.submitList(shopsWithSelection)
+        }
 
         binding.btnSave.setOnClickListener {
-            val selectedShopIds = selectedShopsViewModel.selectedShops.value?.map { it.id } ?: emptyList()
+            val itemName = binding.tvItemName.text.toString()
+            val selectedShopIds =
+                selectedShopsViewModel.selectedShops.value?.map { it.id } ?: emptyList()
 
             if (selectedShopIds.isEmpty()) {
-                Toast.makeText(context, "Please select at least one shop", Toast.LENGTH_SHORT).show()
-            } else {
-                val newItemName = Item(name = navigationArgs.itemName, description = "")
+                Toast.makeText(context, "Please select at least one shop", Toast.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
+            }
 
-                lifecycleScope.launch {
-                    itemId = itemViewModel.insertItemWithShopsAsync(newItemName, selectedShopIds).await()
-                    if (itemId != -1L) {
-                        Log.i("DebugLog", "Item inserted with ID: $itemId")
-                Log.i("Flanders", "Item ID $itemId is now priority: $isPriority")
-                        // Update the item's priority status using the stored 'isPriority' value
-                        viewModel.updateItemPriority(itemId, isPriority)
+            lifecycleScope.launch {
+                if (itemId == -1L) {
+                    // Add a new item
+                    val newItemId = itemViewModel.insertItemWithShopsAsync(
+                        Item(
+                            name = itemName,
+                            description = ""
+                        ), selectedShopIds
+                    ).await()
+                    // Handle the case for new item insertion
+                    viewModel.updateItemPriority(newItemId, isPriority)
 
-                        // Navigate or perform other actions
-                        val action = TagItemToShopsFragmentDirections.actionTagItemToShopsFragmentToListFragment()
-                        findNavController().navigate(action)
-                    } else {
-                        // Handle the case where item insertion failed
-                        Log.e("DebugLog", "Failed to insert the item")
-                    }
+                } else {
+                    // Update existing item
+                    itemViewModel.updateItem(itemId, itemName, selectedShopIds, isPriority)
+                    // Handle the case for updating an item
                 }
+
+                // Common code after insertion or update
+                findNavController().navigate(TagItemToShopsFragmentDirections.actionTagItemToShopsFragmentToListFragment())
             }
         }
 
-
-//        binding.btnSave.setOnClickListener {
-//            val selectedShopIds = selectedShopsViewModel.selectedShops.value?.map { it.id } ?: emptyList()
-//
-//            if (selectedShopIds.isEmpty()) {
-//                Toast.makeText(context, "Please select at least one shop", Toast.LENGTH_SHORT).show()
-//            } else {
-//                val newItemName = Item(name = navigationArgs.itemName, description = "")
-//
-//                lifecycleScope.launch {
-//                    itemId = itemViewModel.insertItemWithShopsAsync(newItemName, selectedShopIds).await()
-//                    if (itemId != -1L) {
-//                        Log.i("DebugLog", "Item inserted with ID: $itemId")
-//                        // Navigate or perform other actions
-//                        val action = TagItemToShopsFragmentDirections.actionTagItemToShopsFragmentToListFragment()
-//                        findNavController().navigate(action)
-//                    } else {
-//                        // Handle the case where item insertion failed
-//                        Log.e("DebugLog", "Failed to insert the item")
-//                    }
-//                }
-//            }
-//        }
-
-//        binding.btnSave.setOnClickListener {
-//            val selectedShopIds = selectedShopsViewModel.selectedShops.value?.map { it.id } ?: emptyList()
-//
-//            if (selectedShopIds.isEmpty()) {
-//                // Show a Toast message if no shops are selected
-//                Toast.makeText(context, "Please select at least one shop", Toast.LENGTH_SHORT).show()
-//            } else {
-//                // Continue with the saving process
-//                val newItemName = Item(name = newItem, description = "")
-//
-//                lifecycleScope.launch {
-//                    itemViewModel.insertItemWithShopsAsync(newItemName, selectedShopIds).await()
-//                    Log.i("DebugLog", "Item inserted with ID: $itemId")
-//                    // Navigate back to ListFragment
-//                    val action = TagItemToShopsFragmentDirections.actionTagItemToShopsFragmentToListFragment()
-//                    findNavController().navigate(action)
-//                }
-//            }
-//        }
-
     }
-
 
     private fun setupRecyclerView() {
         val recyclerView: RecyclerView = binding.rvShopsToTag
@@ -207,8 +207,20 @@ class TagItemToShopsFragment() : Fragment() {
     private fun observeShopData() {
         viewModel.shops.observe(viewLifecycleOwner) { shops ->
             Log.d("DOH!", "Shops are this $shops")
-            shopSelectionAdapter.submitList(shops)
 
+            // Assuming selectedShopsViewModel holds the current selection state
+            val selectedShopIds = selectedShopsViewModel.selectedShops.value?.map { it.id }?.toSet() ?: emptySet()
+
+            // Transform the list of Shops to a list of ShopWithSelection
+            val shopsWithSelection = shops.map { shop ->
+                ShopWithSelection(
+                    shop = shop,
+                    isSelected = selectedShopIds.contains(shop.id)
+                )
+            }
+
+            // Submit the transformed list to the adapter
+            shopSelectionAdapter.submitList(shopsWithSelection)
         }
     }
 

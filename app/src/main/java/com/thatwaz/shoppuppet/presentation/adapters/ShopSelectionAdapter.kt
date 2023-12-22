@@ -3,6 +3,7 @@ package com.thatwaz.shoppuppet.presentation.adapters
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,40 +15,58 @@ import androidx.recyclerview.widget.RecyclerView
 import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.ItemShopsToTagBinding
 import com.thatwaz.shoppuppet.domain.model.Shop
+import com.thatwaz.shoppuppet.domain.model.ShopWithSelection
 import com.thatwaz.shoppuppet.presentation.viewmodel.SelectedShopsViewModel
 
 
 class ShopSelectionAdapter(
     var onItemClick: (Shop) -> Unit,
     private val selectedShopsViewModel: SelectedShopsViewModel
-) : ListAdapter<Shop, ShopSelectionAdapter.ViewHolder>(ShopDiffCallback()) {
+) : ListAdapter<ShopWithSelection, ShopSelectionAdapter.ViewHolder>(ShopDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemShopsToTagBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemShopsToTagBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val shop = getItem(position)
-        holder.bind(shop, selectedShopsViewModel.isSelected(shop))
+        // Get the current item which includes both the Shop and its selection state
+        val shopWithSelection = getItem(position)
+//        val isSelected = selectedShopIds.contains(shopWithSelection.shop.id)
+        // Use the holder's bind method to set up the shop details and selection state
+        holder.bind(shopWithSelection)
     }
 
-    inner class ViewHolder(private val binding: ItemShopsToTagBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemShopsToTagBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
 
-        fun bind(shop: Shop, isSelected: Boolean) {
-            binding.tvShopToTag.text = shop.name
-
+        fun bind(shopWithSelection: ShopWithSelection) {
+            binding.tvShopToTag.text = shopWithSelection.shop.name
+            binding.cbTagShop.isChecked = shopWithSelection.isSelected
             // Convert the color resource name to an actual color resource ID
-            val colorResId = binding.root.context.resources.getIdentifier(shop.colorResName, "color", binding.root.context.packageName)
-            val color = if (colorResId != 0) ContextCompat.getColor(binding.root.context, colorResId) else Color.BLACK // Fallback to a default color if not found
+            val colorResId = binding.root.context.resources.getIdentifier(
+                shopWithSelection.shop.colorResName,
+                "color",
+                binding.root.context.packageName
+            )
+            val color = if (colorResId != 0) ContextCompat.getColor(
+                binding.root.context,
+                colorResId
+            ) else Color.BLACK // Fallback to a default color if not found
 
             // Set checkbox color
             val checkboxColorStateList = getCheckboxColorStateList(binding.root.context, color)
             binding.cbTagShop.buttonTintList = checkboxColorStateList
 
             // Check if an icon is set
-            val iconResId = binding.root.context.resources.getIdentifier(shop.iconResName, "drawable", binding.root.context.packageName)
+            val iconResId = binding.root.context.resources.getIdentifier(
+                shopWithSelection.shop.iconResName,
+                "drawable",
+                binding.root.context.packageName
+            )
             if (iconResId != 0) {
                 // Get and set the icon drawable
                 val iconDrawable = ContextCompat.getDrawable(binding.root.context, iconResId)
@@ -62,7 +81,7 @@ class ShopSelectionAdapter(
                 binding.ivShopIcon.visibility = View.VISIBLE
             } else {
                 // Use initials if icon is not provided
-                shop.initials?.let {
+                shopWithSelection.shop.initials?.let {
                     binding.tvShopInitials.text = it
                     binding.tvShopInitials.setTextColor(color)
                 }
@@ -74,24 +93,25 @@ class ShopSelectionAdapter(
 
             // Set text color using color
             binding.tvShopToTag.setTextColor(color)
-
-
-            // Remove any previous listeners
-            binding.cbTagShop.setOnCheckedChangeListener(null)
-
-            // Set the current state
-            binding.cbTagShop.isChecked = isSelected
-
-            // Set a new listener
+            binding.cbTagShop.setOnCheckedChangeListener(null) // remove listener
+            binding.cbTagShop.isChecked = shopWithSelection.isSelected // change check state
             binding.cbTagShop.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    selectedShopsViewModel.addSelectedShop(shop)
+                // Update the shop's selection state
+                shopWithSelection.isSelected = isChecked
+                Log.i("Pigeon", "Checkbox for shop ${shopWithSelection.shop.id} is now: $isChecked")
+                Log.i("Pigeon", "shop with sel is ${shopWithSelection.isSelected}")
+
+                // Update the ViewModel state
+
+                // todo investigate why I had to put !isChecked vs isChecked to get it to work
+                if (!isChecked) {
+                    selectedShopsViewModel.addSelectedShop(shopWithSelection.shop)
                 } else {
-                    selectedShopsViewModel.removeSelectedShop(shop)
+                    selectedShopsViewModel.removeSelectedShop(shopWithSelection.shop)
                 }
 
-                // Optional: Notify an external listener about the selection
-                onItemClick(shop)
+                // Notify about the selection for any external handling
+                onItemClick(shopWithSelection.shop)
             }
         }
 
@@ -112,29 +132,20 @@ class ShopSelectionAdapter(
             return ColorStateList(states, colors)
         }
 
-
-//    private fun getCheckboxColorStateList(context: Context, colorResId: Int): ColorStateList {
-//        val states = arrayOf(
-//            intArrayOf(-android.R.attr.state_enabled), // disabled
-//            intArrayOf(android.R.attr.state_checked),  // checked
-//            intArrayOf()                               // default
-//        )
-////todo figure out color issue
-//        val colors = intArrayOf(
-//            ContextCompat.getColor(context, R.color.black), // Disabled color
-//            ContextCompat.getColor(context, colorResId),                          // Checked color
-//            ContextCompat.getColor(context, colorResId)   // Default color
-//        )
-//
-//        return ColorStateList(states, colors)
     }
 
-    class ShopDiffCallback : DiffUtil.ItemCallback<Shop>() {
-        override fun areItemsTheSame(oldItem: Shop, newItem: Shop): Boolean {
-            return oldItem.id == newItem.id
+    class ShopDiffCallback : DiffUtil.ItemCallback<ShopWithSelection>() {
+        override fun areItemsTheSame(
+            oldItem: ShopWithSelection,
+            newItem: ShopWithSelection
+        ): Boolean {
+            return oldItem.shop.id == newItem.shop.id
         }
 
-        override fun areContentsTheSame(oldItem: Shop, newItem: Shop): Boolean {
+        override fun areContentsTheSame(
+            oldItem: ShopWithSelection,
+            newItem: ShopWithSelection
+        ): Boolean {
             return oldItem == newItem
         }
     }

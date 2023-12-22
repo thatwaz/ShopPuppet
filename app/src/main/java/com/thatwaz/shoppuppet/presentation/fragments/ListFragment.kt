@@ -77,6 +77,23 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener  {
 
 
     // todo why is this an override method?
+
+    override fun onEditItem(item: ItemUiModel) {
+        // Prepare arguments
+        val itemId = item.itemId
+        val itemName = item.itemName
+        val isPriority = item.isPriorityItem
+        val associatedShopIds = item.shopNames.map { it.id }.toLongArray()
+
+        // Navigate to TagItemToShopsFragment
+        val action = ListFragmentDirections.actionListFragmentToTagItemToShopsFragment(
+            itemName = itemName,
+            itemId = itemId,
+            isPriority = isPriority,
+            associatedShopIds = associatedShopIds
+        )
+        findNavController().navigate(action)
+    }
     override fun onDeleteItem(itemUiModel: ItemUiModel) {
         // Find the corresponding Item object from the ViewModel's data
         val item = viewModel.findItemByUiModel(itemUiModel)

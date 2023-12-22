@@ -18,6 +18,7 @@ class ListAdapter(private val itemClickListener: ItemClickListener
 ) : androidx.recyclerview.widget.ListAdapter<ItemUiModel, ListAdapter.ShoppingViewHolder>(DiffCallback) {
 
     interface ItemClickListener {
+        fun onEditItem(item: ItemUiModel)
         fun onDeleteItem(item: ItemUiModel)
     }
 
@@ -76,8 +77,11 @@ class ListAdapter(private val itemClickListener: ItemClickListener
                     )
                 }
             }
-            binding.btnDeleteItem.setOnClickListener {
+            binding.ivDeleteItem.setOnClickListener {
                 itemClickListener.onDeleteItem(itemUiModel)
+            }
+            binding.ivEditItem.setOnClickListener {
+                itemClickListener.onEditItem(itemUiModel)
             }
         }
     }
