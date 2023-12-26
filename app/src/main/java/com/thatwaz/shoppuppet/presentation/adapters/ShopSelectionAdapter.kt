@@ -34,7 +34,8 @@ class ShopSelectionAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // Get the current item which includes both the Shop and its selection state
         val shopWithSelection = getItem(position)
-//        val isSelected = selectedShopIds.contains(shopWithSelection.shop.id)
+
+        /*        val isSelected = selectedShopIds.contains(shopWithSelection.shop.id)*/
         // Use the holder's bind method to set up the shop details and selection state
         holder.bind(shopWithSelection)
     }
@@ -45,7 +46,10 @@ class ShopSelectionAdapter(
 
         fun bind(shopWithSelection: ShopWithSelection) {
             binding.tvShopToTag.text = shopWithSelection.shop.name
+//            shopWithSelection.isSelected = false
             binding.cbTagShop.isChecked = shopWithSelection.isSelected
+            //todo Checks are all reading false when going right into edit mode
+            Log.i("SSVM", "checks are ${shopWithSelection.isSelected}")
             // Convert the color resource name to an actual color resource ID
             val colorResId = binding.root.context.resources.getIdentifier(
                 shopWithSelection.shop.colorResName,
@@ -104,9 +108,11 @@ class ShopSelectionAdapter(
                 // Update the ViewModel state
 
                 // todo investigate why I had to put !isChecked vs isChecked to get it to work
-                if (!isChecked) {
+                if (isChecked) {
+                    Log.i("Checky", "is checked is $isChecked")
                     selectedShopsViewModel.addSelectedShop(shopWithSelection.shop)
                 } else {
+                    Log.i("Checky", "is checked is falsely $isChecked")
                     selectedShopsViewModel.removeSelectedShop(shopWithSelection.shop)
                 }
 
@@ -134,22 +140,50 @@ class ShopSelectionAdapter(
 
     }
 
+
     class ShopDiffCallback : DiffUtil.ItemCallback<ShopWithSelection>() {
         override fun areItemsTheSame(
             oldItem: ShopWithSelection,
             newItem: ShopWithSelection
         ): Boolean {
-            return oldItem.shop.id == newItem.shop.id
+            val sameItem = oldItem.shop.id == newItem.shop.id
+            Log.i(
+                "DiffCallback",
+                "areItemsTheSame: $sameItem -- OLD ID: ${oldItem.shop.id}, NEW ID: ${newItem.shop.id}"
+            )
+            return sameItem
         }
 
         override fun areContentsTheSame(
             oldItem: ShopWithSelection,
             newItem: ShopWithSelection
         ): Boolean {
-            return oldItem == newItem
+            val sameContent = oldItem == newItem
+            Log.i(
+                "DiffCallback",
+                "areContentsTheSame: $sameContent -- OLD ITEM: $oldItem, NEW ITEM: $newItem"
+            )
+            return sameContent
         }
     }
 }
+
+//    class ShopDiffCallback : DiffUtil.ItemCallback<ShopWithSelection>() {
+//        override fun areItemsTheSame(
+//            oldItem: ShopWithSelection,
+//            newItem: ShopWithSelection
+//        ): Boolean {
+//            return oldItem.shop.id == newItem.shop.id
+//        }
+//
+//        override fun areContentsTheSame(
+//            oldItem: ShopWithSelection,
+//            newItem: ShopWithSelection
+//        ): Boolean {
+//            return oldItem == newItem
+//        }
+//    }
+
 
 
 

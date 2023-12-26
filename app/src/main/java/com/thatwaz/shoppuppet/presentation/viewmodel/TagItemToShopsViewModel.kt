@@ -41,10 +41,11 @@ class TagItemToShopsViewModel @Inject constructor(
         loadShops()
     }
 
-    private fun loadShops() {
+    fun loadShops() {
         viewModelScope.launch {
             val shops = shopRepository.getAllShops()  // Replace with actual data fetching
             _allShopsLiveData.value = shops
+            Log.i("CRACK","shops loading are $shops")
             // Initialize the selectedShopsLiveData with all shops unselected
             _selectedShopsLiveData.value = shops.map { ShopWithSelection(it, false) }
         }
@@ -91,6 +92,27 @@ class TagItemToShopsViewModel @Inject constructor(
             }
         }
     }
+
+    fun fetchShopsByIds(shopIds: List<Long>): LiveData<List<Shop>> {
+        val result = MutableLiveData<List<Shop>>()
+        viewModelScope.launch {
+            // Fetch the shops from the repository
+            val shops = shopRepository.getShopsByIds(shopIds)
+            result.postValue(shops)
+        }
+        return result
+    }
+
+
+//    fun fetchShopsByIds(shopIds: LongArray): LiveData<List<Shop>> {
+//        val result = MutableLiveData<List<Shop>>()
+//        viewModelScope.launch {
+//            // Fetch the shops from the repository
+//            val shops = shopRepository.getShopsByIds(shopIds)
+//            result.postValue(shops)
+//        }
+//        return result
+//    }
 
     fun fetchAndSetSelectedShops(itemId: Long) {
         viewModelScope.launch {

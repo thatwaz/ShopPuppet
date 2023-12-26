@@ -99,7 +99,6 @@
             android:name="isPriority"
             app:argType="boolean"
             android:defaultValue="false"/>
-
         <argument
             android:name="associatedShopIds"
             app:argType="long[]"/>

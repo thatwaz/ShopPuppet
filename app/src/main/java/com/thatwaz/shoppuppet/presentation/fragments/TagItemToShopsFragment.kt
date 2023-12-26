@@ -34,6 +34,8 @@ class TagItemToShopsFragment() : Fragment() {
     private val viewModel: TagItemToShopsViewModel by viewModels()
     private val selectedShopsViewModel: SelectedShopsViewModel by viewModels()
     private val itemViewModel: ItemViewModel by viewModels()
+
+    //    private val tagItemToShopsViewModel: TagItemToShopsViewModel by viewModels()
     private lateinit var shopSelectionAdapter: ShopSelectionAdapter
     private var isPriority = false
     private var itemId: Long = -1
@@ -54,6 +56,14 @@ class TagItemToShopsFragment() : Fragment() {
 
         // Retrieve the item name from fragment arguments
         val itemName = arguments?.getString("itemName")
+        // Retrieve associated shop IDs from navigation arguments
+        val associatedShopIds: LongArray =
+            navigationArgs.associatedShopIds // Assuming this is LongArray
+        fetchAndInitializeSelectedShops(associatedShopIds.toList()) // Convert to List<Long> when passing
+
+
+        selectedShopsViewModel.setSelectedShopIds(associatedShopIds.toList())  // Ensure this method exists and updates the ViewModel's LiveData
+
 
         // Set the item name in your TextView
         // changed to edit text to handle name edit
@@ -62,51 +72,26 @@ class TagItemToShopsFragment() : Fragment() {
         val newItem = navigationArgs.itemName
         Log.i("DOH!", "New item is $newItem")
 
-        viewModel.fetchAndSetSelectedShops(itemId)
-
-
-
-
         itemId = navigationArgs.itemId
         isPriority = navigationArgs.isPriority
+        viewModel.fetchAndSetSelectedShops(itemId)
+        // Observe the full list of shops
+//        viewModel.shops.observe(viewLifecycleOwner) { allShops ->
+//            combineAndSubmit(allShops, selectedShopsViewModel.selectedShops.value)
+//        }
 
-        if (itemId != -1L) { // If editing an existing item
-            viewModel.fetchAndSetSelectedShops(itemId)
-            viewModel.selectedShops.observe(viewLifecycleOwner) { shops ->
-                // Initialize the SelectedShopsViewModel with these shops
-                val selectedShopIds = shops.map { it.id }
-                selectedShopsViewModel.setSelectedShopIds(selectedShopIds)
-                selectedShopsViewModel.initializeSelectedShops(shops)
-            }
-//            viewModel.selectedShops.observe(viewLifecycleOwner) { shops ->
-//                // Now synchronize this data to SelectedShopsViewModel
-//
-//            }
-        }
+        // Temporary test list of shops
 
 
-        viewModel.selectedShops.observe(viewLifecycleOwner) { selectedShops ->
-            Log.i("Crappy", "Selected Shops are $selectedShops")
+// Observe the selected shops
+//        selectedShopsViewModel.selectedShops.observe(viewLifecycleOwner) { selectedShops ->
+//            selectedShops
+////            combineAndSubmit(viewModel.shops.value, selectedShops)
+//            Log.i("horseshit","shoppies are ${selectedShops}")
+//            Log.i("AdapterDebug", "Submitting list to adapter: $selectedShops")
+//            shopSelectionAdapter.submitList(selectedShops)
+//        }
 
-            // Assuming viewModel.shops holds the full list of shops
-            viewModel.shops.value?.let { fullShopsList ->
-                // Create a Set of selected Shop IDs for faster lookup
-                val selectedShopIds = selectedShops.map { it.id }.toSet()
-
-                // Transform the full list of shops into a list of ShopWithSelection
-                val shopsWithSelection = fullShopsList.map { shop ->
-                    ShopWithSelection(
-                        shop = shop,
-                        isSelected = selectedShopIds.contains(shop.id)
-                    )
-                }
-
-                // Submit the updated list to the adapter
-                (binding.rvShopsToTag.adapter as? ShopSelectionAdapter)?.submitList(
-                    shopsWithSelection
-                )
-            }
-        }
 
         updatePriorityIcon()
 
@@ -119,13 +104,44 @@ class TagItemToShopsFragment() : Fragment() {
         setupRecyclerView()
         observeShopData()
 
+//        selectedShopsViewModel.selectedShops.observe(viewLifecycleOwner) { selectedShops ->
+
+        if (itemId != -1L) {
+            viewModel.selectedShops.observe(viewLifecycleOwner) { selectedShops ->
+
+
+                Log.i("horseshit", "shoppies are ${selectedShops}")
+                // Assuming viewModel.shops holds the full list of shops
+                viewModel.allShopsLiveData.value?.let { allShops ->
+                    Log.i("horseshit", "Current viewModel.shops: ${viewModel.allShopsLiveData.value}")
+
+                    // Transform the list of all shops into a list of ShopWithSelection
+                    // where each shop's selection status is determined by whether it's in the selectedShops list
+
+                    val shopsWithSelection = allShops.map { shop ->
+                        ShopWithSelection(
+                            shop = shop,
+                            isSelected = selectedShops.contains(shop)
+                        )
+                    }
+                    // Log the transformed list
+                    Log.i("horseshit", "ShopWithSelection list: $shopsWithSelection")
+//                // Now submit this transformed list to your adapter
+
+                    /*todo viewmodel.loadShops() brings shops back but not cheked, do I need a
+                    similar function in viewmodel to reload shops minus the checkbox?*/
+//                    viewModel.loadShops()
+                    shopSelectionAdapter.submitList(shopsWithSelection)
+                }
+            }
+        }
 
         //todo This might have something to do with the log showing added and removed at the same time
         shopSelectionAdapter.onItemClick = { selectedShop ->
             // Correctly toggle the selection state
             if (selectedShopsViewModel.isSelected(selectedShop)) {
                 // If the shop is already selected, remove it from the selection
-                selectedShopsViewModel.removeSelectedShop(selectedShop)
+//                selectedShopsViewModel.removeSelectedShop(selectedShop)
             } else {
                 // If the shop is not selected, add it to the selection
                 selectedShopsViewModel.addSelectedShop(selectedShop)
@@ -179,6 +195,14 @@ class TagItemToShopsFragment() : Fragment() {
 
     }
 
+    private fun fetchAndInitializeSelectedShops(shopIds: List<Long>) {
+        // Assuming you have a method in your ViewModel to fetch shops by IDs
+        viewModel.fetchShopsByIds(shopIds).observe(viewLifecycleOwner) { shops ->
+            // Now that you have the shops, initialize the SelectedShopsViewModel
+            selectedShopsViewModel.initializeSelectedShops(shops)
+        }
+    }
+
     private fun setupRecyclerView() {
         val recyclerView: RecyclerView = binding.rvShopsToTag
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -190,11 +214,17 @@ class TagItemToShopsFragment() : Fragment() {
         )
         recyclerView.adapter = shopSelectionAdapter
     }
+
     private fun updatePriorityIcon() {
         if (isPriority) {
             // Change icon to filled star and set tint color
             binding.ivPriorityStar.setImageResource(R.drawable.ic_star) // Replace with your filled star icon
-            binding.ivPriorityStar.setColorFilter(ContextCompat.getColor(requireContext(), R.color.colorAccent))
+            binding.ivPriorityStar.setColorFilter(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.colorAccent
+                )
+            )
             binding.ivStarPriorityMarker.visibility = View.VISIBLE
         } else {
             // Change icon to star outline
@@ -209,7 +239,8 @@ class TagItemToShopsFragment() : Fragment() {
             Log.d("DOH!", "Shops are this $shops")
 
             // Assuming selectedShopsViewModel holds the current selection state
-            val selectedShopIds = selectedShopsViewModel.selectedShops.value?.map { it.id }?.toSet() ?: emptySet()
+            val selectedShopIds =
+                selectedShopsViewModel.selectedShops.value?.map { it.id }?.toSet() ?: emptySet()
 
             // Transform the list of Shops to a list of ShopWithSelection
             val shopsWithSelection = shops.map { shop ->
@@ -223,6 +254,7 @@ class TagItemToShopsFragment() : Fragment() {
             shopSelectionAdapter.submitList(shopsWithSelection)
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

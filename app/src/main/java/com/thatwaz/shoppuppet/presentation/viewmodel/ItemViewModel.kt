@@ -46,6 +46,9 @@ class ItemViewModel @Inject constructor(
     private val _itemUiModels = MutableLiveData<List<ItemUiModel>>()
     val itemUiModels: LiveData<List<ItemUiModel>> = _itemUiModels
 
+
+
+
     fun updateItemName(itemName: String) {
         itemNameLiveData.value = itemName
 
@@ -88,7 +91,7 @@ class ItemViewModel @Inject constructor(
             val allShops = shopRepository.getAllShops()
             _shops.value = allShops
             allShops.forEach { shop ->
-                Log.d("ItemViewModel", "Shop name: ${shop.name}, Shop id: ${shop.id}")
+                Log.d("HorseShit", "Shop name: ${shop.name}, Shop id: ${shop.id}")
             }
         }
     }

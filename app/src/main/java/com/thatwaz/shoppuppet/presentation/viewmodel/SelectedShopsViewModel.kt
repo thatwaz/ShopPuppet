@@ -24,11 +24,14 @@ class SelectedShopsViewModel @Inject constructor(
     private val _selectedShops = MutableLiveData<List<Shop>>(emptyList())
     val selectedShops: LiveData<List<Shop>> get() = _selectedShops
 
+
+
     fun addSelectedShop(shop: Shop) {
         if (!_selectedShops.value.orEmpty().contains(shop)) {
             _selectedShops.value = _selectedShops.value.orEmpty().toMutableList().apply {
-                add(shop)
                 Log.i("crow","selected shops are: ${_selectedShops.value}")
+                add(shop)
+
             }
         }
     }
@@ -41,7 +44,9 @@ class SelectedShopsViewModel @Inject constructor(
     }
 
         fun initializeSelectedShops(shops: List<Shop>) {
+            Log.i("SSVM","sel shops live data is ${_selectedShops.value}")
         _selectedShops.value = shops
+
     }
 
         fun setSelectedShopIds(shopIds: List<Long>) {
@@ -52,6 +57,7 @@ class SelectedShopsViewModel @Inject constructor(
 
                 // Update the selected shops
                 _selectedShops.postValue(shops)
+                Log.i("SSVM","fetching shop ids: $shops")
             } catch (e: Exception) {
                 // Handle any exceptions
                 Log.e("SelectedShopsViewModel", "Error setting selected shops: ${e.message}")
