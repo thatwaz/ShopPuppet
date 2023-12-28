@@ -13,6 +13,11 @@ class ItemShopCrossRefRepository @Inject constructor(private val crossRefDao: It
         crossRefDao.insertCrossRef(crossRef)
     }
 
+    suspend fun removeAllAssociationsForItem(itemId: Long) {
+        crossRefDao.deleteAllCrossRefsForItem(itemId)
+    }
+
+
 //    suspend fun removeAssociationBetweenItemAndShop(itemId: Long, shopId: Long) {
 //        crossRefDao.deleteCrossRef(itemId, shopId)
 //    }

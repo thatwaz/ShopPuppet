@@ -138,10 +138,12 @@ class TagItemToShopsFragment() : Fragment() {
 
         //todo This might have something to do with the log showing added and removed at the same time
         shopSelectionAdapter.onItemClick = { selectedShop ->
+
+
             // Correctly toggle the selection state
             if (selectedShopsViewModel.isSelected(selectedShop)) {
                 // If the shop is already selected, remove it from the selection
-//                selectedShopsViewModel.removeSelectedShop(selectedShop)
+                selectedShopsViewModel.removeSelectedShop(selectedShop)
             } else {
                 // If the shop is not selected, add it to the selection
                 selectedShopsViewModel.addSelectedShop(selectedShop)
@@ -206,14 +208,29 @@ class TagItemToShopsFragment() : Fragment() {
     private fun setupRecyclerView() {
         val recyclerView: RecyclerView = binding.rvShopsToTag
         recyclerView.layoutManager = LinearLayoutManager(context)
-        shopSelectionAdapter = ShopSelectionAdapter(
-            onItemClick = { selectedShop ->
-                selectedShopsViewModel.addSelectedShop(selectedShop)
-            },
-            selectedShopsViewModel = selectedShopsViewModel
-        )
+
+        // Initialize the adapter with the onItemClick implementation
+        shopSelectionAdapter = ShopSelectionAdapter(onItemClick = { selectedShop ->
+            // Directly call the ViewModel's method to toggle selection here
+            viewModel.toggleShopSelection(selectedShop)
+        })
+
+        // Set the adapter to the RecyclerView
         recyclerView.adapter = shopSelectionAdapter
     }
+
+
+//    private fun setupRecyclerView() {
+//        val recyclerView: RecyclerView = binding.rvShopsToTag
+//        recyclerView.layoutManager = LinearLayoutManager(context)
+//        shopSelectionAdapter = ShopSelectionAdapter(
+//            onItemClick = { selectedShop ->
+//                selectedShopsViewModel.addSelectedShop(selectedShop)
+//            },
+//            selectedShopsViewModel = selectedShopsViewModel, viewModel
+//        )
+//        recyclerView.adapter = shopSelectionAdapter
+//    }
 
     private fun updatePriorityIcon() {
         if (isPriority) {

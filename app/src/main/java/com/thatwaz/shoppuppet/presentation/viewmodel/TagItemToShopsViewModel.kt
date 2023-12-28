@@ -55,10 +55,15 @@ class TagItemToShopsViewModel @Inject constructor(
     fun toggleShopSelection(shop: Shop) {
         _selectedShopsLiveData.value = _selectedShopsLiveData.value?.map { shopWithSelection ->
             if (shopWithSelection.shop.id == shop.id) {
+                //
                 // Toggle the selection state
+                Log.i("Gravy","selected = ${shopWithSelection.shop}")
                 shopWithSelection.copy(isSelected = !shopWithSelection.isSelected)
+
             } else {
+//                Log.i("Gravy","else = $shopWithSelection")
                 shopWithSelection
+
             }
         }
     }

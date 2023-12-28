@@ -16,12 +16,11 @@ import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.ItemShopsToTagBinding
 import com.thatwaz.shoppuppet.domain.model.Shop
 import com.thatwaz.shoppuppet.domain.model.ShopWithSelection
-import com.thatwaz.shoppuppet.presentation.viewmodel.SelectedShopsViewModel
 
 
 class ShopSelectionAdapter(
     var onItemClick: (Shop) -> Unit,
-    private val selectedShopsViewModel: SelectedShopsViewModel
+
 ) : ListAdapter<ShopWithSelection, ShopSelectionAdapter.ViewHolder>(ShopDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -99,26 +98,23 @@ class ShopSelectionAdapter(
             binding.tvShopToTag.setTextColor(color)
             binding.cbTagShop.setOnCheckedChangeListener(null) // remove listener
             binding.cbTagShop.isChecked = shopWithSelection.isSelected // change check state
+
             binding.cbTagShop.setOnCheckedChangeListener { _, isChecked ->
-                // Update the shop's selection state
-                shopWithSelection.isSelected = isChecked
-                Log.i("Pigeon", "Checkbox for shop ${shopWithSelection.shop.id} is now: $isChecked")
-                Log.i("Pigeon", "shop with sel is ${shopWithSelection.isSelected}")
-
-                // Update the ViewModel state
-
-                // todo investigate why I had to put !isChecked vs isChecked to get it to work
-                if (isChecked) {
-                    Log.i("Checky", "is checked is $isChecked")
-                    selectedShopsViewModel.addSelectedShop(shopWithSelection.shop)
-                } else {
-                    Log.i("Checky", "is checked is falsely $isChecked")
-                    selectedShopsViewModel.removeSelectedShop(shopWithSelection.shop)
+                if (isChecked != shopWithSelection.isSelected) { // Only if the state has actually changed
+                    onItemClick(shopWithSelection.shop) // Use the callback to signal change
                 }
-
-                // Notify about the selection for any external handling
-                onItemClick(shopWithSelection.shop)
             }
+
+//            binding.cbTagShop.setOnCheckedChangeListener { _, isChecked ->
+//                // When checkbox state changes, toggle the selection in the ViewModel
+//                if (isChecked != shopWithSelection.isSelected) { // Prevent unnecessary updates
+//                    onItemClick(shopWithSelection.shop)
+//                    Log.i("Gravy","checky shop is ${shopWithSelection.shop}")
+//                    viewModel.toggleShopSelection(shopWithSelection.shop)
+//                }
+//            }
+
+
         }
 
 

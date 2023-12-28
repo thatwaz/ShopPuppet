@@ -196,18 +196,57 @@ class ItemViewModel @Inject constructor(
 
     private fun updateShopAssociations(itemId: Long, newShopIds: List<Long>) {
         viewModelScope.launch {
+            Log.d("UpdateAssociations", "Starting to update associations for item ID: $itemId")
+
             // Clear existing associations
-//            crossRefRepository.deleteCrossRefsForItem(itemId)
+            Log.d("UpdateAssociations", "Removing all associations for item ID: $itemId")
+            crossRefRepository.removeAllAssociationsForItem(itemId)
+            Log.d("UpdateAssociations", "All existing associations removed for item ID: $itemId")
 
             // Create new associations
             newShopIds.forEach { shopId ->
+                Log.d("UpdateAssociations", "Associating shop ID $shopId with item ID: $itemId")
                 crossRefRepository.associateItemWithShop(itemId, shopId)
             }
+            Log.d("UpdateAssociations", "All new associations created for item ID: $itemId")
 
             // Optionally, refresh the item list
+            Log.d("UpdateAssociations", "Refreshing all items post association update")
             fetchAllItems()
         }
     }
+
+
+//    private fun updateShopAssociations(itemId: Long, newShopIds: List<Long>) {
+//        viewModelScope.launch {
+//            // Clear existing associations
+//            crossRefRepository.removeAllAssociationsForItem(itemId)
+//
+//            // Create new associations
+//            newShopIds.forEach { shopId ->
+//                crossRefRepository.associateItemWithShop(itemId, shopId)
+//            }
+//
+//            // Optionally, refresh the item list
+//            fetchAllItems()
+//        }
+//    }
+
+
+//    private fun updateShopAssociations(itemId: Long, newShopIds: List<Long>) {
+//        viewModelScope.launch {
+//            // Clear existing associations
+//            crossRefRepository.removeAssociationBetweenItemAndShop(itemId)
+//
+//            // Create new associations
+//            newShopIds.forEach { shopId ->
+//                crossRefRepository.associateItemWithShop(itemId, shopId)
+//            }
+//
+//            // Optionally, refresh the item list
+//            fetchAllItems()
+//        }
+//    }
 
 //    fun fetchAndSetSelectedShops(itemId: Long) {
 //        viewModelScope.launch {
