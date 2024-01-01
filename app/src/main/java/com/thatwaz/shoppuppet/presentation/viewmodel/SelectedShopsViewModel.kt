@@ -27,21 +27,27 @@ class SelectedShopsViewModel @Inject constructor(
 
 
     fun addSelectedShop(shop: Shop) {
-        if (!_selectedShops.value.orEmpty().contains(shop)) {
-            _selectedShops.value = _selectedShops.value.orEmpty().toMutableList().apply {
-                Log.i("crow","selected shops are: ${_selectedShops.value}")
+        val newSelectedShops = selectedShops.value.orEmpty().toMutableList().apply {
+            if (!contains(shop)) {
                 add(shop)
-
             }
         }
+        _selectedShops.value = newSelectedShops
+        Log.d("SelectedShops", "Added shop, new list: $newSelectedShops")
     }
 
 
     fun removeSelectedShop(shop: Shop) {
-        val newList = _selectedShops.value.orEmpty().filter { it != shop }
-        Log.i("crow","Removing shop: $shop. New list: $newList")
-        _selectedShops.value = newList
+        if (selectedShops.value.orEmpty().contains(shop)) {
+            val newSelectedShops = selectedShops.value.orEmpty().filter { it != shop }
+            _selectedShops.value = newSelectedShops
+            Log.d("SelectedShops", "Removed shop, new list: $newSelectedShops")
+        } else {
+            Log.d("SelectedShops", "Attempted to remove a shop not in the list: $shop")
+            // You could handle this case differently if needed.
+        }
     }
+
 
         fun initializeSelectedShops(shops: List<Shop>) {
             Log.i("SSVM","sel shops live data is ${_selectedShops.value}")

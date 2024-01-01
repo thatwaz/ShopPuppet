@@ -19,9 +19,9 @@ import com.thatwaz.shoppuppet.domain.model.ShopWithSelection
 
 
 class ShopSelectionAdapter(
-    var onItemClick: (Shop) -> Unit,
+    var onItemClick: (Shop, Boolean) -> Unit,
 
-) : ListAdapter<ShopWithSelection, ShopSelectionAdapter.ViewHolder>(ShopDiffCallback()) {
+    ) : ListAdapter<ShopWithSelection, ShopSelectionAdapter.ViewHolder>(ShopDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
@@ -46,7 +46,7 @@ class ShopSelectionAdapter(
         fun bind(shopWithSelection: ShopWithSelection) {
             binding.tvShopToTag.text = shopWithSelection.shop.name
 //            shopWithSelection.isSelected = false
-            binding.cbTagShop.isChecked = shopWithSelection.isSelected
+//            binding.cbTagShop.isChecked = shopWithSelection.isSelected
             //todo Checks are all reading false when going right into edit mode
             Log.i("SSVM", "checks are ${shopWithSelection.isSelected}")
             // Convert the color resource name to an actual color resource ID
@@ -98,19 +98,34 @@ class ShopSelectionAdapter(
             binding.tvShopToTag.setTextColor(color)
             binding.cbTagShop.setOnCheckedChangeListener(null) // remove listener
             binding.cbTagShop.isChecked = shopWithSelection.isSelected // change check state
+//todo isChecked and isSelected need to be equal
 
             binding.cbTagShop.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked != shopWithSelection.isSelected) { // Only if the state has actually changed
-                    onItemClick(shopWithSelection.shop) // Use the callback to signal change
+                // Log the checkbox interaction
+                Log.d(
+                    "CheckboxDebug",
+                    "Checkbox for ${shopWithSelection.shop.name} is now: $isChecked"
+                )
+
+                if (isChecked != shopWithSelection.isSelected) {
+                    // Use the callback to signal change
+                    onItemClick(shopWithSelection.shop,isChecked)
+
+                }
+
+                // Specifically log when an item is unchecked
+                if (!isChecked) {
+                    Log.d("CheckboxDebug", "Unchecked: ${shopWithSelection.shop.name}")
                 }
             }
 
+
 //            binding.cbTagShop.setOnCheckedChangeListener { _, isChecked ->
-//                // When checkbox state changes, toggle the selection in the ViewModel
-//                if (isChecked != shopWithSelection.isSelected) { // Prevent unnecessary updates
-//                    onItemClick(shopWithSelection.shop)
-//                    Log.i("Gravy","checky shop is ${shopWithSelection.shop}")
-//                    viewModel.toggleShopSelection(shopWithSelection.shop)
+//                if (isChecked != shopWithSelection.isSelected) { // Only if the state has actually changed
+//                    onItemClick(shopWithSelection.shop) // Use the callback to signal change
+//                    Toast.makeText(binding.root.context, "Clicked on: ${shopWithSelection.shop.name}", Toast.LENGTH_SHORT).show()
+//                    Log.d("CheckboxDebug", "Before setOnCheckedChangeListener - isChecked: $isChecked, isSelected: ${shopWithSelection.isSelected}")
+//
 //                }
 //            }
 
