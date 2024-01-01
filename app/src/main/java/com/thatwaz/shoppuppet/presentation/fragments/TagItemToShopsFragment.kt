@@ -189,16 +189,16 @@ class TagItemToShopsFragment() : Fragment() {
     }
 
     private fun setupPriorityIcon() {
-        updatePriorityIcon()
+        updatePriorityStatus()
         binding.ivPriorityStar.setOnClickListener {
             // Toggle the priority status
             isPriority = !isPriority
-            updatePriorityIcon()
+            updatePriorityStatus()
         }
     }
 
 
-    private fun updatePriorityIcon() {
+    private fun updatePriorityStatus() {
         if (isPriority) {
             // Change icon to filled star and set tint color
             binding.ivPriorityStar.setImageResource(R.drawable.ic_star) // Replace with your filled star icon
@@ -208,14 +208,19 @@ class TagItemToShopsFragment() : Fragment() {
                     R.color.colorAccent
                 )
             )
-            binding.ivStarPriorityMarker.visibility = View.VISIBLE
+            // Change the background of the tv_item_name here
+            binding.tvItemName.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
+
         } else {
             // Change icon to star outline
             binding.ivPriorityStar.setImageResource(R.drawable.ic_star_outline) // Replace with your outline star icon
             binding.ivPriorityStar.setColorFilter(null) // Remove tint color
-            binding.ivStarPriorityMarker.visibility = View.INVISIBLE
+
+            // Reset the background of the tv_item_name here or set it to a default color
+            binding.tvItemName.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.off_white)) // or whatever your default color is
         }
     }
+
 
     private fun observeShopData() {
         viewModel.shops.observe(viewLifecycleOwner) { shops ->

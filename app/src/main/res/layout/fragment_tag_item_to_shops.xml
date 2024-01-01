@@ -6,32 +6,30 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <!-- Header or Title -->
-    <EditText
-        android:id="@+id/tv_item_name"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/item_name_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/tv_item_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginBottom="8dp"
         android:textSize="24sp"
         android:paddingStart="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
         android:paddingEnd="16dp"
-        app:layout_constraintStart_toEndOf="@id/iv_star_priority_marker"
-
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/iv_star_priority_marker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleX=".75"
-        android:scaleY=".75"
-        android:visibility="invisible"
-        app:layout_constraintTop_toTopOf="parent"
 
-        app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/ic_star"
-        app:tint="@color/colorAccent" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
 
 
 
@@ -47,7 +45,7 @@
         app:layout_constraintBottom_toTopOf="@id/cl_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_item_name"
+        app:layout_constraintTop_toBottomOf="@id/item_name_label"
         tools:listitem="@layout/item_shops_to_tag" />
 
     <com.google.android.material.divider.MaterialDivider
@@ -70,8 +68,8 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="@color/darker_grey"
-            android:text="Mark item as priority"
+            android:textColor="@color/primary"
+            android:text="Mark Item As Priority"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

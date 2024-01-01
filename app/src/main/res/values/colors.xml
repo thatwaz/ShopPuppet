@@ -44,6 +44,7 @@
     <color name="textColorDark">#212121</color>
     <color name="textColorGrey">#757575</color>
     <color name="clickable_blue">#2196F3</color> <!-- Material Design Blue 500 -->
+    <color name="soft_black">#DE000000</color>
 
 
     <!-- Shop Colors -->
