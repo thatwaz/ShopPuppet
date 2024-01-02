@@ -63,6 +63,7 @@
 
     <color name="positiveAction">#4CAF50</color> <!-- Green for positive actions -->
     <color name="negativeAction">#B0B0B0</color> <!-- Light_Gray for caution/negative actions -->
+    <color name="delete">#D32F2F</color>
 
 
 

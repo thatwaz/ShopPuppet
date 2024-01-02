@@ -96,10 +96,18 @@ class ListAdapter(private val itemClickListener: ItemClickListener
 //                binding.chipGroupShops.addView(chip)
 //            }
 
-            binding.imgDropDown.setOnClickListener {
+            binding.ivArrowDown.setOnClickListener {
                 if (binding.chipGroupShops.visibility == View.VISIBLE) {
+                    binding.apply {
+                        ivDeleteItem.visibility = View.VISIBLE
+                        ivEditItem.visibility= View.VISIBLE
+                    }
                     binding.chipGroupShops.visibility = View.GONE
-                    binding.imgDropDown.setImageDrawable(
+                    binding.apply {
+                        ivDeleteItem.visibility = View.GONE
+                        ivEditItem.visibility= View.GONE
+                    }
+                    binding.ivArrowDown.setImageDrawable(
                         ContextCompat.getDrawable(
                             it.context,
                             R.drawable.ic_arrow_down
@@ -107,7 +115,11 @@ class ListAdapter(private val itemClickListener: ItemClickListener
                     )
                 } else {
                     binding.chipGroupShops.visibility = View.VISIBLE
-                    binding.imgDropDown.setImageDrawable(
+                    binding.apply {
+                        ivDeleteItem.visibility = View.VISIBLE
+                        ivEditItem.visibility= View.VISIBLE
+                    }
+                    binding.ivArrowDown.setImageDrawable(
                         ContextCompat.getDrawable(
                             it.context,
                             R.drawable.ic_arrow_up
@@ -136,13 +148,13 @@ class ListAdapter(private val itemClickListener: ItemClickListener
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAdapter.ShoppingViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShoppingViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ShoppingItemBinding.inflate(layoutInflater, parent, false)
-        return ListAdapter.ShoppingViewHolder(binding, itemClickListener)
+        return ShoppingViewHolder(binding, itemClickListener)
     }
 
-    override fun onBindViewHolder(holder: ListAdapter.ShoppingViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ShoppingViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item)
     }
