@@ -9,7 +9,6 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.thatwaz.shoppuppet.domain.model.Item
-import com.thatwaz.shoppuppet.domain.model.ShopWithItemCount
 
 @Dao
 interface ItemDao {
@@ -79,6 +78,14 @@ interface ItemDao {
     // Method to delete items by their IDs
     @Query("DELETE FROM items WHERE id IN (:itemIds)")
     suspend fun deleteItemsByIds(itemIds: List<Long>)
+
+    @Query("SELECT * FROM items WHERE lastPurchasedDate >= :thirtyDaysAgo ORDER BY purchaseCount DESC")
+    fun getFrequentItems(thirtyDaysAgo: Long): LiveData<List<Item>>
+
+//    @Query("SELECT * FROM items WHERE lastPurchasedDate >= :date")
+//    fun getFrequentItems(date: Long): LiveData<List<Item>>
+
+
 }
 
 

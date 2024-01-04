@@ -46,6 +46,33 @@ class ItemViewModel @Inject constructor(
     private val _itemUiModels = MutableLiveData<List<ItemUiModel>>()
     val itemUiModels: LiveData<List<ItemUiModel>> = _itemUiModels
 
+    val frequentItems: LiveData<List<Item>> = itemRepository.getFrequentItems()
+
+
+
+    // Existing LiveData and functions...
+
+    init {
+        logItemsWithAssociatedShops()
+        fetchAllItems()
+        fetchAllShops()
+//        calculateThirtyDaysAgo()
+        fetchFrequentItems()
+        fetchFreqItems()
+
+    }
+
+    // Fetch frequently purchased items and log the retrieval
+    fun fetchFrequentItems() {
+        // Assigning the result of getFrequentItems() to frequentItems LiveData
+        // Assuming getFrequentItems() returns LiveData<List<Item>>
+        // Note: No need to calculateThirtyDaysAgo here as it should be done in the Repository
+
+        // Log the operation for debugging
+        Log.d("ItemViewModel", "Fetching frequently purchased items")
+    }
+
+
 
 
 
@@ -57,19 +84,13 @@ class ItemViewModel @Inject constructor(
 
     }
 
-    init {
-        logItemsWithAssociatedShops()
-        fetchAllItems()
-        fetchAllShops()
 
+// For frequently purchased items
+
+    fun fetchFreqItems() {
+        Log.d("ItemViewPredict", "Freq items are ${frequentItems.value}")
     }
 
-//    suspend fun insertNewItem(itemName: String): Long {
-//        val newItem = Item(name = itemName, description = "")
-//        return itemRepository.insertItem(newItem)
-//    }
-//
-//
 
     //used for delete logic in list fragment -------
     fun findItemByUiModel(itemUiModel: ItemUiModel): Item? {
@@ -77,6 +98,7 @@ class ItemViewModel @Inject constructor(
     }
 
 
+    /* This is used for deleting items directly from the main list */
     fun deleteItemWithShops(item: Item) {
         viewModelScope.launch {
             // Delete the item and its associated shops

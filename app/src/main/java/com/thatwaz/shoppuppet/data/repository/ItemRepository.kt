@@ -1,9 +1,11 @@
 package com.thatwaz.shoppuppet.data.repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import com.thatwaz.shoppuppet.data.db.dao.ItemDao
 import com.thatwaz.shoppuppet.data.db.dao.ItemShopCrossRefDao
 import com.thatwaz.shoppuppet.domain.model.Item
+import java.util.Calendar
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,6 +18,18 @@ class ItemRepository @Inject constructor(
     // Get all items
     suspend fun getAllItems(): List<Item> = itemDao.getAllItems()
 
+    fun getFrequentItems(): LiveData<List<Item>> {
+        val thirtyDaysAgo = calculateThirtyDaysAgo()
+        return itemDao.getFrequentItems(thirtyDaysAgo)
+    }
+
+    // Utility method to calculate the date 30 days ago
+    private fun calculateThirtyDaysAgo(): Long {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_MONTH, -2)
+        return calendar.timeInMillis
+    }
+
     // Get items for a specific shop
     suspend fun getItemsByShop(shopId: Long): List<Item> = itemDao.getItemsByShop(shopId)
 
@@ -24,6 +38,7 @@ class ItemRepository @Inject constructor(
 
     suspend fun getItemById(itemId: Long): Item? = itemDao.getItemById(itemId)
 
+    /* This is used for deleting items directly from the main list */
     suspend fun deleteItemWithShops(item: Item) {
         // Step 1: Delete associations in item_shop_cross_ref
         val shopIds = itemShopCrossRefDao.getShopIdsForItem(item.id)
@@ -35,6 +50,7 @@ class ItemRepository @Inject constructor(
         itemDao.deleteItem(item)
     }
 
+    /* This is used for deleting items after they are marked as purchased */
     suspend fun deleteItemsWithShopAssociation(items: List<Item>) {
         val itemIds = items.map { it.id }
         itemDao.deleteItemsWithShopAssociation(itemIds)
@@ -81,6 +97,8 @@ class ItemRepository @Inject constructor(
             Log.d("RepositoryLog", "Edited item details in database for item ID: $itemId")
         }
     }
+
+
 
 }
 

@@ -9,6 +9,7 @@ import com.thatwaz.shoppuppet.data.repository.ItemRepository
 import com.thatwaz.shoppuppet.domain.model.Item
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.Date
 import javax.inject.Inject
 
 
@@ -46,25 +47,46 @@ class ShopSpecificListViewModel @Inject constructor(
         }
     }
 
-
     fun handleUnpurchasedItemChecked(item: Item) {
         item.isPurchased = true
+        item.lastPurchasedDate = Date()  // Setting the lastPurchasedDate to current date
         Log.d("ViewModelLog", "Item checked as purchased: ${item.name}, isPurchased: ${item.isPurchased}")
         viewModelScope.launch {
             repository.updateItem(item)
             updateLists()
         }
-
     }
 
     fun handlePurchasedItemChecked(item: Item) {
         item.isPurchased = false
+        // Decide how you want to handle lastPurchasedDate when an item is unchecked as purchased
         Log.d("ViewModelLog", "Item unchecked as purchased: ${item.name}, isPurchased: ${item.isPurchased}")
         viewModelScope.launch {
             repository.updateItem(item)
             updateLists()
         }
     }
+
+
+
+//    fun handleUnpurchasedItemChecked(item: Item) {
+//        item.isPurchased = true
+//        Log.d("ViewModelLog", "Item checked as purchased: ${item.name}, isPurchased: ${item.isPurchased}")
+//        viewModelScope.launch {
+//            repository.updateItem(item)
+//            updateLists()
+//        }
+//
+//    }
+//
+//    fun handlePurchasedItemChecked(item: Item) {
+//        item.isPurchased = false
+//        Log.d("ViewModelLog", "Item unchecked as purchased: ${item.name}, isPurchased: ${item.isPurchased}")
+//        viewModelScope.launch {
+//            repository.updateItem(item)
+//            updateLists()
+//        }
+//    }
 
 
 
