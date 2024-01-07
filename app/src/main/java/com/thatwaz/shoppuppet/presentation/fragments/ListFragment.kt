@@ -60,6 +60,8 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener  {
     }
 
 // todo TRY TO REMOVE IF ELSE STATEMENT
+
+    // TODO NEED TO UPDATE SHOPLIST TO ONLY SHOW UNPURCHASED ITEMS
     private fun observeListData() {
         viewModel.itemUiModels.observe(viewLifecycleOwner) { shopList ->
             if (shopList.isNotEmpty()) {

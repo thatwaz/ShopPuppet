@@ -25,9 +25,6 @@ interface ItemDao {
     WHERE item_shop_cross_ref.shopId = :shopId
 """)
     suspend fun getItemsByShop(shopId: Long): List<Item>
-
-
-
     @Update
     suspend fun updateItem(item: Item): Int
 
@@ -44,12 +41,6 @@ interface ItemDao {
     WHERE item_shop_cross_ref.shopId = :shopId
 """)
     suspend fun getItemsCountForShop(shopId: Long): Int
-
-
-
-
-
-
 
     @Query("SELECT * FROM items WHERE id = :itemId")
     suspend fun getItemById(itemId: Long): Item?
@@ -79,11 +70,37 @@ interface ItemDao {
     @Query("DELETE FROM items WHERE id IN (:itemIds)")
     suspend fun deleteItemsByIds(itemIds: List<Long>)
 
-    @Query("SELECT * FROM items WHERE lastPurchasedDate >= :thirtyDaysAgo ORDER BY purchaseCount DESC")
-    fun getFrequentItems(thirtyDaysAgo: Long): LiveData<List<Item>>
+//    @Query("SELECT * FROM items WHERE lastPurchasedDate >= :thirtyDaysAgo ORDER BY purchaseCount DESC")
+//    fun getFrequentItems(thirtyDaysAgo: Long): LiveData<List<Item>>
 
-//    @Query("SELECT * FROM items WHERE lastPurchasedDate >= :date")
-//    fun getFrequentItems(date: Long): LiveData<List<Item>>
+//    @Query("SELECT * FROM items WHERE isSoftDeleted = 0")
+//    fun getAllActiveItems(): LiveData<List<Item>>  // Modify as per your actual method names and logic
+//
+//
+//    @Query("SELECT * FROM items WHERE lastPurchasedDate >= :thirtyDaysAgo AND isPurchased = 0 ORDER BY lastPurchasedDate DESC, purchaseCount DESC")
+//    fun getFrequentItems(thirtyDaysAgo: Long): LiveData<List<Item>>
+
+
+    // for purchased items recyclerview
+    @Query("SELECT * FROM items WHERE isPurchased = 1 AND isSoftDeleted = 1")
+    fun getPurchasedAndSoftDeletedItems(): LiveData<List<Item>>
+
+    @Query("SELECT * FROM items WHERE isPurchased = 1 AND isSoftDeleted = 0")
+    fun getPurchasedAndNotSoftDeletedItems(): LiveData<List<Item>>
+
+    @Query("SELECT * FROM items WHERE isSoftDeleted = 0 AND isPurchased = 0")
+    fun getActiveUnpurchasedItems(): LiveData<List<Item>>
+
+    @Query("SELECT * FROM items WHERE isSoftDeleted = 0 AND isPurchased = 1 AND lastPurchasedDate >= :thirtyDaysAgo")
+    fun getActivePurchasedItems(thirtyDaysAgo: Long): LiveData<List<Item>>
+
+
+
+    // In your DAO
+    /* for future */
+//    @Query("DELETE FROM items WHERE isSoftDeleted = 1 AND lastPurchasedDate < :threshold")
+//    suspend fun permanentDeleteSoftDeletedItemsOlderThan(threshold: Long)
+
 
 
 }

@@ -28,7 +28,7 @@ class ShopRepository @Inject constructor(private val shopDao: ShopDao) {
     suspend fun deleteShop(shop: Shop) = shopDao.deleteShop(shop)
 
     // Retrieve the number of items associated with a shop (assuming this method exists in your ShopDao)
-    suspend fun getItemsCountForShop(shopId: Long): Int = shopDao.getItemsCountForShop(shopId)
+//    suspend fun getItemsCountForShop(shopId: Long): Int = shopDao.getItemsCountForShop(shopId)
 
 
     suspend fun getShopsWithItemCountAndPriorityStatus(): List<ShopWithItemCount> {

@@ -18,17 +18,32 @@ class ItemRepository @Inject constructor(
     // Get all items
     suspend fun getAllItems(): List<Item> = itemDao.getAllItems()
 
-    fun getFrequentItems(): LiveData<List<Item>> {
+//    fun getFrequentItems(): LiveData<List<Item>> {
+//        val thirtyDaysAgo = calculateThirtyDaysAgo()
+//        return itemDao.getFrequentItems(thirtyDaysAgo)
+//    }
+
+
+
+    // Get active unpurchased items
+    fun getActiveUnpurchasedItems(): LiveData<List<Item>> = itemDao.getActiveUnpurchasedItems()
+
+    // Get active purchased items
+    fun getActivePurchasedItems(): LiveData<List<Item>> {
         val thirtyDaysAgo = calculateThirtyDaysAgo()
-        return itemDao.getFrequentItems(thirtyDaysAgo)
+        return itemDao.getActivePurchasedItems(thirtyDaysAgo)
     }
 
-    // Utility method to calculate the date 30 days ago
+    // Calculate the date 30 days ago
     private fun calculateThirtyDaysAgo(): Long {
         val calendar = Calendar.getInstance()
-        calendar.add(Calendar.DAY_OF_MONTH, -2)
-        return calendar.timeInMillis
+        calendar.add(Calendar.DAY_OF_YEAR, -30)  // Subtract 30 days from the current date
+        return calendar.timeInMillis  // Return the time 30 days ago in milliseconds
     }
+    // Utility method to calculate the date 30 days ago
+
+
+
 
     // Get items for a specific shop
     suspend fun getItemsByShop(shopId: Long): List<Item> = itemDao.getItemsByShop(shopId)
@@ -56,6 +71,14 @@ class ItemRepository @Inject constructor(
         itemDao.deleteItemsWithShopAssociation(itemIds)
     }
 
+    suspend fun softDeleteItems(items: List<Item>) {
+        items.forEach { item ->
+            item.isSoftDeleted = true  // Mark the item as soft-deleted
+            // Optionally update the lastPurchasedDate or other relevant fields
+            itemDao.updateItem(item)  // Update the item in the database to reflect the soft deletion
+        }
+    }
+
 
     // Update an item's details
 //    suspend fun updateItem(item: Item) = itemDao.updateItem(item)
@@ -67,6 +90,15 @@ class ItemRepository @Inject constructor(
         val result = itemDao.updateItem(item)
         Log.d("RepositoryLog", "Item update completed. Rows affected: $result")
     }
+
+    fun getPurchasedAndSoftDeletedItems(): LiveData<List<Item>> {
+        return itemDao.getPurchasedAndSoftDeletedItems()
+    }
+
+    fun getPurchasedAndNotSoftDeletedItems(): LiveData<List<Item>> {
+        return itemDao.getPurchasedAndNotSoftDeletedItems()
+    }
+
 
     // Delete an item
     suspend fun deleteItem(item: Item) = itemDao.deleteItem(item)
@@ -99,6 +131,11 @@ class ItemRepository @Inject constructor(
     }
 
 
+    /*for future */
+//    suspend fun cleanupOldSoftDeletedItems() {
+//        val thirtyDaysAgoMillis = System.currentTimeMillis() - (30L * 24 * 60 * 60 * 1000)
+//        itemDao.permanentDeleteSoftDeletedItemsOlderThan(thirtyDaysAgoMillis)
+//    }
 
 }
 

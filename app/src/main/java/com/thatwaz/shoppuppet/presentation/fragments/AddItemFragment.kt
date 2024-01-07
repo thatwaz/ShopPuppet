@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.thatwaz.shoppuppet.databinding.FragmentAddItemBinding
 import com.thatwaz.shoppuppet.presentation.adapters.FrequentlyPurchasedItemAdapter
 import com.thatwaz.shoppuppet.presentation.viewmodel.ItemViewModel
+import com.thatwaz.shoppuppet.presentation.viewmodel.ShopSpecificListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -23,6 +24,7 @@ class AddItemFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: ItemViewModel by viewModels()
+    private val shopSpecificListViewModel: ShopSpecificListViewModel by viewModels()
 
     private lateinit var adapter: FrequentlyPurchasedItemAdapter
 
@@ -42,7 +44,7 @@ class AddItemFragment : Fragment() {
         // Set the list for your adapter
         //todo get vm to log freq purchased items in fragment
 
-        viewModel.items.observe(viewLifecycleOwner) { items ->
+        shopSpecificListViewModel.purchasedAndSoftDeletedItems.observe(viewLifecycleOwner) { items ->
             items.forEach { item ->
                 Log.i("FrequentItemLog", "Item: ${item.name}, Last Purchased: ${item.lastPurchasedDate}")
             }

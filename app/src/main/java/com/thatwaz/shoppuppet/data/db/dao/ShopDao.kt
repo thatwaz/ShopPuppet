@@ -33,23 +33,46 @@ interface ShopDao {
 //    @Query("SELECT COUNT(*) FROM items WHERE shopId = :shopId")
 //    suspend fun getItemsCountForShop(shopId: Long): Int
 
-    @Query("""
-    SELECT COUNT(items.id) FROM items 
-    INNER JOIN item_shop_cross_ref ON items.id = item_shop_cross_ref.itemId 
-    WHERE item_shop_cross_ref.shopId = :shopId
-""")
-    suspend fun getItemsCountForShop(shopId: Long): Int
+//    @Query("""
+//    SELECT COUNT(items.id) FROM items
+//    INNER JOIN item_shop_cross_ref ON items.id = item_shop_cross_ref.itemId
+//    WHERE item_shop_cross_ref.shopId = :shopId
+//    AND items.isSoftDeleted = 0  -- Adding this line to exclude soft deleted items
+//""")
+//    suspend fun getItemsCountForShop(shopId: Long): Int
+
+
+//    @Query("""
+//    SELECT COUNT(items.id) FROM items
+//    INNER JOIN item_shop_cross_ref ON items.id = item_shop_cross_ref.itemId
+//    WHERE item_shop_cross_ref.shopId = :shopId
+//""")
+//    suspend fun getItemsCountForShop(shopId: Long): Int
+
 
     @Query("""
     SELECT s.id, s.name, s.iconResName, s.colorResName, s.initials, s.isPriority, 
-           COUNT(i.id) AS itemCount, 
-           MAX(i.isPriorityItem) AS hasPriorityItem
+           COUNT(CASE WHEN i.isSoftDeleted = 0 THEN i.id ELSE NULL END) AS itemCount, 
+           MAX(CASE WHEN i.isSoftDeleted = 0 THEN i.isPriorityItem ELSE 0 END) AS hasPriorityItem
     FROM shops s
     LEFT JOIN item_shop_cross_ref isr ON s.id = isr.shopId
     LEFT JOIN items i ON isr.itemId = i.id
     GROUP BY s.id
 """)
     suspend fun getShopsWithItemCountAndPriorityStatus(): List<ShopWithItemCountAndPriority>
+
+
+
+//    @Query("""
+//    SELECT s.id, s.name, s.iconResName, s.colorResName, s.initials, s.isPriority,
+//           COUNT(i.id) AS itemCount,
+//           MAX(i.isPriorityItem) AS hasPriorityItem
+//    FROM shops s
+//    LEFT JOIN item_shop_cross_ref isr ON s.id = isr.shopId
+//    LEFT JOIN items i ON isr.itemId = i.id
+//    GROUP BY s.id
+//""")
+//    suspend fun getShopsWithItemCountAndPriorityStatus(): List<ShopWithItemCountAndPriority>
 
 
 //    @Query("SELECT s.*, \n" +

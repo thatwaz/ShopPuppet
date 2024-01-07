@@ -9,6 +9,7 @@ import com.thatwaz.shoppuppet.data.repository.ItemRepository
 import com.thatwaz.shoppuppet.domain.model.Item
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 
@@ -29,22 +30,49 @@ class ShopSpecificListViewModel @Inject constructor(
     private val _purchasedItems = MutableLiveData<List<Item>>()
     val purchasedItems: LiveData<List<Item>> = _purchasedItems
 
+    private val _purchasedAndSoftDeletedItems = MutableLiveData<List<Item>>()
+    var purchasedAndSoftDeletedItems: LiveData<List<Item>> = _purchasedAndSoftDeletedItems
+
+    private val _purchasedAndNotSoftDeletedItems = MutableLiveData<List<Item>>()
+    var purchasedAndNotSoftDeletedItems: LiveData<List<Item>> = _purchasedAndNotSoftDeletedItems
+
+    private val _softDeletedItems = MutableLiveData<List<Item>>()
+    val softDeletedItems: LiveData<List<Item>> = _softDeletedItems
+
     // Function to fetch all items from the repository
-    fun fetchShopSpecificItems(shopId: Long) {
-        currentShopId = shopId
-        viewModelScope.launch {
-            val result = repository.getItemsByShop(shopId)
+    init {
+        fetchPurchasedAndSoftDeletedItems()
+        fetchPurchasedAndNotSoftDeletedItems()
+    }
 
-            // Filter and set the values for unpurchased and purchased items
-            val unpurchasedItems = result.filter { !it.isPurchased }
-            val purchasedItems = result.filter { it.isPurchased }
-            _unpurchasedItems.value = unpurchasedItems
-            _purchasedItems.value = purchasedItems
 
-            // Log the lists of unpurchased and purchased items
-            Log.d("ViewModelLog", "Unpurchased Items: ${unpurchasedItems.joinToString { it.name }}")
-            Log.d("ViewModelLog", "Purchased Items: ${purchasedItems.joinToString { it.name }}")
-        }
+
+//    fun fetchShopSpecificItems(shopId: Long) {
+//        currentShopId = shopId
+//        viewModelScope.launch {
+//            val allItems = repository.getItemsByShop(shopId)
+//
+//            // Active Unpurchased Items: Not marked as purchased, presumably available to buy.
+//            val activeUnpurchasedItems = allItems.filter { !it.isPurchased }
+//
+//            // Active Purchased Items: Marked as purchased recently (within the last 30 days).
+//            val activePurchasedItems = allItems.filter {
+//                it.isPurchased && (it.lastPurchasedDate?.time ?: 0L) > getThirtyDaysAgo()
+//            }
+//
+//            _unpurchasedItems.value = activeUnpurchasedItems
+//            _purchasedItems.value = activePurchasedItems
+//
+//            Log.d("ViewModelLog", "Active Unpurchased Items: ${activeUnpurchasedItems.joinToString { it.name }}")
+//            Log.d("ViewModelLog", "Active Purchased Items: ${activePurchasedItems.joinToString { it.name }}")
+//        }
+//    }
+
+
+    private fun getThirtyDaysAgo(): Long {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, -30)  // Subtract 30 days from the current date
+        return calendar.timeInMillis  // Return the time 30 days ago in milliseconds
     }
 
     fun handleUnpurchasedItemChecked(item: Item) {
@@ -67,27 +95,13 @@ class ShopSpecificListViewModel @Inject constructor(
         }
     }
 
+    fun fetchPurchasedAndSoftDeletedItems() {
+        purchasedAndSoftDeletedItems = repository.getPurchasedAndSoftDeletedItems()
+    }
 
-
-//    fun handleUnpurchasedItemChecked(item: Item) {
-//        item.isPurchased = true
-//        Log.d("ViewModelLog", "Item checked as purchased: ${item.name}, isPurchased: ${item.isPurchased}")
-//        viewModelScope.launch {
-//            repository.updateItem(item)
-//            updateLists()
-//        }
-//
-//    }
-//
-//    fun handlePurchasedItemChecked(item: Item) {
-//        item.isPurchased = false
-//        Log.d("ViewModelLog", "Item unchecked as purchased: ${item.name}, isPurchased: ${item.isPurchased}")
-//        viewModelScope.launch {
-//            repository.updateItem(item)
-//            updateLists()
-//        }
-//    }
-
+    fun fetchPurchasedAndNotSoftDeletedItems() {
+        purchasedAndNotSoftDeletedItems = repository.getPurchasedAndNotSoftDeletedItems()
+    }
 
 
     private fun updateLists() {
@@ -96,16 +110,60 @@ class ShopSpecificListViewModel @Inject constructor(
                 val allItems = repository.getItemsByShop(shopId)
                 _unpurchasedItems.value = allItems.filter { !it.isPurchased }
                 _purchasedItems.value = allItems.filter { it.isPurchased }
+                Log.i("ViewModelLog","${_purchasedItems.value} Item is now purchased")
             }
         } ?: Log.d("ViewModelLog", "Shop ID not set")
     }
 
     // todo Diagnose why last item in list does not disappear in ui immediately
-    fun deleteCheckedItems(items: List<Item>) {
+
+//    fun softDeleteCheckedItems(items: List<Item>) {
+//        viewModelScope.launch {
+//            items.forEach { item ->
+//                item.isPurchased = true  // Keep marked as purchased
+//                item.lastPurchasedDate = Date()  // Update the last purchased date
+//                // Additional flag or logic for explicit deletion if needed
+//                repository.updateItem(item)
+//            }
+//            updateLists()  // This will refresh both lists and remove soft-deleted items
+//        }
+//    }
+
+    fun fetchShopSpecificItems(shopId: Long) {
+        currentShopId = shopId
         viewModelScope.launch {
-            repository.deleteItemsWithShopAssociation(items)
+            val allItems = repository.getItemsByShop(shopId)
+
+            // Filter for active unpurchased items
+            val activeUnpurchasedItems = allItems.filter { !it.isPurchased && !it.isSoftDeleted }
+            _unpurchasedItems.value = activeUnpurchasedItems
+
+            // Filter for active purchased items (not soft deleted)
+            val activePurchasedItems = allItems.filter {
+                it.isPurchased && !it.isSoftDeleted && (it.lastPurchasedDate?.time ?: 0L) > getThirtyDaysAgo()
+            }
+            _purchasedItems.value = activePurchasedItems
+
+            // You don't necessarily need a separate LiveData for softDeletedItems unless you want to specifically track or manage them.
+        }
+    }
+//TODO FIGURE OUT THE DISCONNECT BETWEEN THE ABOVE AND BELOW FUNCTION
+
+    fun softDeleteCheckedItems(items: List<Item>) {
+        viewModelScope.launch {
+            items.forEach { item ->
+
+                item.isPurchased = true  // Soft delete: mark as purchased
+                item.lastPurchasedDate = Date()  // Set the current date as the last purchased date
+                Log.i("ViewModelLog","date of last purchase is ${item.lastPurchasedDate}")
+                repository.updateItem(item)  // Update the item in the database
+                //todo below works the way you had it
+//                repository.deleteItemsWithShopAssociation(items)
+                repository.softDeleteItems(items)
+                currentShopId?.let { fetchShopSpecificItems(it) }
+            }
             currentShopId?.let { fetchShopSpecificItems(it) }
-            // Refresh data or notify UI about changes as needed
+            // This refetches items and should update LiveData
         }
     }
 

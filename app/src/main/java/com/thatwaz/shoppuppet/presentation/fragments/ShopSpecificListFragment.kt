@@ -78,7 +78,7 @@ class ShopSpecificListFragment : Fragment() {
         binding.fabDeletePurchasedItems.setOnClickListener {
             val checkedItems = purchasedItemsAdapter?.getCheckedItems() ?: listOf()
             // Pass checkedItems to ViewModel for deletion
-            viewModel.deleteCheckedItems(checkedItems)
+            viewModel.softDeleteCheckedItems(checkedItems)
 
         }
 
@@ -153,23 +153,37 @@ class ShopSpecificListFragment : Fragment() {
         }
     }
 
-
     private fun observeLiveData() {
         viewModel.unpurchasedItems.observe(viewLifecycleOwner) { items ->
             shopSpecificItemAdapter?.submitList(items)
-//            Log.i("DOH!","this things are: ${viewModel.purchasedItems.value}")
-            Log.d(
-                "FragmentLog",
-                "Unpurchased items updated post-rotation: ${items.map { it.name }}"
-            )
+            // This should reflect the updated list excluding soft-deleted items
         }
 
-        viewModel.purchasedItems.observe(viewLifecycleOwner) { items ->
+        viewModel.purchasedAndNotSoftDeletedItems.observe(viewLifecycleOwner) { items ->
+            Log.i("CapNCrunch","purchased items are $items")
             purchasedItemsAdapter?.submitList(items)
-            Log.i("DOH!", "this things are: ${viewModel.purchasedItems.value}")
-            Log.d("FragmentLog", "Purchased items updated post-rotation: ${items.map { it.name }}")
+            // If you wish to show recently purchased items, ensure they are correctly handled
         }
     }
+
+
+
+//    private fun observeLiveData() {
+//        viewModel.unpurchasedItems.observe(viewLifecycleOwner) { items ->
+//            shopSpecificItemAdapter?.submitList(items)
+////            Log.i("DOH!","this things are: ${viewModel.purchasedItems.value}")
+//            Log.d(
+//                "FragmentLog",
+//                "Unpurchased items updated post-rotation: ${items.map { it.name }}"
+//            )
+//        }
+//
+//        viewModel.purchasedItems.observe(viewLifecycleOwner) { items ->
+//            purchasedItemsAdapter?.submitList(items)
+//            Log.i("DOH!", "this things are: ${viewModel.purchasedItems.value}")
+//            Log.d("FragmentLog", "Purchased items updated post-rotation: ${items.map { it.name }}")
+//        }
+//    }
 
 
     override fun onDestroyView() {
