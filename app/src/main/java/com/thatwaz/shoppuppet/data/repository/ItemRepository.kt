@@ -71,6 +71,12 @@ class ItemRepository @Inject constructor(
         itemDao.deleteItemsWithShopAssociation(itemIds)
     }
 
+    /*temp code for freq items r.v. */
+    suspend fun deleteSoftDeletedItems() {
+        itemDao.deleteSoftDeletedItems()
+    }
+
+
     suspend fun softDeleteItems(items: List<Item>) {
         items.forEach { item ->
             item.isSoftDeleted = true  // Mark the item as soft-deleted

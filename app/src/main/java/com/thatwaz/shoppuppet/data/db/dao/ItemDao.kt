@@ -94,6 +94,9 @@ interface ItemDao {
     @Query("SELECT * FROM items WHERE isSoftDeleted = 0 AND isPurchased = 1 AND lastPurchasedDate >= :thirtyDaysAgo")
     fun getActivePurchasedItems(thirtyDaysAgo: Long): LiveData<List<Item>>
 
+    /*temp code for freq items r.v. */
+    @Query("DELETE FROM items WHERE isSoftDeleted = 1")
+    suspend fun deleteSoftDeletedItems()
 
 
     // In your DAO

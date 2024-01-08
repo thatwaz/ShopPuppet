@@ -1,5 +1,6 @@
 package com.thatwaz.shoppuppet.presentation.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -42,7 +43,7 @@ class AddItemFragment : Fragment() {
         setupRecyclerView()
 
         // Set the list for your adapter
-        //todo get vm to log freq purchased items in fragment
+        // Todo maybe just utilize this as recently purchased items and delete after 30 days and Massive code clean up
 
         shopSpecificListViewModel.purchasedAndSoftDeletedItems.observe(viewLifecycleOwner) { items ->
             items.forEach { item ->
@@ -62,6 +63,10 @@ class AddItemFragment : Fragment() {
         binding.btnNext.setOnClickListener {
             navigateToNextFragment()
         }
+
+        binding.fabTempDelete.setOnClickListener {
+            showDeleteConfirmationDialog()
+        }
     }
 
     private fun setupRecyclerView() {
@@ -73,6 +78,18 @@ class AddItemFragment : Fragment() {
             }
         }
         recyclerView.adapter = adapter
+    }
+
+    private fun showDeleteConfirmationDialog() {
+        AlertDialog.Builder(context)
+            .setTitle("Delete Soft Deleted Items")
+            .setMessage("Are you sure you want to permanently delete all recently purchased items?")
+            .setPositiveButton("Delete") { dialog, which ->
+                // Call the ViewModel function to delete soft-deleted items
+                shopSpecificListViewModel.hardDeleteSoftDeletedItems()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
 
