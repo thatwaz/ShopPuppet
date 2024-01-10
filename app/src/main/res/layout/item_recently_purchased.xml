@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/tv_frequently_purchased_items"
+        android:id="@+id/tv_recently_purchased_items"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Bananas"

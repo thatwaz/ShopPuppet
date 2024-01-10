@@ -5,17 +5,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.thatwaz.shoppuppet.databinding.ItemFrequentlyPurchasedBinding
+import com.thatwaz.shoppuppet.databinding.ItemRecentlyPurchasedBinding
 import com.thatwaz.shoppuppet.domain.model.Item
 
-class FrequentlyPurchasedItemAdapter :
-    ListAdapter<Item, FrequentlyPurchasedItemAdapter.ItemViewHolder>(DiffCallback) {
+class RecentlyPurchasedItemAdapter :
+    ListAdapter<Item, RecentlyPurchasedItemAdapter.ItemViewHolder>(DiffCallback) {
 
     var onItemClick: ((Item) -> Unit)? = null
+    var onItemLongPress: ((Item) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(
-            ItemFrequentlyPurchasedBinding.inflate(
+            ItemRecentlyPurchasedBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -25,19 +26,28 @@ class FrequentlyPurchasedItemAdapter :
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item, onItemClick)
+        holder.bind(item, onItemClick, onItemLongPress)
     }
 
 
-    class ItemViewHolder(private var binding: ItemFrequentlyPurchasedBinding) :
+
+    class ItemViewHolder(private var binding: ItemRecentlyPurchasedBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Item, onItemClick: ((Item) -> Unit)?) {
-            binding.tvFrequentlyPurchasedItems.text = item.name
+
+        fun bind(item: Item, onItemClick: ((Item) -> Unit)?, onItemLongPress: ((Item) -> Unit)?) {
+            binding.tvRecentlyPurchasedItems.text = item.name
             itemView.setOnClickListener {
                 onItemClick?.invoke(item)
             }
+            itemView.setOnLongClickListener {
+                onItemLongPress?.invoke(item)
+                true  // Return true to indicate that the callback consumed the long press
+            }
         }
+
+
+
     }
 
 

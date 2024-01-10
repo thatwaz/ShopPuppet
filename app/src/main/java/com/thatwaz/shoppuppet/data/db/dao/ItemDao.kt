@@ -82,11 +82,30 @@ interface ItemDao {
 
 
     // for purchased items recyclerview
-    @Query("SELECT * FROM items WHERE isPurchased = 1 AND isSoftDeleted = 1")
+
+    // TODO - this is a temp fix to not show dup. items in purchased and soft-del. recycler view.
+    // TOdo - need to find way to delete dup items
+    @Query("""
+    SELECT MIN(id) as id, name, MIN(description) as description, 
+           MAX(isPurchased) as isPurchased, MAX(isPriorityItem) as isPriorityItem, 
+           MAX(isSoftDeleted) as isSoftDeleted, MAX(lastPurchasedDate) as lastPurchasedDate, 
+           MAX(purchaseCount) as purchaseCount
+    FROM items 
+    WHERE isPurchased = 1 AND isSoftDeleted = 1 
+    GROUP BY name 
+    ORDER BY name COLLATE NOCASE ASC
+""")
     fun getPurchasedAndSoftDeletedItems(): LiveData<List<Item>>
 
-    @Query("SELECT * FROM items WHERE isPurchased = 1 AND isSoftDeleted = 0")
+//    @Query("SELECT * FROM items WHERE isPurchased = 1 AND isSoftDeleted = 1")
+//    fun getPurchasedAndSoftDeletedItems(): LiveData<List<Item>>
+
+    @Query("SELECT * FROM items WHERE isPurchased = 1 AND isSoftDeleted = 0 ORDER BY name COLLATE NOCASE ASC")
     fun getPurchasedAndNotSoftDeletedItems(): LiveData<List<Item>>
+
+
+//    @Query("SELECT * FROM items WHERE isPurchased = 1 AND isSoftDeleted = 0")
+//    fun getPurchasedAndNotSoftDeletedItems(): LiveData<List<Item>>
 
     @Query("SELECT * FROM items WHERE isSoftDeleted = 0 AND isPurchased = 0")
     fun getActiveUnpurchasedItems(): LiveData<List<Item>>
