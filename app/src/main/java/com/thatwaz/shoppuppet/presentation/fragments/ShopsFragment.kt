@@ -103,7 +103,6 @@ class ShopsFragment : Fragment() {
     }
 
 
-
     private fun showLongPressDialog(shop: Shop) {
         val context = requireContext()
         AlertDialog.Builder(context)

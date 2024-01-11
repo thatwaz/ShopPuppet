@@ -83,6 +83,9 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.48.1")
     kapt("com.google.dagger:hilt-compiler:2.48.1")
 
+    // WorkManager dependency
+    implementation ("androidx.work:work-runtime-ktx:2.9.0")
+
     // AndroidX Test - Instrumented testing
     // Test Libraries
     testImplementation("junit:junit:4.13.2")

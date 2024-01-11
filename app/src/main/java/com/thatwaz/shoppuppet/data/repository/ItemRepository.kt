@@ -77,13 +77,61 @@ class ItemRepository @Inject constructor(
     }
 
 
+//    suspend fun softDeleteItems(items: List<Item>, deleteOlder: Boolean = true) {
+//        items.forEach { newItem ->
+//            // Find items with the same name
+//            val duplicateItems = itemDao.getItemsByName(newItem.name)
+//
+//            // Determine the item to be hard deleted (older or newer)
+//            val itemToHardDelete = if (deleteOlder) {
+//                // Find the oldest item
+//                duplicateItems.minByOrNull { it.lastPurchasedDate ?: Date(0) }
+//            } else {
+//                // Find the newest item
+//                duplicateItems.maxByOrNull { it.lastPurchasedDate ?: Date(0) }
+//            }
+//
+//            // Hard delete the selected item
+//            itemToHardDelete?.let { hardDeleteItem ->
+//                itemDao.deleteItem(hardDeleteItem)
+//            }
+//
+//            // Soft delete the rest
+//            duplicateItems.filter { it.id != itemToHardDelete?.id }.forEach { item ->
+//                item.isSoftDeleted = true
+//                itemDao.updateItem(item)
+//            }
+//        }
+//    }
+
     suspend fun softDeleteItems(items: List<Item>) {
-        items.forEach { item ->
-            item.isSoftDeleted = true  // Mark the item as soft-deleted
-            // Optionally update the lastPurchasedDate or other relevant fields
-            itemDao.updateItem(item)  // Update the item in the database to reflect the soft deletion
+        items.forEach { newItem ->
+            // Soft delete the new item
+            newItem.isSoftDeleted = true
+            itemDao.updateItem(newItem)
+
+            // Find older items with the same name
+            val olderItems = itemDao.getItemsByName(newItem.name).filter {
+                it.id != newItem.id && it.lastPurchasedDate?.before(newItem.lastPurchasedDate) == true
+            }
+
+            // Hard delete older items
+            olderItems.forEach { oldItem ->
+                itemDao.deleteItem(oldItem)
+            }
         }
     }
+
+
+
+
+//    suspend fun softDeleteItems(items: List<Item>) {
+//        items.forEach { item ->
+//            item.isSoftDeleted = true  // Mark the item as soft-deleted
+//            // Optionally update the lastPurchasedDate or other relevant fields
+//            itemDao.updateItem(item)  // Update the item in the database to reflect the soft deletion
+//        }
+//    }
 
 
     // Update an item's details
@@ -138,6 +186,18 @@ class ItemRepository @Inject constructor(
 
 
     /*for future */
+    suspend fun deleteOldSoftDeletedItems() {
+        Log.i("Item Repo","Initiating clean-up")
+        val thresholdDate = Calendar.getInstance().apply {
+            add(Calendar.DAY_OF_YEAR, -3)  // Set to 30 days ago
+        }.time
+        val oldItems = itemDao.getOldSoftDeletedItems(thresholdDate)
+        Log.i("Item Repo","Old items are $oldItems")
+        if (oldItems.isNotEmpty()) {
+            itemDao.deleteItemsOlderThanThirtyDays(oldItems)
+        }
+    }
+
 //    suspend fun cleanupOldSoftDeletedItems() {
 //        val thirtyDaysAgoMillis = System.currentTimeMillis() - (30L * 24 * 60 * 60 * 1000)
 //        itemDao.permanentDeleteSoftDeletedItemsOlderThan(thirtyDaysAgoMillis)

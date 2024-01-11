@@ -126,11 +126,17 @@ class ItemViewModel @Inject constructor(
                 // Log each item
                 Log.d(
                     "ItemViewModel",
-                    "Item name: ${item.name}, Item description: ${item.description}"
+                    "Item name: ${item.name}, id is: ${item.id}Item last purchased: ${item.lastPurchasedDate}"
                 )
             }
             // After processing all items, update LiveData
             _items.postValue(allItems)
+        }
+    }
+
+    fun cleanUpOldSoftDeletedItems() {
+        viewModelScope.launch {
+            itemRepository.deleteOldSoftDeletedItems()
         }
     }
 

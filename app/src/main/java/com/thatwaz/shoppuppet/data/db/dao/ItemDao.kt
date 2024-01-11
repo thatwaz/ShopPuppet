@@ -9,6 +9,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.thatwaz.shoppuppet.domain.model.Item
+import java.util.Date
 
 @Dao
 interface ItemDao {
@@ -100,6 +101,10 @@ interface ItemDao {
 //    @Query("SELECT * FROM items WHERE isPurchased = 1 AND isSoftDeleted = 1")
 //    fun getPurchasedAndSoftDeletedItems(): LiveData<List<Item>>
 
+    /* used for not adding dups when soft deleting */
+    @Query("SELECT * FROM items WHERE name = :name")
+    suspend fun getItemsByName(name: String): List<Item>
+
     @Query("SELECT * FROM items WHERE isPurchased = 1 AND isSoftDeleted = 0 ORDER BY name COLLATE NOCASE ASC")
     fun getPurchasedAndNotSoftDeletedItems(): LiveData<List<Item>>
 
@@ -117,9 +122,16 @@ interface ItemDao {
     @Query("DELETE FROM items WHERE isSoftDeleted = 1")
     suspend fun deleteSoftDeletedItems()
 
+    @Delete
+    suspend fun deleteItemsOlderThanThirtyDays(items: List<Item>)
+
+
 
     // In your DAO
     /* for future */
+    @Query("SELECT * FROM items WHERE isSoftDeleted = 1 AND lastPurchasedDate <= :thresholdDate")
+    suspend fun getOldSoftDeletedItems(thresholdDate: Date): List<Item>
+
 //    @Query("DELETE FROM items WHERE isSoftDeleted = 1 AND lastPurchasedDate < :threshold")
 //    suspend fun permanentDeleteSoftDeletedItemsOlderThan(threshold: Long)
 

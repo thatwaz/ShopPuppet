@@ -40,6 +40,9 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener  {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.cleanUpOldSoftDeletedItems()
+
         viewModel.logItemsWithAssociatedShops()
         setupRecyclerView()
         observeListData()
