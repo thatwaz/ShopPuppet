@@ -71,6 +71,7 @@ class ItemViewModel @Inject constructor(
         viewModelScope.launch {
             // Delete the item and its associated shops
             itemRepository.deleteItemWithShops(item)
+            refreshUiModels()
         }
     }
 

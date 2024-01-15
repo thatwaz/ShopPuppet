@@ -113,6 +113,7 @@ class ShopsFragment : Fragment() {
                 // Call ViewModel to delete the shop
                 viewModel.deleteShop(shop)
                 dialog.dismiss()
+                viewModel.fetchShopsWithItemCount()
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
