@@ -20,14 +20,13 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class ListFragment : Fragment(), ListAdapter.ItemClickListener  {
+class ListFragment : Fragment(), ListAdapter.ItemClickListener {
 
-        private var _binding: FragmentListBinding? = null
+    private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
     private lateinit var listAdapter: ListAdapter
 
     private val viewModel: ItemViewModel by viewModels()
-
 
 
     override fun onCreateView(
@@ -38,52 +37,87 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener  {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.cleanUpOldSoftDeletedItems()
 
-        viewModel.logItemsWithAssociatedShops()
+        viewModel.cleanUpOldSoftDeletedItems()
+//        viewModel.logItemsWithAssociatedShops() // Call this before observing LiveData
         setupRecyclerView()
         observeListData()
 
-
         binding.fabAddItem.setOnClickListener {
-            val action = ListFragmentDirections
-                .actionListFragmentToAddItemFragment()
+            val action = ListFragmentDirections.actionListFragmentToAddItemFragment()
             findNavController().navigate(action)
-
         }
     }
+
+
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//
+//
+//        viewModel.cleanUpOldSoftDeletedItems()
+//
+//
+//        // todo this is logging before priority status is updated
+//
+//        setupRecyclerView()
+//        observeListData()
+////        viewModel.logItemsWithAssociatedShops()
+//
+//        binding.fabAddItem.setOnClickListener {
+//            val action = ListFragmentDirections
+//                .actionListFragmentToAddItemFragment()
+//            findNavController().navigate(action)
+//
+//        }
+//    }
+
     private fun setupRecyclerView() {
+
         val recyclerView: RecyclerView = binding.rvShoppingList
         recyclerView.layoutManager = LinearLayoutManager(context)
         listAdapter = ListAdapter(this)
         recyclerView.adapter = listAdapter
+
     }
 
-// todo TRY TO REMOVE IF ELSE STATEMENT
 
-    // TODO NEED TO UPDATE SHOPLIST TO ONLY SHOW UNPURCHASED ITEMS
+    // This is being observed after saving/editing item when it automatically navs to the list fragment
+
+    // todo sp,ewhere this is doubled up isPriority=true)], isPriorityItem=true,
+    // todo isPriorityItem is the delayed var  isPriority=true)], isPriorityItem=false
     private fun observeListData() {
+//        viewModel.refreshUiModels()
         viewModel.itemUiModels.observe(viewLifecycleOwner) { shopList ->
+
             if (shopList.isNotEmpty()) {
                 // Update the adapter with the new list if it's not empty
+
                 listAdapter.submitList(shopList)
-                Log.i("Crispy", "Shoplist is $shopList")
+
+                Log.i("Bazinga", "Shoplist is $shopList")
+
             } else {
                 listAdapter.submitList(emptyList())
                 Log.i("Crispy", "Shoplist is empty")
             }
+
         }
+
     }
+
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
 
-    // todo why is this an override method?
+    // todo on Edit and on Delete do not sync with the u.i 01/14
 
     override fun onEditItem(item: ItemUiModel) {
         // Prepare arguments
@@ -99,6 +133,7 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener  {
             isPriority = isPriority,
             associatedShopIds = associatedShopIds
         )
+        Log.i("Spacely","$itemName ps is $isPriority")
         findNavController().navigate(action)
     }
 
@@ -121,22 +156,6 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener  {
             Toast.makeText(requireContext(), "Item not found", Toast.LENGTH_SHORT).show()
         }
     }
-
-
-
-//    override fun onDeleteItem(itemUiModel: ItemUiModel) {
-//        // Find the corresponding Item object from the ViewModel's data
-//        val item = viewModel.findItemByUiModel(itemUiModel)
-//
-//        if (item != null) {
-//            // Call the deleteItemWithShops function with the Item object
-//            viewModel.deleteItemWithShops(item)
-//
-//        } else {
-//            // Handle the case where the corresponding Item object is not found
-//        }
-//
-//    }
 
 }
 

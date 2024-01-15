@@ -141,6 +141,7 @@ class ItemRepository @Inject constructor(
     suspend fun updateItem(item: Item) {
         Log.d("RepositoryLog", "Updating item in database: ${item.name}")
         Log.d("RepositoryLog", "Updating purchase status in database: ${item.isPurchased}")
+        Log.d("RepositoryLog", "Updating priority status: ${item.isPriorityItem}")
         val result = itemDao.updateItem(item)
         Log.d("RepositoryLog", "Item update completed. Rows affected: $result")
     }

@@ -6,10 +6,8 @@ data class ItemUiModel(
     val itemId: Long,
     val itemName: String,
     val shopNames: List<Shop>,
-    val isPriorityItem: Boolean,
+    var isPriorityItem: Boolean,
     var isPurchased: Boolean = false,
-
-
     )
 
 

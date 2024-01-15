@@ -32,8 +32,6 @@ class ItemViewModel @Inject constructor(
     private val _itemNameLiveData = MutableLiveData<String>()
     var itemNameLiveData: MutableLiveData<String> = _itemNameLiveData
 
-//    private val _selectedShops = MutableLiveData<List<Shop>>()
-//    val selectedShops: LiveData<List<Shop>> = _selectedShops
 
     // LiveData to observe changes in items
     private val _items = MutableLiveData<List<Item>>()
@@ -43,38 +41,16 @@ class ItemViewModel @Inject constructor(
     private val _shops = MutableLiveData<List<Shop>>()
     val shops: LiveData<List<Shop>> get() = _shops
 
+    //todo below isPrirorityItem is not updating in itemUiModels
     private val _itemUiModels = MutableLiveData<List<ItemUiModel>>()
     val itemUiModels: LiveData<List<ItemUiModel>> = _itemUiModels
-
-//    val frequentItems: LiveData<List<Item>> = itemRepository.getFrequentItems()
-
-
-
-    // Existing LiveData and functions...
 
     init {
         logItemsWithAssociatedShops()
         fetchAllItems()
         fetchAllShops()
-//        calculateThirtyDaysAgo()
-        fetchFrequentItems()
-//        fetchFreqItems()
-
+//        refreshUiModels()
     }
-
-    // Fetch frequently purchased items and log the retrieval
-    fun fetchFrequentItems() {
-        // Assigning the result of getFrequentItems() to frequentItems LiveData
-        // Assuming getFrequentItems() returns LiveData<List<Item>>
-        // Note: No need to calculateThirtyDaysAgo here as it should be done in the Repository
-
-        // Log the operation for debugging
-        Log.d("ItemViewModel", "Fetching frequently purchased items")
-    }
-
-
-
-
 
     fun updateItemName(itemName: String) {
         itemNameLiveData.value = itemName
@@ -83,14 +59,6 @@ class ItemViewModel @Inject constructor(
         Log.i("DOH!", "itemNameLiveData value: ${itemNameLiveData.value}")
 
     }
-
-
-// For frequently purchased items
-
-//    fun fetchFreqItems() {
-//        Log.d("ItemViewPredict", "Freq items are ${frequentItems.value}")
-//    }
-
 
     //used for delete logic in list fragment -------
     fun findItemByUiModel(itemUiModel: ItemUiModel): Item? {
@@ -105,7 +73,8 @@ class ItemViewModel @Inject constructor(
             itemRepository.deleteItemWithShops(item)
         }
     }
-// end------------------------------------------
+
+    // end------------------------------------------
     fun fetchAllShops() {
         viewModelScope.launch {
             _shops.value = shopRepository.getAllShops()
@@ -118,6 +87,8 @@ class ItemViewModel @Inject constructor(
         }
     }
 
+
+    // TODO THIS IS UPDATING PRIORITY STATUS CORRECTLY BUT U.I. IS NOT
     fun fetchAllItems() {
         viewModelScope.launch {
             val allItems = itemRepository.getAllItems()
@@ -126,11 +97,13 @@ class ItemViewModel @Inject constructor(
                 // Log each item
                 Log.d(
                     "ItemViewModel",
-                    "Item name: ${item.name}, id is: ${item.id}Item last purchased: ${item.lastPurchasedDate}"
+                    "Item name: ${item.name}, item ps: ${item.isPriorityItem}Item last purchased: ${item.lastPurchasedDate}"
                 )
             }
+//                        refreshUiModels()
             // After processing all items, update LiveData
             _items.postValue(allItems)
+
         }
     }
 
@@ -140,30 +113,34 @@ class ItemViewModel @Inject constructor(
         }
     }
 
-    fun insertItemWithShopsAsync(item: Item, shopIds: List<Long>): Deferred<Long> =
+    fun insertItemWithShopsAsync(item: Item, shopIds: List<Long>, isPriority: Boolean): Deferred<Long> =
         viewModelScope.async {
             // Insert the item and get its ID
             val itemId = itemRepository.insertItem(item)
 
-            // If insertion was successful (itemId is not -1), associate item with shops
+            // If insertion was successful (itemId is not -1), handle additional operations
             if (itemId != -1L) {
-                // Create and await all association operations
+                // Associate item with shops
                 shopIds.forEach { shopId ->
                     crossRefRepository.associateItemWithShop(itemId, shopId)
                 }
+                // Update priority status
+
+                updatePriorityStatus(itemId, isPriority)
+
+
+            } else {
+                updateItem(item.id, item.name, shopIds, isPriority)
+                item.id
             }
 
             // Fetch all items again to update the _items LiveData
             fetchAllItems()
-            logItemsWithAssociatedShops()
+//            logItemsWithAssociatedShops()
 
             // Return the generated item ID
             itemId
         }
-
-
-
-
 
     fun logItemsWithAssociatedShops() {
         viewModelScope.launch {
@@ -194,174 +171,92 @@ class ItemViewModel @Inject constructor(
                     )
                 }
             }
-
+            //Adding this fixed u.i. issue to change without leaving and returning to fragment
+            refreshUiModels()
             // Now, update the LiveData with the list of UI models
             _itemUiModels.postValue(uiModels)
+            Log.i("ThreadCheck", "Current thread: ${Thread.currentThread().name}")
+//            _itemUiModels.postValue(uiModels)
 
             // Logging after updating LiveData
-            Log.i("Crispy", "UI models updated: $uiModels")
+
+            Log.i("Baked Goods", "UI models updated: $uiModels")
+
             fetchAllItems()
         }
     }
 
 
-//    fun logItemsWithAssociatedShops() {
+    // this is updating item but not item ui models
+//    fun updateItem(itemId: Long, itemName: String, shopIds: List<Long>, isPriority: Boolean) {
 //        viewModelScope.launch {
-//            // Fetch all items first
-//            val allItems = itemRepository.getAllItems()
-//
-//            // Prepare a list to hold the UI models
-//            val uiModels = mutableListOf<ItemUiModel>()
-//
-//            // Iterate over each item and fetch associated shops
-//            for (item in allItems) {
-//                val associatedShopIds = crossRefRepository.getShopIdsForItem(item.id)
-//                val associatedShops = shopRepository.getShopsByIds(associatedShopIds)
-//
-//                // Logging associated shops for each item
-//                Log.i("Crispy", "Associated shops for item ${item.name} are $associatedShops")
-//
-//                // Create and add the UI model to the list
-//                uiModels.add(
-//                    ItemUiModel(
-//                        itemId = item.id,
-//                        itemName = item.name,
-//                        shopNames = associatedShops,
-//                        isPriorityItem = item.isPriorityItem
-//                    )
-//                )
+//            itemRepository.getItemById(itemId)?.let { item ->
+//                item.name = itemName
+//                item.isPriorityItem = isPriority
+//                itemRepository.updateItem(item)
+//                updateShopAssociations(item.id, shopIds)
+//                refreshUiModels()
 //            }
-//
-//            // Now, update the LiveData with the list of UI models
-//            // This is done after all the asynchronous work is complete
-//            _itemUiModels.postValue(uiModels)
-//
-//            // Logging after updating LiveData
-//            Log.i("Crispy", "UI models updated: $uiModels")
-//            fetchAllItems()
 //        }
 //    }
-
-
 
     fun updateItem(itemId: Long, itemName: String, shopIds: List<Long>, isPriority: Boolean) {
         viewModelScope.launch {
-            // Fetch the existing item
-            val currentItem = itemRepository.getItemById(itemId)
-            currentItem?.let { item ->
+            itemRepository.getItemById(itemId)?.let { item ->
                 item.name = itemName
-                item.isPriorityItem = isPriority
-                // Update any other fields if necessary
-
-                // Update the item in the database
                 itemRepository.updateItem(item)
-
-                // Update the associations with shops
                 updateShopAssociations(item.id, shopIds)
+                updatePriorityStatus(itemId, isPriority)
+//                refreshUiModels()
             }
+        }
+
+    }
+
+    private fun updatePriorityStatus(itemId: Long, isPriority: Boolean) {
+        viewModelScope.launch {
+            val item = itemRepository.getItemById(itemId)
+            item?.let {
+                it.isPriorityItem = isPriority
+                itemRepository.updateItem(it)
+                Log.i("Kangaroo","status is ${it.name} and ${it.isPriorityItem}")
+                refreshUiModels()
+            }
+        }
+
+    }
+
+    fun refreshUiModels() {
+        viewModelScope.launch {
+            val allItems = itemRepository.getAllItems().filterNot { it.isSoftDeleted }
+            val uiModels = allItems.map { item ->
+                ItemUiModel(
+                    itemId = item.id,
+                    itemName = item.name,
+                    shopNames = shopRepository.getShopsByIds(
+                        crossRefRepository.getShopIdsForItem(
+                            item.id
+                        )
+                    ),
+                    isPriorityItem = item.isPriorityItem
+                )
+            }
+            _itemUiModels.postValue(uiModels)
+            Log.i("Kangaroo","ui models are $uiModels")
         }
     }
 
+
+    // TODO THIS FUNCTION UPDATES SHOPS IMMEDIATELY FOR U.I. BUT PRIORITY STATUS IS NOT UPDATED
     private fun updateShopAssociations(itemId: Long, newShopIds: List<Long>) {
         viewModelScope.launch {
-            Log.d("UpdateAssociations", "Starting to update associations for item ID: $itemId")
-
-            // Clear existing associations
-            Log.d("UpdateAssociations", "Removing all associations for item ID: $itemId")
             crossRefRepository.removeAllAssociationsForItem(itemId)
-            Log.d("UpdateAssociations", "All existing associations removed for item ID: $itemId")
-
-            // Create new associations
             newShopIds.forEach { shopId ->
-                Log.d("UpdateAssociations", "Associating shop ID $shopId with item ID: $itemId")
                 crossRefRepository.associateItemWithShop(itemId, shopId)
             }
-            Log.d("UpdateAssociations", "All new associations created for item ID: $itemId")
-
-            // Optionally, refresh the item list
-            Log.d("UpdateAssociations", "Refreshing all items post association update")
-            fetchAllItems()
+//            refreshUiModels()
         }
     }
-
-
-//    private fun updateShopAssociations(itemId: Long, newShopIds: List<Long>) {
-//        viewModelScope.launch {
-//            // Clear existing associations
-//            crossRefRepository.removeAllAssociationsForItem(itemId)
-//
-//            // Create new associations
-//            newShopIds.forEach { shopId ->
-//                crossRefRepository.associateItemWithShop(itemId, shopId)
-//            }
-//
-//            // Optionally, refresh the item list
-//            fetchAllItems()
-//        }
-//    }
-
-
-//    private fun updateShopAssociations(itemId: Long, newShopIds: List<Long>) {
-//        viewModelScope.launch {
-//            // Clear existing associations
-//            crossRefRepository.removeAssociationBetweenItemAndShop(itemId)
-//
-//            // Create new associations
-//            newShopIds.forEach { shopId ->
-//                crossRefRepository.associateItemWithShop(itemId, shopId)
-//            }
-//
-//            // Optionally, refresh the item list
-//            fetchAllItems()
-//        }
-//    }
-
-//    fun fetchAndSetSelectedShops(itemId: Long) {
-//        viewModelScope.launch {
-//            try {
-//                // Log the itemId received
-//                Log.i("Crappy", "Fetching associated shops for itemId: $itemId")
-//
-//                // Get the list of shop IDs associated with the item
-//                val associatedShopIds = crossRefRepository.getShopIdsForItem(itemId)
-//
-//                // Log the associated shop IDs
-//                Log.i("Crappy", "Associated shop IDs: $associatedShopIds")
-//
-//                // Fetch shops by their IDs
-//                val associatedShops = shopRepository.getShopsByIds(associatedShopIds)
-//
-//                // Log the associated shops
-//                Log.i("Crappy", "Associated shops: $associatedShops")
-//
-//                // Update the selected shops
-//                _selectedShops.postValue(associatedShops)
-//            } catch (e: Exception) {
-//                // Handle any exceptions, such as logging or showing an error message
-//                Log.e("Crappy", "Error fetching associated shops: ${e.message}")
-//            }
-//        }
-//    }
-
-
-//    fun fetchAndSetSelectedShops(itemId: Long) {
-//        viewModelScope.launch {
-//            try {
-//                // Get the list of shop IDs associated with the item
-//                val associatedShopIds = crossRefRepository.getShopIdsForItem(itemId)
-//
-//                // Fetch shops by their IDs
-//                val associatedShops = shopRepository.getShopsByIds(associatedShopIds)
-//
-//                // Update the selected shops
-//                _selectedShops.postValue(associatedShops)
-//            } catch (e: Exception) {
-//                // Handle any exceptions, such as logging or showing an error message
-//                Log.e("ItemViewModel", "Error fetching associated shops: ${e.message}")
-//            }
-//        }
-//    }
-
 
 
 }

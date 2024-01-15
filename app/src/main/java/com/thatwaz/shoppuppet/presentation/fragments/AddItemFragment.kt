@@ -45,9 +45,6 @@ class AddItemFragment : Fragment() {
 
         setupRecyclerView()
 
-        // Set the list for your adapter
-        // Todo maybe just utilize this as recently purchased items and delete after 30 days and Massive code clean up
-
         shopSpecificListViewModel.purchasedAndSoftDeletedItems.observe(viewLifecycleOwner) { items ->
             items.forEach { item ->
                 Log.i("FrequentItemLog", "Item: ${item.name}, Last Purchased: ${item.lastPurchasedDate}")
@@ -148,7 +145,6 @@ class AddItemFragment : Fragment() {
         )
         findNavController().navigate(action)
 
-        // ... rest of your code for navigation
     }
 
     override fun onDestroyView() {
@@ -158,51 +154,5 @@ class AddItemFragment : Fragment() {
 }
 
 
-//@AndroidEntryPoint
-//class AddItemFragment : Fragment() {
-//
-//    private var _binding: FragmentAddItemBinding? = null
-//    private val binding get() = _binding!!
-//
-//    private val viewModel: ItemViewModel by viewModels()
-//
-//
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        _binding = FragmentAddItemBinding.inflate(inflater, container, false)
-//        return binding.root
-//    }
-//
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//        binding.btnNext.setOnClickListener {
-//            val itemName = binding.etItemName.text.toString()
-//            viewModel.updateItemName(itemName)
-//
-//            // Set default values for other arguments
-//            val itemId = -1L // Default ID for new item
-//            val isPriority = false // Default priority status for new item
-//            val associatedShopIds = longArrayOf() // Empty array for new item
-//
-//            // Navigate to the next fragment with all arguments
-//            val action = AddItemFragmentDirections.actionAddItemFragmentToTagItemToShopsFragment(
-//                itemName = itemName,
-//                itemId = itemId,
-//                isPriority = isPriority,
-//                associatedShopIds = associatedShopIds
-//            )
-//            findNavController().navigate(action)
-//        }
-//
-//
-//    }
-//
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        _binding = null
-//    }
-//}
+
 

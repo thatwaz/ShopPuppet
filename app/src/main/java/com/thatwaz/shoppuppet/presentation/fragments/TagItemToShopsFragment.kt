@@ -131,6 +131,9 @@ class TagItemToShopsFragment() : Fragment() {
     }
 
 
+    // todo two different viewmodels here brett
+
+    // todo between this and list fragment override methods are not updated in u.i. immediately
     private fun setupSaveButton() {
         binding.btnSave.setOnClickListener {
             val itemName = binding.tvItemName.text.toString()
@@ -150,15 +153,23 @@ class TagItemToShopsFragment() : Fragment() {
                         Item(
                             name = itemName,
                             description = ""
-                        ), selectedShopIds
+                        ), selectedShopIds,isPriority
                     ).await()
                     // Handle the case for new item insertion
-                    viewModel.updateItemPriority(newItemId, isPriority)
+//                    viewModel.updateItemPriority(newItemId, isPriority)
+                    Log.i("Kangaroo","fragment reads $newItemId is $isPriority")
+
 
                 } else {
+                    Log.i("Ice Cream","This else block is firing")
                     // Update existing item
+//                    itemViewModel.updatePriorityStatus(itemId,isPriority)
                     itemViewModel.updateItem(itemId, itemName, selectedShopIds, isPriority)
+                    Log.i("Kangaroo","fragment in edit mode reads $itemId is $isPriority")
                     // Handle the case for updating an item
+
+
+                    
                 }
 //                setupRecyclerView()
                 // Common code after insertion or update

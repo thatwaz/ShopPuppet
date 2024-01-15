@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.thatwaz.shoppuppet.data.repository.ItemRepository
 import com.thatwaz.shoppuppet.data.repository.ItemShopCrossRefRepository
 import com.thatwaz.shoppuppet.data.repository.ShopRepository
+import com.thatwaz.shoppuppet.domain.model.ItemUiModel
 import com.thatwaz.shoppuppet.domain.model.Shop
 import com.thatwaz.shoppuppet.domain.model.ShopWithSelection
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,6 +33,9 @@ class TagItemToShopsViewModel @Inject constructor(
 
     private val _selectedShopsLiveData = MutableLiveData<List<ShopWithSelection>?>()
     val selectedShopsLiveData: MutableLiveData<List<ShopWithSelection>?> = _selectedShopsLiveData
+
+    private val _itemUiModels = MutableLiveData<List<ItemUiModel>>()
+    val itemUiModels: LiveData<List<ItemUiModel>> = _itemUiModels
 
     init {
         loadShops()
@@ -64,28 +68,6 @@ class TagItemToShopsViewModel @Inject constructor(
         Log.i("GravyBoat", "updated list is $updatedList")
     }
 
-
-    fun updateItemPriority(itemId: Long, isPriority: Boolean) {
-        Log.d("ViewModelLog", "Updating item priority. Item ID: $itemId, New Priority: $isPriority")
-
-        viewModelScope.launch {
-            try {
-                // Update the item's priority status
-                Log.d("ViewModelLog", "Calling repository to update item priority")
-                itemRepository.updateItemPriority(itemId, isPriority)
-
-                // Reflect these changes in the shop list
-                Log.d("ViewModelLog", "Updating shops for item priority change")
-                updateShopsForItemPriorityChange(itemId, isPriority)
-
-                Log.d("ViewModelLog", "Item priority update and shop refresh complete")
-            } catch (e: Exception) {
-                Log.e("ViewModelLog", "Error updating item priority: ${e.message}")
-                // Handle exceptions, like showing an error message
-            }
-        }
-    }
-
     fun fetchAndSetSelectedShops(itemId: Long) {
         viewModelScope.launch {
             try {
@@ -110,6 +92,29 @@ class TagItemToShopsViewModel @Inject constructor(
                 _selectedShopsLiveData.value = shopsWithSelection
             } catch (e: Exception) {
                 Log.e("Crappy", "Error fetching associated shops: ${e.message}")
+            }
+        }
+    }
+
+    //todo this is only called when setting initial priority
+    fun updateItemPriority(itemId: Long, isPriority: Boolean) {
+        Log.d("Bazinga", "Updating item priority. Item ID: $itemId, New Priority: $isPriority")
+
+        viewModelScope.launch {
+
+            try {
+                // Update the item's priority status
+                Log.d("Bazinga", "Calling repository to update item priority")
+                itemRepository.updateItemPriority(itemId, isPriority)
+
+                // Reflect these changes in the shop list
+                Log.d("ViewModelLog", "Updating shops for item priority change")
+                updateShopsForItemPriorityChange(itemId, isPriority)
+
+                Log.d("ViewModelLog", "Item priority update and shop refresh complete")
+            } catch (e: Exception) {
+                Log.e("ViewModelLog", "Error updating item priority: ${e.message}")
+                // Handle exceptions, like showing an error message
             }
         }
     }
