@@ -29,14 +29,7 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
     private var selectedIconRef: Int? = null
     private var selectedColor: Int = R.color.black
     private var shopInitials: String? = null
-//
-//    private val iconClickListener = View.OnClickListener { view ->
-//        val iconResId = IconUtils.getIconResId(view.id)
-//        iconResId?.let {
-//            updatePreviewIcon(it)
-//            selectedIconRef = it
-//        }
-//    }
+
 
     private val iconClickListener = View.OnClickListener { view ->
         val iconResName = IconUtils.getIconResName(view.id)
@@ -65,10 +58,10 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         super.onViewCreated(view, savedInstanceState)
         initializeViews()
 
-        viewModel.allShops.observe(viewLifecycleOwner) { shops ->
-            Log.d("ShopsFragment", "Observed shops: $shops")
-            // Your logic to display the shops in the UI, e.g., updating a RecyclerView.
-        }
+//        viewModel.allShops.observe(viewLifecycleOwner) { shops ->
+//            Log.d("ShopsFragment", "Observed shops: $shops")
+//            // Your logic to display the shops in the UI, e.g., updating a RecyclerView.
+//        }
 
         viewModel.shopName.observe(viewLifecycleOwner) { name ->
             binding.shopNamePreview.text = name
@@ -141,29 +134,6 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
             Toast.makeText(context, "Please enter a valid shop name.", Toast.LENGTH_SHORT).show()
         }
     }
-
-
-//    private fun handleShopSave() {
-//        val shopName = binding.etShopName.text.toString()
-//        if (shopName.isNotBlank()) {
-//            viewModel.updateShopName(shopName)
-//            viewModel.updateSelectedIconRef(selectedIconRef ?: R.drawable.ic_grocery_store)
-//            viewModel.updateSelectedColor(selectedColor)
-//            viewModel.updateShopInitials(shopInitials)
-//
-//            if (viewModel.saveShop()) {
-//                Toast.makeText(context, "Shop saved!", Toast.LENGTH_SHORT).show()
-//                navigateToShopsFragment()
-//            } else {
-//                Toast.makeText(context, "Failed to save shop. Try again.", Toast.LENGTH_SHORT).show()
-//            }
-//        } else {
-//            Toast.makeText(context, "Please enter a valid shop name.", Toast.LENGTH_SHORT).show()
-//        }
-//    }
-
-
-
     private fun navigateToShopsFragment() {
         val action = AddShopFragmentDirections.actionAddShopFragmentToShopsFragment()
         findNavController().navigate(action)

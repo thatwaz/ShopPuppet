@@ -27,7 +27,7 @@ class AddItemFragment : Fragment() {
     private var _binding: FragmentAddItemBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: ItemViewModel by viewModels()
+    private val itemViewModel: ItemViewModel by viewModels()
     private val shopSpecificListViewModel: ShopSpecificListViewModel by viewModels()
 
     private lateinit var adapter: RecentlyPurchasedItemAdapter
@@ -56,6 +56,7 @@ class AddItemFragment : Fragment() {
             navigateToNextFragment()
         }
 
+        //todo move delete button to top
         binding.fabTempDelete.setOnClickListener {
             showDeleteConfirmationDialog()
         }
@@ -118,7 +119,7 @@ class AddItemFragment : Fragment() {
             .setMessage("Are you sure you want to permanently delete this item?")
             .setPositiveButton("Delete") { dialog, which ->
 
-                viewModel.deleteItemWithShops(item)
+                itemViewModel.deleteItemWithShops(item)
             }
             .setNegativeButton("Cancel", null)
             .show()
@@ -128,7 +129,7 @@ class AddItemFragment : Fragment() {
 
     private fun navigateToNextFragment() {
         val itemName = binding.etItemName.text.toString()
-        viewModel.updateItemName(itemName)
+        itemViewModel.updateItemName(itemName)
 
 
         // Set default values for other arguments

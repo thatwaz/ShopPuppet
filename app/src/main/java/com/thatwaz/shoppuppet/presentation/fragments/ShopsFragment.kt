@@ -23,7 +23,7 @@ class ShopsFragment : Fragment() {
 
     private var _binding: FragmentShopsBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: ShopsViewModel by viewModels()
+    private val shopsViewModel: ShopsViewModel by viewModels()
     private lateinit var shopAdapter: ShopAdapter
 
 //    interface ShopFragmentListener {
@@ -48,7 +48,7 @@ class ShopsFragment : Fragment() {
         setupAddShopButton()
 
         //refreshes item count for each shop
-        viewModel.fetchShopsWithItemCount()
+        shopsViewModel.fetchShopsWithItemCount()
         val content = SpannableString(binding.tvEditDeleteInfo.text)
         content.setSpan(UnderlineSpan(), 0, content.length, 0)
         binding.tvEditDeleteInfo.text = content
@@ -88,7 +88,7 @@ class ShopsFragment : Fragment() {
     }
 
     private fun observeShopData() {
-        viewModel.shopsWithItemCount.observe(viewLifecycleOwner) { shopListWithItemCount ->
+        shopsViewModel.shopsWithItemCount.observe(viewLifecycleOwner) { shopListWithItemCount ->
             shopAdapter.submitList(shopListWithItemCount)
         }
     }
@@ -111,9 +111,9 @@ class ShopsFragment : Fragment() {
             .setPositiveButton("Delete") { dialog, _ ->
                 // Handle delete action
                 // Call ViewModel to delete the shop
-                viewModel.deleteShop(shop)
+                shopsViewModel.deleteShop(shop)
                 dialog.dismiss()
-                viewModel.fetchShopsWithItemCount()
+                shopsViewModel.fetchShopsWithItemCount()
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
@@ -135,19 +135,6 @@ class ShopsFragment : Fragment() {
             .show()
     }
 
-//    override fun onAttach(context: Context) {
-//        super.onAttach(context)
-//        if (context is ShopFragmentListener) {
-//            listener = context
-//        } else {
-//            throw RuntimeException("$context must implement ShopFragmentListener")
-//        }
-//    }
-//
-//    override fun onDetach() {
-//        super.onDetach()
-//        listener = null
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

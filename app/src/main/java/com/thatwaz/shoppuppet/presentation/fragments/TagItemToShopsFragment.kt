@@ -31,7 +31,7 @@ class TagItemToShopsFragment() : Fragment() {
 
     private var _binding: FragmentTagItemToShopsBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: TagItemToShopsViewModel by viewModels()
+    private val tagItemToShopsViewModel: TagItemToShopsViewModel by viewModels()
     private val selectedShopsViewModel: SelectedShopsViewModel by viewModels()
     private val itemViewModel: ItemViewModel by viewModels()
 
@@ -84,7 +84,7 @@ class TagItemToShopsFragment() : Fragment() {
 
             // Log the interaction
             Log.i("ShopSelectionAdapter", "Shop item interacted: $selectedShop with checked state: $isChecked")
-            viewModel.toggleShopSelection(selectedShop)
+            tagItemToShopsViewModel.toggleShopSelection(selectedShop)
             // Use the isChecked boolean to add or remove the shop from the selection
             if (isChecked) {
                 // If the item is checked, add the shop to the selection
@@ -119,8 +119,8 @@ class TagItemToShopsFragment() : Fragment() {
 
     private fun observeAndDisplayShops() {
         // Assume fetchAndSetSelectedShops updates the LiveData with List<ShopWithSelection>
-        viewModel.fetchAndSetSelectedShops(itemId)
-        viewModel.selectedShopsLiveData.observe(viewLifecycleOwner) { shopsWithSelection ->
+        tagItemToShopsViewModel.fetchAndSetSelectedShops(itemId)
+        tagItemToShopsViewModel.selectedShopsLiveData.observe(viewLifecycleOwner) { shopsWithSelection ->
             // Submit the new list to the adapter
             shopSelectionAdapter.submitList(shopsWithSelection)
         }
@@ -196,7 +196,7 @@ class TagItemToShopsFragment() : Fragment() {
     }
 
     private fun initViewModelData() {
-        viewModel.fetchAndSetSelectedShops(itemId)
+        tagItemToShopsViewModel.fetchAndSetSelectedShops(itemId)
     }
 
     private fun setupPriorityIcon() {
@@ -234,7 +234,7 @@ class TagItemToShopsFragment() : Fragment() {
 
 
     private fun observeShopData() {
-        viewModel.shops.observe(viewLifecycleOwner) { shops ->
+        tagItemToShopsViewModel.shops.observe(viewLifecycleOwner) { shops ->
             Log.d("DOH!", "Shops are this $shops")
 
             // Assuming selectedShopsViewModel holds the current selection state

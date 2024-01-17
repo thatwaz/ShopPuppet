@@ -181,6 +181,7 @@ class ItemViewModel @Inject constructor(
 
             // Logging after updating LiveData
 
+            //todo this log statement is not updating correctly
             Log.i("Baked Goods", "UI models updated: $uiModels")
 
             fetchAllItems()

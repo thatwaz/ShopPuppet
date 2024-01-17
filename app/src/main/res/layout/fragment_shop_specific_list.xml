@@ -38,17 +38,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/iv_shop_specific_icon"
+            android:id="@+id/iv_navigate_to_list_fragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleX=".75"
             android:scaleY=".75"
-            app:layout_constraintEnd_toStartOf="@id/tv_shop_name"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
             android:visibility="visible"
             app:layout_constraintTop_toTopOf="@id/tv_shop_name"
             app:layout_constraintBottom_toBottomOf="@id/tv_shop_name"
-            android:src="@drawable/ic_grocery_store"
+            android:src="@drawable/ic_list"
             app:tint="@color/white" />
 
         <TextView

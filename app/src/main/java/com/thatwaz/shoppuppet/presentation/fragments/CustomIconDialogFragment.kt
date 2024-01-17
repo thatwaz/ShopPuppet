@@ -9,8 +9,6 @@ import androidx.fragment.app.DialogFragment
 import com.thatwaz.shoppuppet.R
 
 class CustomIconDialogFragment : DialogFragment() {
-
-
     interface CustomIconDialogListener {
         fun onIconTextEntered(text: String)
     }

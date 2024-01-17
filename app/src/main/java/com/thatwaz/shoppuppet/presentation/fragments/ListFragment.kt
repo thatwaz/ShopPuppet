@@ -26,7 +26,7 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
     private val binding get() = _binding!!
     private lateinit var listAdapter: ListAdapter
 
-    private val viewModel: ItemViewModel by viewModels()
+    private val itemViewModel: ItemViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -41,9 +41,9 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        itemViewModel.refreshUiModels()
+        itemViewModel.cleanUpOldSoftDeletedItems()
 
-        viewModel.cleanUpOldSoftDeletedItems()
-//        viewModel.logItemsWithAssociatedShops() // Call this before observing LiveData
         setupRecyclerView()
         observeListData()
 
@@ -53,27 +53,6 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
         }
     }
 
-
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//
-//        viewModel.cleanUpOldSoftDeletedItems()
-//
-//
-//        // todo this is logging before priority status is updated
-//
-//        setupRecyclerView()
-//        observeListData()
-////        viewModel.logItemsWithAssociatedShops()
-//
-//        binding.fabAddItem.setOnClickListener {
-//            val action = ListFragmentDirections
-//                .actionListFragmentToAddItemFragment()
-//            findNavController().navigate(action)
-//
-//        }
-//    }
 
     private fun setupRecyclerView() {
 
@@ -91,7 +70,7 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
     // todo isPriorityItem is the delayed var  isPriority=true)], isPriorityItem=false
     private fun observeListData() {
 //        viewModel.refreshUiModels()
-        viewModel.itemUiModels.observe(viewLifecycleOwner) { shopList ->
+        itemViewModel.itemUiModels.observe(viewLifecycleOwner) { shopList ->
 
             if (shopList.isNotEmpty()) {
                 // Update the adapter with the new list if it's not empty
@@ -138,7 +117,7 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
     }
 
     override fun onDeleteItem(itemUiModel: ItemUiModel) {
-        val item = viewModel.findItemByUiModel(itemUiModel)
+        val item = itemViewModel.findItemByUiModel(itemUiModel)
 
         if (item != null) {
             // Show confirmation dialog before deletion
@@ -147,7 +126,7 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
                 .setMessage("Are you sure you want to delete this item?") // Set the message
                 .setPositiveButton("Delete") { dialog, which ->
                     // Call the delete function when user confirms
-                    viewModel.deleteItemWithShops(item)
+                    itemViewModel.deleteItemWithShops(item)
                 }
                 .setNegativeButton("Cancel", null) // Do nothing on cancel
                 .show()
