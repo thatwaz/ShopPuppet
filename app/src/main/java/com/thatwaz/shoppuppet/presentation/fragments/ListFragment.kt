@@ -88,6 +88,10 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        itemViewModel.refreshUiModels()
+    }
 
 
     override fun onDestroyView() {

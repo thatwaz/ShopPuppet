@@ -56,8 +56,6 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.core:core-ktx:+")
-    implementation("androidx.core:core-ktx:+")
     implementation("androidx.test.ext:junit-ktx:1.1.5")
 
 
@@ -83,8 +81,7 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.48.1")
     kapt("com.google.dagger:hilt-compiler:2.48.1")
 
-    // WorkManager dependency
-    implementation ("androidx.work:work-runtime-ktx:2.9.0")
+
 
     // AndroidX Test - Instrumented testing
     // Test Libraries
@@ -98,7 +95,7 @@ dependencies {
     androidTestImplementation("androidx.test:core:1.5.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test:runner:1.5.2")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
 
     // Room Testing
     androidTestImplementation("androidx.room:room-testing:2.6.1")

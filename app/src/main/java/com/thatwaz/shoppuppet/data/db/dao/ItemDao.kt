@@ -21,10 +21,10 @@ interface ItemDao {
     suspend fun getAllItems(): List<Item>
 
     @Query("""
-    SELECT items.* FROM items 
-    INNER JOIN item_shop_cross_ref ON items.id = item_shop_cross_ref.itemId 
-    WHERE item_shop_cross_ref.shopId = :shopId
-""")
+                SELECT items.* FROM items
+                INNER JOIN item_shop_cross_ref ON items.id = item_shop_cross_ref.itemId
+                WHERE item_shop_cross_ref.shopId = :shopId
+            """)
     suspend fun getItemsByShop(shopId: Long): List<Item>
     @Update
     suspend fun updateItem(item: Item): Int
@@ -37,10 +37,10 @@ interface ItemDao {
 
 
     @Query("""
-    SELECT COUNT(items.id) FROM items 
-    INNER JOIN item_shop_cross_ref ON items.id = item_shop_cross_ref.itemId 
-    WHERE item_shop_cross_ref.shopId = :shopId
-""")
+                SELECT COUNT(items.id) FROM items
+                INNER JOIN item_shop_cross_ref ON items.id = item_shop_cross_ref.itemId
+                WHERE item_shop_cross_ref.shopId = :shopId
+            """)
     suspend fun getItemsCountForShop(shopId: Long): Int
 
     @Query("SELECT * FROM items WHERE id = :itemId")
@@ -48,9 +48,6 @@ interface ItemDao {
 
     @Query("UPDATE Items SET isPurchased = :purchased WHERE id = :itemId")
     suspend fun setItemPurchasedStatus(itemId: Long, purchased: Boolean)
-
-//    @Query("SELECT * FROM Items WHERE isPurchased = 1")
-//    suspend fun getPurchasedItems(): List<Item>
 
     @Transaction
     suspend fun deleteItemsWithShopAssociation(itemIds: List<Long>) {
@@ -71,49 +68,26 @@ interface ItemDao {
     @Query("DELETE FROM items WHERE id IN (:itemIds)")
     suspend fun deleteItemsByIds(itemIds: List<Long>)
 
-//    @Query("SELECT * FROM items WHERE lastPurchasedDate >= :thirtyDaysAgo ORDER BY purchaseCount DESC")
-//    fun getFrequentItems(thirtyDaysAgo: Long): LiveData<List<Item>>
-
-//    @Query("SELECT * FROM items WHERE isSoftDeleted = 0")
-//    fun getAllActiveItems(): LiveData<List<Item>>  // Modify as per your actual method names and logic
-//
-//
-//    @Query("SELECT * FROM items WHERE lastPurchasedDate >= :thirtyDaysAgo AND isPurchased = 0 ORDER BY lastPurchasedDate DESC, purchaseCount DESC")
-//    fun getFrequentItems(thirtyDaysAgo: Long): LiveData<List<Item>>
-
-
-    // for purchased items recyclerview
-
-    // TODO - this is a temp fix to not show dup. items in purchased and soft-del. recycler view.
-    // TOdo - need to find way to delete dup items
     @Query("""
-    SELECT MIN(id) as id, name, MIN(description) as description, 
-           MAX(isPurchased) as isPurchased, MAX(isPriorityItem) as isPriorityItem, 
-           MAX(isSoftDeleted) as isSoftDeleted, MAX(lastPurchasedDate) as lastPurchasedDate, 
-           MAX(purchaseCount) as purchaseCount
-    FROM items 
-    WHERE isPurchased = 1 AND isSoftDeleted = 1 
-    GROUP BY name 
-    ORDER BY name COLLATE NOCASE ASC
-""")
+                SELECT MIN(id) as id, name,
+                       MAX(isPurchased) as isPurchased, MAX(isPriorityItem) as isPriorityItem,
+                       MAX(isSoftDeleted) as isSoftDeleted, MAX(lastPurchasedDate) as lastPurchasedDate
+                FROM items
+                WHERE isPurchased = 1 AND isSoftDeleted = 1
+                GROUP BY name
+                ORDER BY name COLLATE NOCASE ASC
+            """)
     fun getPurchasedAndSoftDeletedItems(): LiveData<List<Item>>
 
-//    @Query("SELECT * FROM items WHERE isPurchased = 1 AND isSoftDeleted = 1")
-//    fun getPurchasedAndSoftDeletedItems(): LiveData<List<Item>>
-
-    /* used for not adding dups when soft deleting */
+    /* used for not adding duplicate items to the database when soft deleting them*/
     @Query("SELECT * FROM items WHERE name = :name")
     suspend fun getItemsByName(name: String): List<Item>
 
     @Query("SELECT * FROM items WHERE isPurchased = 1 AND isSoftDeleted = 0 ORDER BY name COLLATE NOCASE ASC")
     fun getPurchasedAndNotSoftDeletedItems(): LiveData<List<Item>>
 
-
-//    @Query("SELECT * FROM items WHERE isPurchased = 1 AND isSoftDeleted = 0")
-//    fun getPurchasedAndNotSoftDeletedItems(): LiveData<List<Item>>
-
-    @Query("SELECT * FROM items WHERE isSoftDeleted = 0 AND isPurchased = 0")
-    fun getActiveUnpurchasedItems(): LiveData<List<Item>>
+    //    @Query("SELECT * FROM items WHERE isSoftDeleted = 0 AND isPurchased = 0")
+    //    fun getActiveUnpurchasedItems(): LiveData<List<Item>>
 
     @Query("SELECT * FROM items WHERE isSoftDeleted = 0 AND isPurchased = 1 AND lastPurchasedDate >= :thirtyDaysAgo")
     fun getActivePurchasedItems(thirtyDaysAgo: Long): LiveData<List<Item>>
@@ -125,17 +99,8 @@ interface ItemDao {
     @Delete
     suspend fun deleteItemsOlderThanThirtyDays(items: List<Item>)
 
-
-
-    // In your DAO
-    /* for future */
     @Query("SELECT * FROM items WHERE isSoftDeleted = 1 AND lastPurchasedDate <= :thresholdDate")
     suspend fun getOldSoftDeletedItems(thresholdDate: Date): List<Item>
-
-//    @Query("DELETE FROM items WHERE isSoftDeleted = 1 AND lastPurchasedDate < :threshold")
-//    suspend fun permanentDeleteSoftDeletedItemsOlderThan(threshold: Long)
-
-
 
 }
 

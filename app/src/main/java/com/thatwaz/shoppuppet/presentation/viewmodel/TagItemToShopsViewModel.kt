@@ -37,6 +37,14 @@ class TagItemToShopsViewModel @Inject constructor(
     private val _itemUiModels = MutableLiveData<List<ItemUiModel>>()
     val itemUiModels: LiveData<List<ItemUiModel>> = _itemUiModels
 
+    private val _isPriority = MutableLiveData<Boolean>(false)
+    val isPriority: LiveData<Boolean> = _isPriority
+
+    // Method to update isPriority
+    fun setIsPriority(priority: Boolean) {
+        _isPriority.value = priority
+    }
+
     init {
         loadShops()
     }
@@ -97,7 +105,7 @@ class TagItemToShopsViewModel @Inject constructor(
     }
 
     //todo this is only called when setting initial priority
-    fun updateItemPriority(itemId: Long, isPriority: Boolean) {
+    fun setInitialItemPriorityStatus(itemId: Long, isPriority: Boolean) {
         Log.d("Bazinga", "Updating item priority. Item ID: $itemId, New Priority: $isPriority")
 
         viewModelScope.launch {

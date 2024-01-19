@@ -16,31 +16,8 @@ class ItemShopCrossRefRepository @Inject constructor(private val crossRefDao: It
     suspend fun removeAllAssociationsForItem(itemId: Long) {
         crossRefDao.deleteAllCrossRefsForItem(itemId)
     }
-
-
-//    suspend fun removeAssociationBetweenItemAndShop(itemId: Long, shopId: Long) {
-//        crossRefDao.deleteCrossRef(itemId, shopId)
-//    }
-//
-//    suspend fun logAllAssociations() {
-//        val allAssociations = crossRefDao.getAllAssociations()
-//        allAssociations.forEach { association ->
-//            Log.d("CrossRefRepository", "Item ID: ${association.itemId}, Shop ID: ${association.shopId}")
-//        }
-//    }
-
     suspend fun getShopIdsForItem(itemId: Long): List<Long> {
         return crossRefDao.getShopIdsForItem(itemId)
     }
 
-
-
-//    suspend fun logAllAssociations() {
-//        val allAssociations = ItemShopCrossRefDao.getAllAssociations()
-//        allAssociations.forEach { association ->
-//            Log.d("CrossRefRepository", "Item ID: ${association.itemId}, Shop ID: ${association.shopId}")
-//        }
-//    }
-
-    // Other related methods...
 }

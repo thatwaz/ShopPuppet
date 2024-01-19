@@ -45,7 +45,6 @@ class ShopSpecificListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("FragmentLifecycle", "onViewCreated called for ShopSpecificListFragment")
 
         val shopId = navigationArgs.shopId
         val shopName = navigationArgs.shopName

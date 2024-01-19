@@ -202,6 +202,8 @@ class ItemViewModel @Inject constructor(
 //        }
 //    }
 
+
+
     fun updateItem(itemId: Long, itemName: String, shopIds: List<Long>, isPriority: Boolean) {
         viewModelScope.launch {
             itemRepository.getItemById(itemId)?.let { item ->
@@ -209,7 +211,7 @@ class ItemViewModel @Inject constructor(
                 itemRepository.updateItem(item)
                 updateShopAssociations(item.id, shopIds)
                 updatePriorityStatus(itemId, isPriority)
-//                refreshUiModels()
+
             }
         }
 
