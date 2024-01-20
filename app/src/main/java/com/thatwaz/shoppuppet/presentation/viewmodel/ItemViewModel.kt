@@ -12,8 +12,6 @@ import com.thatwaz.shoppuppet.domain.model.Item
 import com.thatwaz.shoppuppet.domain.model.ItemUiModel
 import com.thatwaz.shoppuppet.domain.model.Shop
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -45,6 +43,9 @@ class ItemViewModel @Inject constructor(
     private val _itemUiModels = MutableLiveData<List<ItemUiModel>>()
     val itemUiModels: LiveData<List<ItemUiModel>> = _itemUiModels
 
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String> get() = _error
+
     init {
         logItemsWithAssociatedShops()
         fetchAllItems()
@@ -69,11 +70,24 @@ class ItemViewModel @Inject constructor(
     /* This is used for deleting items directly from the main list */
     fun deleteItemWithShops(item: Item) {
         viewModelScope.launch {
-            // Delete the item and its associated shops
-            itemRepository.deleteItemWithShops(item)
-            refreshUiModels()
+            try {
+                // Attempt to delete the item and its associated shops
+                itemRepository.deleteItemWithShops(item)
+                // If successful, refresh UI models to reflect changes
+                refreshUiModels()
+            } catch (e: Exception) {
+                // If an error occurs, post the error message to the LiveData
+                _error.postValue("Error deleting item: ${e.localizedMessage}")
+            }
         }
     }
+//    fun deleteItemWithShops(item: Item) {
+//        viewModelScope.launch {
+//            // Delete the item and its associated shops
+//            itemRepository.deleteItemWithShops(item)
+//            refreshUiModels()
+//        }
+//    }
 
     // end------------------------------------------
     fun fetchAllShops() {
@@ -114,34 +128,63 @@ class ItemViewModel @Inject constructor(
         }
     }
 
-    fun insertItemWithShopsAsync(item: Item, shopIds: List<Long>, isPriority: Boolean): Deferred<Long> =
-        viewModelScope.async {
-            // Insert the item and get its ID
-            val itemId = itemRepository.insertItem(item)
-
-            // If insertion was successful (itemId is not -1), handle additional operations
-            if (itemId != -1L) {
-                // Associate item with shops
-                shopIds.forEach { shopId ->
-                    crossRefRepository.associateItemWithShop(itemId, shopId)
-                }
-                // Update priority status
-
-                updatePriorityStatus(itemId, isPriority)
-
-
+    fun handleItemSave(
+        itemId: Long,
+        itemName: String,
+        selectedShopIds: List<Long>,
+        isPriority: Boolean
+    ) {
+        viewModelScope.launch {
+            if (itemId == -1L) {
+                addItem(itemName, selectedShopIds, isPriority)
             } else {
-                updateItem(item.id, item.name, shopIds, isPriority)
-                item.id
+                updateItem(itemId, itemName, selectedShopIds, isPriority)
             }
-
-            // Fetch all items again to update the _items LiveData
-            fetchAllItems()
-//            logItemsWithAssociatedShops()
-
-            // Return the generated item ID
-            itemId
+            // Trigger any other actions or LiveData updates
         }
+    }
+
+    private suspend fun addItem(
+        itemName: String,
+        selectedShopIds: List<Long>,
+        isPriority: Boolean
+    ) {
+        // Create a new item
+        val newItem = Item(name = itemName, isPriorityItem = isPriority)
+
+        // Insert the item and get its ID
+        val newItemId = itemRepository.insertItem(newItem)
+
+        // Associate the new item with selected shops
+        selectedShopIds.forEach { shopId ->
+            crossRefRepository.associateItemWithShop(newItemId, shopId)
+        }
+
+        // Refresh UI models to reflect the new item
+        refreshUiModels()
+    }
+
+    private suspend fun updateItem(
+        itemId: Long,
+        itemName: String,
+        selectedShopIds: List<Long>,
+        isPriority: Boolean
+    ) {
+        // Retrieve and update the existing item
+        val existingItem = itemRepository.getItemById(itemId)
+        existingItem?.let { item ->
+            item.name = itemName
+            item.isPriorityItem = isPriority
+            itemRepository.updateItem(item)
+
+            // Update shop associations
+            updateShopAssociations(itemId, selectedShopIds)
+        }
+
+        // Refresh UI models to reflect the updated item
+        refreshUiModels()
+    }
+
 
     fun logItemsWithAssociatedShops() {
         viewModelScope.launch {
@@ -189,47 +232,6 @@ class ItemViewModel @Inject constructor(
     }
 
 
-    // this is updating item but not item ui models
-//    fun updateItem(itemId: Long, itemName: String, shopIds: List<Long>, isPriority: Boolean) {
-//        viewModelScope.launch {
-//            itemRepository.getItemById(itemId)?.let { item ->
-//                item.name = itemName
-//                item.isPriorityItem = isPriority
-//                itemRepository.updateItem(item)
-//                updateShopAssociations(item.id, shopIds)
-//                refreshUiModels()
-//            }
-//        }
-//    }
-
-
-
-    fun updateItem(itemId: Long, itemName: String, shopIds: List<Long>, isPriority: Boolean) {
-        viewModelScope.launch {
-            itemRepository.getItemById(itemId)?.let { item ->
-                item.name = itemName
-                itemRepository.updateItem(item)
-                updateShopAssociations(item.id, shopIds)
-                updatePriorityStatus(itemId, isPriority)
-
-            }
-        }
-
-    }
-
-    private fun updatePriorityStatus(itemId: Long, isPriority: Boolean) {
-        viewModelScope.launch {
-            val item = itemRepository.getItemById(itemId)
-            item?.let {
-                it.isPriorityItem = isPriority
-                itemRepository.updateItem(it)
-                Log.i("Kangaroo","status is ${it.name} and ${it.isPriorityItem}")
-                refreshUiModels()
-            }
-        }
-
-    }
-
     fun refreshUiModels() {
         viewModelScope.launch {
             val allItems = itemRepository.getAllItems().filterNot { it.isSoftDeleted }
@@ -246,7 +248,7 @@ class ItemViewModel @Inject constructor(
                 )
             }
             _itemUiModels.postValue(uiModels)
-            Log.i("Kangaroo","ui models are $uiModels")
+            Log.i("Kangaroo", "ui models are $uiModels")
         }
     }
 

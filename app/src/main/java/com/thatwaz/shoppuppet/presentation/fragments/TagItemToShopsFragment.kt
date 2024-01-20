@@ -1,7 +1,6 @@
 package com.thatwaz.shoppuppet.presentation.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,21 +8,18 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.FragmentTagItemToShopsBinding
-import com.thatwaz.shoppuppet.domain.model.Item
 import com.thatwaz.shoppuppet.domain.model.ShopWithSelection
 import com.thatwaz.shoppuppet.presentation.adapters.ShopSelectionAdapter
 import com.thatwaz.shoppuppet.presentation.viewmodel.ItemViewModel
 import com.thatwaz.shoppuppet.presentation.viewmodel.SelectedShopsViewModel
 import com.thatwaz.shoppuppet.presentation.viewmodel.TagItemToShopsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TagItemToShopsFragment : Fragment() {
@@ -33,9 +29,6 @@ class TagItemToShopsFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("Binding accessed outside valid lifecycle.")
 
-
-    //    private var _binding: FragmentTagItemToShopsBinding? = null
-//    private val binding get() = _binding!!
     private val tagItemToShopsViewModel: TagItemToShopsViewModel by viewModels()
     private val selectedShopsViewModel: SelectedShopsViewModel by viewModels()
     private val itemViewModel: ItemViewModel by viewModels()
@@ -56,13 +49,10 @@ class TagItemToShopsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        tagItemToShopsViewModel.isPriority.observe(viewLifecycleOwner) { isPriority ->
-//            updatePriorityIcon(isPriority)
-//        }
 
         // Initializations
         initArguments()
-        initViewModelData()
+
 
         // UI Setup
         setupPriorityIcon()
@@ -133,38 +123,8 @@ class TagItemToShopsFragment : Fragment() {
         val selectedShopIds =
             selectedShopsViewModel.selectedShops.value?.map { it.id } ?: emptyList()
 
-        lifecycleScope.launch {
-            if (itemId == -1L) {
-                addNewItem(itemName, selectedShopIds)
-            } else {
-                updateExistingItem(itemName, selectedShopIds)
-            }
-            navigateToListFragment()
-        }
-    }
-
-    private suspend fun addNewItem(itemName: String, selectedShopIds: List<Long>) {
-        // Add a new item logic here
-        val newItemId = itemViewModel.insertItemWithShopsAsync(
-            Item(
-                name = itemName,
-            ), selectedShopIds, isPriority
-        ).await()
-        // Handle the case for new item insertion
-        tagItemToShopsViewModel.setInitialItemPriorityStatus(itemId, isPriority)
-        Log.i("Kraparoo", "fragment reads $newItemId is $isPriority")
-        itemViewModel.refreshUiModels()
-    }
-
-    private fun updateExistingItem(itemName: String, selectedShopIds: List<Long>) {
-        // Update existing item logic here
-        Log.i("Kraparoo", "This else block is firing")
-        // Update existing item
-        itemViewModel.updateItem(itemId, itemName, selectedShopIds, isPriority)
-        Log.i("Kraparoo", "fragment in edit mode reads $itemId is $isPriority")
-        // Handle the case for updating an item
-        itemViewModel.refreshUiModels()
-
+        itemViewModel.handleItemSave(itemId, itemName, selectedShopIds, isPriority)
+        navigateToListFragment()
     }
 
     private fun navigateToListFragment() {
@@ -184,15 +144,9 @@ class TagItemToShopsFragment : Fragment() {
         selectedShopsViewModel.setSelectedShopIds(associatedShopIds)
     }
 
-    private fun initViewModelData() {
-        tagItemToShopsViewModel.fetchAndSetSelectedShops(itemId)
-    }
-
     private fun setupPriorityIcon() {
         updatePriorityIcon()
         binding.ivPriorityStar.setOnClickListener {
-//            val currentPriority = tagItemToShopsViewModel.isPriority.value ?: false
-//            tagItemToShopsViewModel.setIsPriority(!currentPriority)
             // Toggle the priority status
             isPriority = !isPriority
             updatePriorityIcon()
