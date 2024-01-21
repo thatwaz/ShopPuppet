@@ -121,7 +121,7 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
     }
 
     override fun onDeleteItem(itemUiModel: ItemUiModel) {
-        val item = itemViewModel.findItemByUiModel(itemUiModel)
+        val item = itemViewModel.findItemByUiModelForDeletion(itemUiModel)
 
         if (item != null) {
             // Show confirmation dialog before deletion
@@ -130,7 +130,7 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
                 .setMessage("Are you sure you want to delete this item?") // Set the message
                 .setPositiveButton("Delete") { dialog, which ->
                     // Call the delete function when user confirms
-                    itemViewModel.deleteItemWithShops(item)
+                    itemViewModel.hardDeleteItemWithShops(item)
                 }
                 .setNegativeButton("Cancel", null) // Do nothing on cancel
                 .show()

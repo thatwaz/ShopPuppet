@@ -40,6 +40,9 @@ class TagItemToShopsViewModel @Inject constructor(
     private val _isPriority = MutableLiveData<Boolean>(false)
     val isPriority: LiveData<Boolean> = _isPriority
 
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String> get() = _error
+
     // Method to update isPriority
     fun setIsPriority(priority: Boolean) {
         _isPriority.value = priority

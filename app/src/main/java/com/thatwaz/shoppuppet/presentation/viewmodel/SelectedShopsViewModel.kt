@@ -24,7 +24,8 @@ class SelectedShopsViewModel @Inject constructor(
     private val _selectedShops = MutableLiveData<List<Shop>>(emptyList())
     val selectedShops: LiveData<List<Shop>> get() = _selectedShops
 
-
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String> get() = _error
 
     fun addSelectedShop(shop: Shop) {
         val newSelectedShops = selectedShops.value.orEmpty().toMutableList().apply {

@@ -119,7 +119,7 @@ class AddItemFragment : Fragment() {
             .setMessage("Are you sure you want to permanently delete this item?")
             .setPositiveButton("Delete") { dialog, which ->
 
-                itemViewModel.deleteItemWithShops(item)
+                itemViewModel.hardDeleteItemWithShops(item)
             }
             .setNegativeButton("Cancel", null)
             .show()

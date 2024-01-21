@@ -23,23 +23,15 @@ class ItemViewModel @Inject constructor(
     private val crossRefRepository: ItemShopCrossRefRepository
 ) : ViewModel() {
 
-
-    private val _itemName = MutableLiveData("")
-    var itemName: LiveData<String> = _itemName
-
     private val _itemNameLiveData = MutableLiveData<String>()
-    var itemNameLiveData: MutableLiveData<String> = _itemNameLiveData
+    private var itemNameLiveData: MutableLiveData<String> = _itemNameLiveData
 
-
-    // LiveData to observe changes in items
     private val _items = MutableLiveData<List<Item>>()
     val items: LiveData<List<Item>> get() = _items
 
-    // LiveData to observe changes in shops
     private val _shops = MutableLiveData<List<Shop>>()
     val shops: LiveData<List<Shop>> get() = _shops
 
-    //todo below isPrirorityItem is not updating in itemUiModels
     private val _itemUiModels = MutableLiveData<List<ItemUiModel>>()
     val itemUiModels: LiveData<List<ItemUiModel>> = _itemUiModels
 
@@ -50,81 +42,64 @@ class ItemViewModel @Inject constructor(
         logItemsWithAssociatedShops()
         fetchAllItems()
         fetchAllShops()
-//        refreshUiModels()
     }
 
     fun updateItemName(itemName: String) {
         itemNameLiveData.value = itemName
-
-        Log.i("DOH!", "updateItemName called with itemName: $itemName")
-        Log.i("DOH!", "itemNameLiveData value: ${itemNameLiveData.value}")
-
     }
 
-    //used for delete logic in list fragment -------
-    fun findItemByUiModel(itemUiModel: ItemUiModel): Item? {
+
+    fun findItemByUiModelForDeletion(itemUiModel: ItemUiModel): Item? {
         return items.value?.find { it.id == itemUiModel.itemId }
     }
 
-
-    /* This is used for deleting items directly from the main list */
-    fun deleteItemWithShops(item: Item) {
+    fun hardDeleteItemWithShops(item: Item) {
         viewModelScope.launch {
             try {
-                // Attempt to delete the item and its associated shops
                 itemRepository.deleteItemWithShops(item)
-                // If successful, refresh UI models to reflect changes
                 refreshUiModels()
             } catch (e: Exception) {
-                // If an error occurs, post the error message to the LiveData
                 _error.postValue("Error deleting item: ${e.localizedMessage}")
             }
         }
     }
-//    fun deleteItemWithShops(item: Item) {
-//        viewModelScope.launch {
-//            // Delete the item and its associated shops
-//            itemRepository.deleteItemWithShops(item)
-//            refreshUiModels()
-//        }
-//    }
 
-    // end------------------------------------------
-    fun fetchAllShops() {
+    private fun fetchAllShops() {
         viewModelScope.launch {
-            _shops.value = shopRepository.getAllShops()
-
-            val allShops = shopRepository.getAllShops()
-            _shops.value = allShops
-            allShops.forEach { shop ->
-                Log.d("HorseShit", "Shop name: ${shop.name}, Shop id: ${shop.id}")
+            try {
+                val allShops = shopRepository.getAllShops()
+                _shops.value = allShops
+                allShops.forEach { _ ->
+                }
+            } catch (e: Exception) {
+                _error.postValue("Error fetching shops: ${e.localizedMessage}")
             }
         }
     }
 
-
-    // TODO THIS IS UPDATING PRIORITY STATUS CORRECTLY BUT U.I. IS NOT
-    fun fetchAllItems() {
+    private fun fetchAllItems() {
         viewModelScope.launch {
-            val allItems = itemRepository.getAllItems()
-            // Process all items first
-            allItems.forEach { item ->
-                // Log each item
-                Log.d(
-                    "ItemViewModel",
-                    "Item name: ${item.name}, item ps: ${item.isPriorityItem}Item last purchased: ${item.lastPurchasedDate}"
-                )
-            }
-//                        refreshUiModels()
-            // After processing all items, update LiveData
-            _items.postValue(allItems)
+            try {
+                val allItems = itemRepository.getAllItems()
 
+                allItems.forEach { _ ->
+
+                }
+
+                _items.postValue(allItems)
+            } catch (e: Exception) {
+                _error.postValue("Error fetching items: ${e.localizedMessage}")
+            }
         }
     }
 
     fun cleanUpOldSoftDeletedItems() {
         viewModelScope.launch {
-            itemRepository.deleteOldSoftDeletedItems()
+            try {
+                itemRepository.deleteOldSoftDeletedItems()
+            } catch (e: Exception) {
+                _error.postValue("Error cleaning up old items: ${e.localizedMessage}")
+            }
         }
     }
 
@@ -135,12 +110,15 @@ class ItemViewModel @Inject constructor(
         isPriority: Boolean
     ) {
         viewModelScope.launch {
-            if (itemId == -1L) {
-                addItem(itemName, selectedShopIds, isPriority)
-            } else {
-                updateItem(itemId, itemName, selectedShopIds, isPriority)
+            try {
+                if (itemId == -1L) {
+                    addItem(itemName, selectedShopIds, isPriority)
+                } else {
+                    updateItem(itemId, itemName, selectedShopIds, isPriority)
+                }
+            } catch (e: Exception) {
+                _error.postValue("Error saving item: ${e.localizedMessage}")
             }
-            // Trigger any other actions or LiveData updates
         }
     }
 
@@ -185,85 +163,110 @@ class ItemViewModel @Inject constructor(
         refreshUiModels()
     }
 
-
-    fun logItemsWithAssociatedShops() {
+    private fun logItemsWithAssociatedShops() {
         viewModelScope.launch {
-            // Fetch all items first
-            val allItems = itemRepository.getAllItems()
+            try {
+                // Fetch all non-deleted items from the repository
+                val allItems = itemRepository.getAllItems()
 
-            // Prepare a list to hold the UI models
-            val uiModels = mutableListOf<ItemUiModel>()
+                // Initialize a list to store UI models for each item
+                val uiModels = mutableListOf<ItemUiModel>()
 
-            // Iterate over each item and fetch associated shops, excluding soft-deleted items
-            for (item in allItems) {
-                // Skip soft-deleted items
-                if (!item.isSoftDeleted) {
-                    val associatedShopIds = crossRefRepository.getShopIdsForItem(item.id)
-                    val associatedShops = shopRepository.getShopsByIds(associatedShopIds)
+                // Process each item to fetch and associate shops, skipping soft-deleted items
+                for (item in allItems) {
+                    if (!item.isSoftDeleted) {
+                        try {
+                            // Fetch shop IDs associated with the item
+                            val associatedShopIds = crossRefRepository.getShopIdsForItem(item.id)
+                            // Fetch shop details based on the shop IDs
+                            val associatedShops = shopRepository.getShopsByIds(associatedShopIds)
 
-                    // Logging associated shops for each item
-                    Log.i("Crispy", "Associated shops for item ${item.name} are $associatedShops")
-
-                    // Create and add the UI model to the list
-                    uiModels.add(
-                        ItemUiModel(
-                            itemId = item.id,
-                            itemName = item.name,
-                            shopNames = associatedShops,
-                            isPriorityItem = item.isPriorityItem
-                        )
-                    )
+                            // Add a new UI model for the item with the fetched shop details
+                            uiModels.add(
+                                ItemUiModel(
+                                    itemId = item.id,
+                                    itemName = item.name,
+                                    shopNames = associatedShops,
+                                    isPriorityItem = item.isPriorityItem
+                                )
+                            )
+                        } catch (e: Exception) {
+                            Log.e(
+                                "Error",
+                                "Failed to fetch shops for item ${item.name}: ${e.localizedMessage}"
+                            )
+                            // Error handling: Log the error and continue processing other items
+                        }
+                    }
                 }
+
+                // Update the LiveData with the generated list of UI models
+                _itemUiModels.postValue(uiModels)
+
+                // Refresh the UI models to reflect the latest data
+                refreshUiModels()
+
+            } catch (e: Exception) {
+                _error.postValue("Error logging items with associated shops: ${e.localizedMessage}")
+                // Error handling for issues in processing the entire list of items
             }
-            //Adding this fixed u.i. issue to change without leaving and returning to fragment
-            refreshUiModels()
-            // Now, update the LiveData with the list of UI models
-            _itemUiModels.postValue(uiModels)
-            Log.i("ThreadCheck", "Current thread: ${Thread.currentThread().name}")
-//            _itemUiModels.postValue(uiModels)
-
-            // Logging after updating LiveData
-
-            //todo this log statement is not updating correctly
-            Log.i("Baked Goods", "UI models updated: $uiModels")
-
-            fetchAllItems()
         }
     }
-
 
     fun refreshUiModels() {
         viewModelScope.launch {
-            val allItems = itemRepository.getAllItems().filterNot { it.isSoftDeleted }
-            val uiModels = allItems.map { item ->
-                ItemUiModel(
-                    itemId = item.id,
-                    itemName = item.name,
-                    shopNames = shopRepository.getShopsByIds(
-                        crossRefRepository.getShopIdsForItem(
-                            item.id
+            try {
+                // Fetch all non-deleted items and transform them into UI models
+                val allItems = itemRepository.getAllItems().filterNot { it.isSoftDeleted }
+                val uiModels = allItems.map { item ->
+                    try {
+                        // Attempt to fetch shop names for each item to include in the UI model
+                        val shopNames = shopRepository.getShopsByIds(
+                            crossRefRepository.getShopIdsForItem(item.id)
                         )
-                    ),
-                    isPriorityItem = item.isPriorityItem
-                )
+                        // Constructing the UI model with the item and associated shop details
+                        ItemUiModel(
+                            itemId = item.id,
+                            itemName = item.name,
+                            shopNames = shopNames,
+                            isPriorityItem = item.isPriorityItem
+                        )
+                    } catch (e: Exception) {
+                        Log.e("Error", "Failed to fetch shops for item ${item.id}: ${e.localizedMessage}")
+                        // Handle fetching error by creating a UI model with available data
+                        ItemUiModel(
+                            itemId = item.id,
+                            itemName = item.name,
+                            shopNames = listOf(),
+                            isPriorityItem = item.isPriorityItem
+                        )
+                    }
+                }
+                // Update the LiveData with the list of constructed UI models
+                _itemUiModels.postValue(uiModels)
+            } catch (e: Exception) {
+                _error.postValue("Error refreshing UI models: ${e.localizedMessage}")
+                // General error handling for the UI model refresh process
             }
-            _itemUiModels.postValue(uiModels)
-            Log.i("Kangaroo", "ui models are $uiModels")
         }
     }
 
-
-    // TODO THIS FUNCTION UPDATES SHOPS IMMEDIATELY FOR U.I. BUT PRIORITY STATUS IS NOT UPDATED
     private fun updateShopAssociations(itemId: Long, newShopIds: List<Long>) {
         viewModelScope.launch {
-            crossRefRepository.removeAllAssociationsForItem(itemId)
-            newShopIds.forEach { shopId ->
-                crossRefRepository.associateItemWithShop(itemId, shopId)
+            try {
+                // First, remove all existing associations for the item
+                crossRefRepository.removeAllAssociationsForItem(itemId)
+
+                // Then, create new associations with the provided shop IDs
+                newShopIds.forEach { shopId ->
+                    crossRefRepository.associateItemWithShop(itemId, shopId)
+                }
+            } catch (e: Exception) {
+                // If an error occurs, post the error message to the LiveData
+                _error.postValue("Error updating shop associations: ${e.localizedMessage}")
             }
-//            refreshUiModels()
         }
     }
-
 
 }
 
