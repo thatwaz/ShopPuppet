@@ -32,6 +32,7 @@ class AddItemFragment : Fragment() {
 
     private lateinit var adapter: RecentlyPurchasedItemAdapter
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,6 +70,7 @@ class AddItemFragment : Fragment() {
 
         binding.etItemName.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
+                binding.btnNext.isEnabled = !s.isNullOrEmpty()
                 val filterText = s.toString()
                 shopSpecificListViewModel.purchasedAndSoftDeletedItems.value?.let { items ->
                     val filteredItems = if (filterText.isEmpty()) {
@@ -88,6 +90,8 @@ class AddItemFragment : Fragment() {
                 // Not needed for filtering
             }
         })
+
+
     }
 
     private fun setupRecyclerView() {

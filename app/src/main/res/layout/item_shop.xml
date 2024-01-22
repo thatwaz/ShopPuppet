@@ -24,8 +24,7 @@
             android:src="@drawable/ic_store"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/shop_red" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
 
 
@@ -46,7 +45,6 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:background="@drawable/badge_background"
-            android:text="6"
             android:gravity="center"
             android:textStyle="bold"
             android:layout_marginTop="8dp"
@@ -64,7 +62,6 @@
             android:layout_marginTop="16dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="Target"
             android:textAlignment="center"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"

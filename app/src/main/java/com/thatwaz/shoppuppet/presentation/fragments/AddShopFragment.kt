@@ -1,9 +1,8 @@
 package com.thatwaz.shoppuppet.presentation.fragments
 
 
-import android.os.Build
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.FragmentAddShopBinding
 import com.thatwaz.shoppuppet.presentation.viewmodel.AddShopViewModel
 import com.thatwaz.shoppuppet.util.ColorUtils
@@ -22,15 +20,17 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogListener {
 
-    private val viewModel: AddShopViewModel by viewModels()
+    private val addShopViewModel: AddShopViewModel by viewModels()
     private var _binding: FragmentAddShopBinding? = null
     private val binding get() = _binding!!
 
     private var selectedIconRef: Int? = null
-    private var selectedColor: Int = R.color.black
+    private var selectedColor: String = "black" // Replace with your default color name
+
+    //    private var selectedColor: Int = R.color.black
     private var shopInitials: String? = null
 
-
+    @SuppressLint("ResourceType")
     private val iconClickListener = View.OnClickListener { view ->
         val iconResName = IconUtils.getIconResName(view.id)
         iconResName?.let { resName ->
@@ -39,17 +39,15 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
             if (iconResId != 0) { // Check if resource ID is valid
                 updatePreviewIcon(iconResId)
                 selectedIconRef = iconResId
-                Log.i("POOP","Icon is $iconResId")
             }
         }
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAddShopBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -58,12 +56,7 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         super.onViewCreated(view, savedInstanceState)
         initializeViews()
 
-//        viewModel.allShops.observe(viewLifecycleOwner) { shops ->
-//            Log.d("ShopsFragment", "Observed shops: $shops")
-//            // Your logic to display the shops in the UI, e.g., updating a RecyclerView.
-//        }
-
-        viewModel.shopName.observe(viewLifecycleOwner) { name ->
+        addShopViewModel.shopName.observe(viewLifecycleOwner) { name ->
             binding.shopNamePreview.text = name
         }
 
@@ -94,11 +87,12 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         }
     }
 
+
     private fun onColorClicked(view: View) {
-        val colorResId = ColorUtils.getColorResId(view.id)
-        colorResId?.let {
-            selectedColor = it
-            ColorUtils.updateIconColor(binding, it, requireContext())
+        val colorResName = ColorUtils.getColorResName(view.id)
+        colorResName?.let { name ->
+            ColorUtils.updateIconColor(binding, name, requireContext())
+            selectedColor = name
         }
     }
 
@@ -118,13 +112,13 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
     private fun handleShopSave() {
         val shopName = binding.etShopName.text.toString()
         if (shopName.isNotBlank()) {
-            viewModel.updateShopName(shopName)
+            addShopViewModel.updateShopName(shopName)
             // Check if selectedIconRef is not null before updating
-            viewModel.updateSelectedIconRef((selectedIconRef ?: 0).toString()) // Use 0 or your 'no icon' indicator
-            viewModel.updateSelectedColor(selectedColor.toString())
-            viewModel.updateShopInitials(shopInitials)
+            addShopViewModel.updateSelectedIconRef((selectedIconRef ?: 0).toString()) // Use 0 or your 'no icon' indicator
+            addShopViewModel.updateSelectedColor(selectedColor)
+            addShopViewModel.updateShopInitials(shopInitials)
 
-            if (viewModel.saveShop()) {
+            if (addShopViewModel.saveShop()) {
                 Toast.makeText(context, "Shop saved!", Toast.LENGTH_SHORT).show()
                 navigateToShopsFragment()
             } else {
@@ -148,18 +142,34 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         icons.forEach { it.setOnClickListener(iconClickListener) }
     }
 
+
     private fun setupColorClickListeners() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val colors = listOf(
-                binding.shopBlue, binding.shopGreen, binding.shopFashionRed, binding.shopDarkGray,
-                binding.shopRed, binding.shopOrange, binding.shopPink, binding.shopNavyBlue,
-                binding.shopYellow, binding.shopPurple, binding.shopTeal, binding.shopBrown
-            )
-            colors.forEach { it.setOnClickListener(::onColorClicked) }
-        } else {
-            // Handle UI setup for devices below API 28 or hide certain UI elements.
+        val colors = listOf(
+            binding.shopBlue, binding.shopGreen, binding.shopFashionRed, binding.shopDarkGray,
+            binding.shopRed, binding.shopOrange, binding.shopPink, binding.shopNavyBlue,
+            binding.shopYellow, binding.shopPurple, binding.shopTeal, binding.shopBrown
+        )
+
+        colors.forEach { colorView ->
+            colorView.setOnClickListener {
+                onColorClicked(it)
+            }
         }
     }
+
+
+//    private fun setupColorClickListeners() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//            val colors = listOf(
+//                binding.shopBlue, binding.shopGreen, binding.shopFashionRed, binding.shopDarkGray,
+//                binding.shopRed, binding.shopOrange, binding.shopPink, binding.shopNavyBlue,
+//                binding.shopYellow, binding.shopPurple, binding.shopTeal, binding.shopBrown
+//            )
+//            colors.forEach { it.setOnClickListener(::onColorClicked) }
+//        } else {
+//            // Handle UI setup for devices below API 28 or hide certain UI elements.
+//        }
+//    }
 
     private fun updatePreviewIcon(drawableResId: Int) {
         binding.previewIcon.setImageResource(drawableResId)
