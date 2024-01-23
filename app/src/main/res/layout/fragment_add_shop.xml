@@ -461,7 +461,6 @@
                     android:id="@+id/btn_save_shop"
                     android:layout_width="135dp"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/positiveAction"
                     android:text="Save Shop"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/cv_shop_preview"

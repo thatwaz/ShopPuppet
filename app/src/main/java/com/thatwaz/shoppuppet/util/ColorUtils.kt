@@ -41,7 +41,7 @@ object ColorUtils {
             }
 
         } else {
-            val defaultColor = ContextCompat.getColor(context, R.color.black)
+            val defaultColor = ContextCompat.getColor(context, R.color.inactive_grey)
             binding.previewIcon.setColorFilter(defaultColor)
             binding.initialsPreview.setTextColor(defaultColor)
 

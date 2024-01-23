@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.addShopFragment -> {
                     // Hide the BottomNavigationView when in AddShopsFragment
                     binding.bnvShopPuppet.visibility = View.GONE
+                    supportActionBar?.title = destination.label
                 }
                 R.id.tagItemToShopsFragment -> {
                     binding.bnvShopPuppet.visibility = View.GONE

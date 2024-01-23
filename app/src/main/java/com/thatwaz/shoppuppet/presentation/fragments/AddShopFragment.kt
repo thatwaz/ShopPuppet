@@ -3,6 +3,8 @@ package com.thatwaz.shoppuppet.presentation.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,26 +24,34 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
 
     private val addShopViewModel: AddShopViewModel by viewModels()
     private var _binding: FragmentAddShopBinding? = null
-    private val binding get() = _binding!!
+
+    private val binding
+        get() = _binding ?: throw IllegalStateException("Binding accessed outside valid lifecycle.")
 
     private var selectedIconRef: Int? = null
-    private var selectedColor: String = "black" // Replace with your default color name
+    private var selectedColor: String = "inactive_grey"
 
-    //    private var selectedColor: Int = R.color.black
     private var shopInitials: String? = null
 
-    @SuppressLint("ResourceType")
+
     private val iconClickListener = View.OnClickListener { view ->
-        val iconResName = IconUtils.getIconResName(view.id)
+        handleIconClick(view.id)
+    }
+
+    @SuppressLint("ResourceType")
+    private fun handleIconClick(viewId: Int) {
+        val iconResName = IconUtils.getIconResName(viewId)
         iconResName?.let { resName ->
             // Convert the resource name to an actual drawable resource ID
-            val iconResId = resources.getIdentifier(resName, "drawable", context?.packageName ?: "")
+            val iconResId = resources
+                .getIdentifier(resName, "drawable", context?.packageName ?: "")
             if (iconResId != 0) { // Check if resource ID is valid
                 updatePreviewIcon(iconResId)
                 selectedIconRef = iconResId
             }
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,11 +64,34 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initializeViews()
+        observeSaveStatus()
+        observeErrorMessages()
 
         addShopViewModel.shopName.observe(viewLifecycleOwner) { name ->
             binding.shopNamePreview.text = name
         }
+
+        binding.btnShopName.isEnabled = false
+        binding.btnShopIcon.isEnabled = false
+        binding.btnSaveShop.isEnabled = false
+
+        // Sets up a TextWatcher to enable the shop name button when valid input is detected
+        binding.etShopName.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val shopName = s.toString()
+                binding.btnShopName.isEnabled = isShopNameValid(shopName)
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Not needed
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Not needed
+            }
+        })
 
     }
 
@@ -69,11 +102,13 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
             btnShopIcon.setOnClickListener { toggleIconView() }
             btnShopName.setOnClickListener { handleShopNameInput() }
             btnSaveShop.setOnClickListener { handleShopSave() }
+            btnStartOver.setOnClickListener { resetUI() }
         }
         setupIconClickListeners()
         setupColorClickListeners()
     }
 
+    // Shows a custom icon dialog for selecting shop initials vs. icons
     private fun showIconDialog() {
         val dialog = CustomIconDialogFragment()
         dialog.show(childFragmentManager, "CustomIconDialog")
@@ -88,12 +123,20 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
     }
 
 
+    // Handles click events on color views to update the selected color and the save button state
     private fun onColorClicked(view: View) {
         val colorResName = ColorUtils.getColorResName(view.id)
         colorResName?.let { name ->
             ColorUtils.updateIconColor(binding, name, requireContext())
             selectedColor = name
+            updateSaveButtonState()
         }
+    }
+
+    private fun updateSaveButtonState() {
+        // Enable the save button if a color is selected
+        binding.btnSaveShop.isEnabled =
+            selectedColor.isNotBlank() && isShopNameValid(binding.etShopName.text.toString())
     }
 
     private fun handleShopNameInput() {
@@ -109,25 +152,41 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         KeyboardUtils.hideKeyboard(requireView())
     }
 
-    private fun handleShopSave() {
-        val shopName = binding.etShopName.text.toString()
-        if (shopName.isNotBlank()) {
-            addShopViewModel.updateShopName(shopName)
-            // Check if selectedIconRef is not null before updating
-            addShopViewModel.updateSelectedIconRef((selectedIconRef ?: 0).toString()) // Use 0 or your 'no icon' indicator
-            addShopViewModel.updateSelectedColor(selectedColor)
-            addShopViewModel.updateShopInitials(shopInitials)
-
-            if (addShopViewModel.saveShop()) {
+    private fun observeSaveStatus() {
+        addShopViewModel.saveStatus.observe(viewLifecycleOwner) { result ->
+            result.onSuccess {
                 Toast.makeText(context, "Shop saved!", Toast.LENGTH_SHORT).show()
                 navigateToShopsFragment()
-            } else {
-                Toast.makeText(context, "Failed to save shop. Try again.", Toast.LENGTH_SHORT).show()
             }
-        } else {
-            Toast.makeText(context, "Please enter a valid shop name.", Toast.LENGTH_SHORT).show()
+            result.onFailure {
+                Toast.makeText(
+                    context,
+                    it.message ?: "Failed to save shop. Try again.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
+
+    private fun handleShopSave() {
+        val shopName = binding.etShopName.text.toString()
+        updateShopDetails(shopName)
+        addShopViewModel.saveShop()
+    }
+
+
+    private fun isShopNameValid(shopName: String): Boolean {
+        return shopName.isNotBlank()
+    }
+
+    private fun updateShopDetails(shopName: String) {
+        addShopViewModel.updateShopName(shopName)
+        addShopViewModel.updateSelectedIconRef((selectedIconRef ?: 0).toString())
+        addShopViewModel.updateSelectedColor(selectedColor)
+        addShopViewModel.updateShopInitials(shopInitials)
+    }
+
+
     private fun navigateToShopsFragment() {
         val action = AddShopFragmentDirections.actionAddShopFragmentToShopsFragment()
         findNavController().navigate(action)
@@ -157,28 +216,63 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         }
     }
 
-
-//    private fun setupColorClickListeners() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-//            val colors = listOf(
-//                binding.shopBlue, binding.shopGreen, binding.shopFashionRed, binding.shopDarkGray,
-//                binding.shopRed, binding.shopOrange, binding.shopPink, binding.shopNavyBlue,
-//                binding.shopYellow, binding.shopPurple, binding.shopTeal, binding.shopBrown
-//            )
-//            colors.forEach { it.setOnClickListener(::onColorClicked) }
-//        } else {
-//            // Handle UI setup for devices below API 28 or hide certain UI elements.
-//        }
-//    }
-
     private fun updatePreviewIcon(drawableResId: Int) {
+        // When an icon is selected, clear initials and update UI
+        shopInitials = null
+        binding.initialsPreview.text = ""
         binding.previewIcon.setImageResource(drawableResId)
+        selectedIconRef = drawableResId
+        updateIconButtonState()
     }
 
     override fun onIconTextEntered(text: String) {
+        // When initials are entered, clear icon selection and update UI
+        selectedIconRef = null
+        binding.previewIcon.setImageResource(0)  // Clear the icon image
         binding.initialsPreview.text = text
         shopInitials = text
+        updateIconButtonState()
     }
+
+    private fun updateIconButtonState() {
+        // Enable the save button if either an icon is selected or initials are entered
+        binding.btnShopIcon.isEnabled = selectedIconRef != null || !shopInitials.isNullOrBlank()
+    }
+
+
+    private fun resetUI() {
+        binding.etShopName.alpha = 1f
+        binding.btnShopName.alpha = 1f
+        binding.etShopName.isEnabled = true
+        binding.cvChooseIcon.visibility = View.INVISIBLE
+        binding.cvChooseColor.visibility = View.INVISIBLE
+        binding.etShopName.text?.clear()
+        binding.shopNamePreview.text = ""
+        selectedColor = "inactive_grey"
+        ColorUtils.updateIconColor(binding, selectedColor, requireContext())
+        selectedIconRef = null
+
+        shopInitials = null
+
+        // Reset icon and initials preview
+        binding.previewIcon.setImageResource(0)  // Clear the icon image
+        binding.initialsPreview.text = ""
+
+        // Reset button states
+        binding.btnSaveShop.isEnabled = false
+        binding.btnShopIcon.isEnabled = false
+        binding.btnShopName.isEnabled = false
+    }
+
+    // Observes error messages from ViewModel and displays them as Toast messages
+    private fun observeErrorMessages() {
+        addShopViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
+            if (errorMessage.isNotEmpty()) {
+                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
