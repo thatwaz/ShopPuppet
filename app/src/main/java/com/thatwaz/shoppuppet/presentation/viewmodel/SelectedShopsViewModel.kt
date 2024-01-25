@@ -1,6 +1,5 @@
 package com.thatwaz.shoppuppet.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,11 +11,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-
-
-
-
-// edit vm
+/**
+ * ViewModel for managing the selection of shops.
+ * Keeps track of user-selected shops and provides functionality for adding or removing shops from
+ * the selection.
+ * Exposes LiveData for the list of selected shops and any errors encountered during operations.
+ * Also facilitates fetching and setting shops based on their IDs, enhancing the ViewModel's
+ * integration with the repository layer.
+ */
 @HiltViewModel
 class SelectedShopsViewModel @Inject constructor(
         private val shopRepository: ShopRepository
@@ -34,29 +36,22 @@ class SelectedShopsViewModel @Inject constructor(
             }
         }
         _selectedShops.value = newSelectedShops
-        Log.d("SelectedShops", "Added shop, new list: $newSelectedShops")
     }
 
 
+
     fun removeSelectedShop(shop: Shop) {
-        if (selectedShops.value.orEmpty().contains(shop)) {
-            val newSelectedShops = selectedShops.value.orEmpty().filter { it != shop }
+        val currentSelectedShops = selectedShops.value.orEmpty()
+        if (currentSelectedShops.contains(shop)) {
+            val newSelectedShops = currentSelectedShops.filter { it != shop }
             _selectedShops.value = newSelectedShops
-            Log.d("SelectedShops", "Removed shop, new list: $newSelectedShops")
         } else {
-            Log.d("SelectedShops", "Attempted to remove a shop not in the list: $shop")
-            // You could handle this case differently if needed.
+            _error.postValue("Shop not found in the selection.")
         }
     }
 
 
-        fun initializeSelectedShops(shops: List<Shop>) {
-            Log.i("SSVM","sel shops live data is ${_selectedShops.value}")
-        _selectedShops.value = shops
-
-    }
-
-        fun setSelectedShopIds(shopIds: List<Long>) {
+    fun setSelectedShopIds(shopIds: List<Long>) {
         viewModelScope.launch {
             try {
                 // Fetch shops by their IDs
@@ -64,17 +59,13 @@ class SelectedShopsViewModel @Inject constructor(
 
                 // Update the selected shops
                 _selectedShops.postValue(shops)
-                Log.i("SSVM","fetching shop ids: $shops")
+
             } catch (e: Exception) {
-                // Handle any exceptions
-                Log.e("SelectedShopsViewModel", "Error setting selected shops: ${e.message}")
+                _error.postValue("Error setting selected shops: ${e.localizedMessage}")
             }
         }
     }
-    fun isSelected(shop: Shop): Boolean {
-        Log.i("Crow","Checked shop is ${_selectedShops.value}")
-        return _selectedShops.value.orEmpty().contains(shop)
-    }
+
 }
 
 

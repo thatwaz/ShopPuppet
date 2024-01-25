@@ -4,12 +4,13 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +26,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class AddItemFragment : Fragment() {
 
     private var _binding: FragmentAddItemBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding ?: throw IllegalStateException("Binding cannot be accessed.")
 
     private val itemViewModel: ItemViewModel by viewModels()
     private val shopSpecificListViewModel: ShopSpecificListViewModel by viewModels()
@@ -36,7 +38,7 @@ class AddItemFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAddItemBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -45,52 +47,59 @@ class AddItemFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
+        setupObservers()
+        setupUIEventHandlers()
+    }
 
-        shopSpecificListViewModel.purchasedAndSoftDeletedItems.observe(viewLifecycleOwner) { items ->
-            items.forEach { item ->
-                Log.i("FrequentItemLog", "Item: ${item.name}, Last Purchased: ${item.lastPurchasedDate}")
+    private fun setupObservers() {
+        observeErrorMessages()
+        observePurchasedAndSoftDeletedItems()
+    }
+
+    private fun observeErrorMessages() {
+        val errorHandler = Observer<String> { errorMessage ->
+            if (errorMessage.isNotEmpty()) {
+                Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
             }
+        }
+        itemViewModel.error.observe(viewLifecycleOwner, errorHandler)
+        shopSpecificListViewModel.error.observe(viewLifecycleOwner, errorHandler)
+    }
+
+    private fun observePurchasedAndSoftDeletedItems() {
+        shopSpecificListViewModel.purchasedAndSoftDeletedItems.observe(viewLifecycleOwner) { items ->
             adapter.submitList(items)
         }
+    }
 
-        binding.btnNext.setOnClickListener {
-            navigateToNextFragment()
-        }
+    private fun setupUIEventHandlers() {
+        binding.btnNext.setOnClickListener { navigateToNextFragment() }
+        binding.fabTempDelete.setOnClickListener { showDeleteConfirmationDialog() }
+        adapter.onItemLongPress = { item -> showSingleItemDeleteConfirmationDialog(item) }
+        binding.etItemName.addTextChangedListener(textWatcher)
+    }
 
-        //todo move delete button to top
-        binding.fabTempDelete.setOnClickListener {
-            showDeleteConfirmationDialog()
-        }
-
-        adapter.onItemLongPress = { item ->
-            // Handle the long press event, e.g., show a confirmation dialog for deletion
-            showSingleItemDeleteConfirmationDialog(item)
-        }
-
-
-        binding.etItemName.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                binding.btnNext.isEnabled = !s.isNullOrEmpty()
-                val filterText = s.toString()
-                shopSpecificListViewModel.purchasedAndSoftDeletedItems.value?.let { items ->
-                    val filteredItems = if (filterText.isEmpty()) {
-                        items
-                    } else {
-                        items.filter { it.name.startsWith(filterText, ignoreCase = true) }
-                    }
-                    adapter.submitList(filteredItems)
+    private val textWatcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            binding.btnNext.isEnabled = !s.isNullOrEmpty()
+            val filterText = s.toString()
+            shopSpecificListViewModel.purchasedAndSoftDeletedItems.value?.let { items ->
+                val filteredItems = if (filterText.isEmpty()) {
+                    items
+                } else {
+                    items.filter { it.name.startsWith(filterText, ignoreCase = true) }
                 }
+                adapter.submitList(filteredItems)
             }
+        }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Not needed for filtering
-            }
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            // Not needed for filtering
+        }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // Not needed for filtering
-            }
-        })
-
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            // Not needed for filtering
+        }
 
     }
 
@@ -107,9 +116,9 @@ class AddItemFragment : Fragment() {
 
     private fun showDeleteConfirmationDialog() {
         AlertDialog.Builder(context)
-            .setTitle("Delete Soft Deleted Items")
+            .setTitle("Delete Recently Purchased Items")
             .setMessage("Are you sure you want to permanently delete all recently purchased items?")
-            .setPositiveButton("Delete") { dialog, which ->
+            .setPositiveButton("Delete") { _, _ ->
                 // Call the ViewModel function to delete soft-deleted items
                 shopSpecificListViewModel.hardDeleteSoftDeletedItems()
             }
@@ -121,14 +130,13 @@ class AddItemFragment : Fragment() {
         AlertDialog.Builder(context)
             .setTitle("Delete Recently Purchased Item")
             .setMessage("Are you sure you want to permanently delete this item?")
-            .setPositiveButton("Delete") { dialog, which ->
+            .setPositiveButton("Delete") { _, _ ->
 
                 itemViewModel.hardDeleteItemWithShops(item)
             }
             .setNegativeButton("Cancel", null)
             .show()
     }
-
 
 
     private fun navigateToNextFragment() {

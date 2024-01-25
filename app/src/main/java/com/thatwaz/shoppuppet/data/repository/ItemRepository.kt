@@ -103,7 +103,7 @@ class ItemRepository @Inject constructor(
     suspend fun deleteOldSoftDeletedItems() {
         Log.i("Item Repo","Initiating clean-up")
         val thresholdDate = Calendar.getInstance().apply {
-            add(Calendar.DAY_OF_YEAR, -3)  // Set to 3 days ago for test purposesx
+            add(Calendar.DAY_OF_YEAR, -1)  // Set to 1 day ago for test purposesx
         }.time
         val oldItems = itemDao.getOldSoftDeletedItems(thresholdDate)
         Log.i("Item Repo","Old items are $oldItems")

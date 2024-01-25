@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -65,6 +66,13 @@ class ShopSpecificListFragment : Fragment() {
         observeLiveData()
         setupAdapters(colorResId) // Pass color instead of shopColorResId
         setupRecyclerViews()
+
+        shopSpecificListViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
+            if (errorMessage.isNotEmpty()) {
+                Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+            }
+        }
+
 
         binding.fabDeletePurchasedItems.setOnClickListener {
             val checkedItems = purchasedItemsAdapter?.getCheckedItems() ?: listOf()

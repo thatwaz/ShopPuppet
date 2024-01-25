@@ -38,6 +38,8 @@ class ItemViewModel @Inject constructor(
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
 
+    //TODO COMMENT CLEAN-UP&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
     init {
         logItemsWithAssociatedShops()
         fetchAllItems()
@@ -155,11 +157,8 @@ class ItemViewModel @Inject constructor(
             item.isPriorityItem = isPriority
             itemRepository.updateItem(item)
 
-            // Update shop associations
             updateShopAssociations(itemId, selectedShopIds)
         }
-
-        // Refresh UI models to reflect the updated item
         refreshUiModels()
     }
 
@@ -191,11 +190,7 @@ class ItemViewModel @Inject constructor(
                                 )
                             )
                         } catch (e: Exception) {
-                            Log.e(
-                                "Error",
-                                "Failed to fetch shops for item ${item.name}: ${e.localizedMessage}"
-                            )
-                            // Error handling: Log the error and continue processing other items
+                            _error.postValue("Error fetching shops for item ${item.name}: ${e.message}")
                         }
                     }
                 }
