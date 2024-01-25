@@ -1,6 +1,5 @@
 package com.thatwaz.shoppuppet.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,6 +14,25 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * ViewModel for managing items, associated shops, and UI models.
+ * Handles CRUD operations for items, shop associations, and UI model updates.
+ *
+ * Functions:
+ * - `updateItemName(itemName: String)`: Updates the name of the item.
+ * - `findItemByUiModelForDeletion(itemUiModel: ItemUiModel)`: Finds an item for deletion.
+ * - `hardDeleteItemWithShops(item: Item)`: Performs a hard delete of an item and its associated shops.
+ * - `cleanUpOldSoftDeletedItems()`: Cleans up old soft-deleted items.
+ * - `handleItemSave(itemId: Long, itemName: String, selectedShopIds: List<Long>,
+ * isPriority: Boolean)`: Handles item save operations.
+ * - `refreshUiModels()`: Refreshes UI models to reflect the latest data.
+ *
+ * LiveData:
+ * - `items`: LiveData for item data.
+ * - `shops`: LiveData for shop data.
+ * - `itemUiModels`: LiveData for UI models.
+ * - `error`: LiveData for error messages.
+ */
 
 @HiltViewModel
 class ItemViewModel @Inject constructor(
@@ -38,8 +56,6 @@ class ItemViewModel @Inject constructor(
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
 
-    //TODO COMMENT CLEAN-UP&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-
     init {
         logItemsWithAssociatedShops()
         fetchAllItems()
@@ -50,11 +66,12 @@ class ItemViewModel @Inject constructor(
         itemNameLiveData.value = itemName
     }
 
-
+    //Handles finding individual item deletion in List Fragment
     fun findItemByUiModelForDeletion(itemUiModel: ItemUiModel): Item? {
         return items.value?.find { it.id == itemUiModel.itemId }
     }
 
+    //Handles actual individual item deletion in List Fragment
     fun hardDeleteItemWithShops(item: Item) {
         viewModelScope.launch {
             try {
@@ -203,7 +220,6 @@ class ItemViewModel @Inject constructor(
 
             } catch (e: Exception) {
                 _error.postValue("Error logging items with associated shops: ${e.localizedMessage}")
-                // Error handling for issues in processing the entire list of items
             }
         }
     }
@@ -213,35 +229,33 @@ class ItemViewModel @Inject constructor(
             try {
                 // Fetch all non-deleted items and transform them into UI models
                 val allItems = itemRepository.getAllItems().filterNot { it.isSoftDeleted }
-                val uiModels = allItems.map { item ->
-                    try {
-                        // Attempt to fetch shop names for each item to include in the UI model
-                        val shopNames = shopRepository.getShopsByIds(
-                            crossRefRepository.getShopIdsForItem(item.id)
-                        )
-                        // Constructing the UI model with the item and associated shop details
-                        ItemUiModel(
-                            itemId = item.id,
-                            itemName = item.name,
-                            shopNames = shopNames,
-                            isPriorityItem = item.isPriorityItem
-                        )
+                val uiModels = mutableListOf<ItemUiModel>()
+
+                for (item in allItems) {
+                    // Attempt to fetch shop names for each item to include in the UI model
+                    val shopNames = try {
+                        shopRepository.getShopsByIds(crossRefRepository.getShopIdsForItem(item.id))
                     } catch (e: Exception) {
-                        Log.e("Error", "Failed to fetch shops for item ${item.id}: ${e.localizedMessage}")
-                        // Handle fetching error by creating a UI model with available data
-                        ItemUiModel(
-                            itemId = item.id,
-                            itemName = item.name,
-                            shopNames = listOf(),
-                            isPriorityItem = item.isPriorityItem
-                        )
+                        // Handle fetching error by creating an empty list for shop names
+                        emptyList()
                     }
+
+                    // Constructing the UI model with the item and associated shop details
+                    val itemUiModel = ItemUiModel(
+                        itemId = item.id,
+                        itemName = item.name,
+                        shopNames = shopNames,
+                        isPriorityItem = item.isPriorityItem
+                    )
+
+                    uiModels.add(itemUiModel)
                 }
+
                 // Update the LiveData with the list of constructed UI models
                 _itemUiModels.postValue(uiModels)
             } catch (e: Exception) {
-                _error.postValue("Error refreshing UI models: ${e.localizedMessage}")
-                // General error handling for the UI model refresh process
+                _error.postValue("Error refreshing UI: ${e.localizedMessage}")
+                // Post an error message to the LiveData when an exception occurs
             }
         }
     }
