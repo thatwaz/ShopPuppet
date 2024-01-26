@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,13 +25,12 @@ class ShopsFragment : Fragment() {
     private var _binding: FragmentShopsBinding? = null
     private val binding get() = _binding!!
     private val shopsViewModel: ShopsViewModel by viewModels()
-    private lateinit var shopAdapter: ShopAdapter
-
+    private val shopAdapter: ShopAdapter = ShopAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentShopsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -43,52 +41,57 @@ class ShopsFragment : Fragment() {
         setupRecyclerView()
         observeShopData()
         setupAddShopButton()
+        observeErrorMessages()
+        setupEditDeleteInfoTextView()
+        setupAdapterClickListeners()
 
-        shopsViewModel.error.observe(viewLifecycleOwner, Observer { errorMessage ->
+        // Refreshes item count for each shop
+        shopsViewModel.fetchShopsWithItemCount()
+    }
+
+    private fun observeErrorMessages() {
+        shopsViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
             if (errorMessage.isNotEmpty()) {
                 Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
             }
-        })
+        }
+    }
 
-        //refreshes item count for each shop
-        shopsViewModel.fetchShopsWithItemCount()
+    private fun setupEditDeleteInfoTextView() {
         val content = SpannableString(binding.tvEditDeleteInfo.text)
         content.setSpan(UnderlineSpan(), 0, content.length, 0)
         binding.tvEditDeleteInfo.text = content
-
         binding.tvEditDeleteInfo.setOnClickListener {
             showEditDeleteInstructionsDialog()
         }
+    }
 
+    private fun setupAdapterClickListeners() {
         shopAdapter.onShopItemClickListener = object : ShopAdapter.OnShopItemClickListener {
             override fun onShopItemClick(shop: Shop) {
-
-                val action = ShopsFragmentDirections.actionShopsFragmentToShopSpecificListFragment(
-                    shop.name,
-                    shop.colorResName,
-                    shop.id
-                )
-                findNavController().navigate(action)
-
+                navigateToShopSpecificListFragment(shop)
             }
         }
         shopAdapter.onShopItemLongClickListener = object : ShopAdapter.OnShopItemLongClickListener {
             override fun onShopItemLongClick(shop: Shop) {
-                // Handle long press here
-                // For example, show a dialog, start a Contextual Action Mode, or navigate to another fragment
-                // Example: Show a dialog to confirm deletion or offer other actions
                 showLongPressDialog(shop)
             }
         }
+    }
 
+    private fun navigateToShopSpecificListFragment(shop: Shop) {
+        val action = ShopsFragmentDirections.actionShopsFragmentToShopSpecificListFragment(
+            shop.name, shop.colorResName, shop.id
+        )
+        findNavController().navigate(action)
     }
 
     private fun setupRecyclerView() {
         val recyclerView: RecyclerView = binding.shopsRecyclerView
         recyclerView.layoutManager = GridLayoutManager(context, 3)
-        shopAdapter = ShopAdapter()
         recyclerView.adapter = shopAdapter
     }
+
 
     private fun observeShopData() {
         shopsViewModel.shopsWithItemCount.observe(viewLifecycleOwner) { shopListWithItemCount ->

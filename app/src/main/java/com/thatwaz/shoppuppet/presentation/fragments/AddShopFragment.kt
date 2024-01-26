@@ -65,18 +65,34 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupInitialButtonStates()
         initializeViews()
-        observeSaveStatus()
-        observeErrorMessages()
+        setupTextWatcher()
+        setupObservers()
 
-        addShopViewModel.shopName.observe(viewLifecycleOwner) { name ->
-            binding.shopNamePreview.text = name
-        }
+    }
 
+    private fun setupInitialButtonStates() {
+        // Set initial button states (enable/disable)
         binding.btnShopName.isEnabled = false
         binding.btnShopIcon.isEnabled = false
         binding.btnSaveShop.isEnabled = false
+    }
 
+    private fun initializeViews() {
+        binding.apply {
+            cvChooseIcon.visibility = View.GONE
+            ibAlphabet.setOnClickListener { showIconDialog() }
+            btnShopIcon.setOnClickListener { toggleIconView() }
+            btnShopName.setOnClickListener { handleShopNameInput() }
+            btnSaveShop.setOnClickListener { handleShopSave() }
+            btnStartOver.setOnClickListener { resetUI() }
+        }
+        setupIconClickListeners()
+        setupColorClickListeners()
+    }
+
+    private fun setupTextWatcher() {
         // Sets up a TextWatcher to enable the shop name button when valid input is detected
         binding.etShopName.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -92,20 +108,15 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
                 // Not needed
             }
         })
-
     }
 
-    private fun initializeViews() {
-        binding.apply {
-            cvChooseIcon.visibility = View.GONE
-            ibAlphabet.setOnClickListener { showIconDialog() }
-            btnShopIcon.setOnClickListener { toggleIconView() }
-            btnShopName.setOnClickListener { handleShopNameInput() }
-            btnSaveShop.setOnClickListener { handleShopSave() }
-            btnStartOver.setOnClickListener { resetUI() }
+    private fun setupObservers() {
+        // Set up observers for ViewModel LiveData
+        addShopViewModel.shopName.observe(viewLifecycleOwner) { name ->
+            binding.shopNamePreview.text = name
         }
-        setupIconClickListeners()
-        setupColorClickListeners()
+        observeSaveStatus()
+        observeErrorMessages()
     }
 
     // Shows a custom icon dialog for selecting shop initials vs. icons

@@ -18,22 +18,14 @@ class CustomIconDialogFragment : DialogFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        // If the dialog is shown from a fragment
-        if (parentFragment is CustomIconDialogListener) {
-            listener = parentFragment as CustomIconDialogListener
-        }
-            // todo test this
-        // If the dialog is shown from an activity
-        else if (context is CustomIconDialogListener) {
-            listener = context
-        }
-        else {
+        // Assign the listener based on whether parentFragment or context implements CustomIconDialogListener
+        listener = parentFragment as? CustomIconDialogListener ?: context as? CustomIconDialogListener
+
+        // Check if listener is still null (neither parentFragment nor context implements the interface)
+        if (listener == null) {
             throw ClassCastException("$context must implement CustomIconDialogListener")
         }
     }
-
-
-
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
@@ -43,7 +35,7 @@ class CustomIconDialogFragment : DialogFragment() {
             val view = inflater.inflate(R.layout.dialog_custom_icon, null)
 
             builder.setView(view)
-                .setTitle("Custom Shop Icon")
+                .setTitle("Custom Shop Icon Using Letters")
                 .setPositiveButton("OK") { _, _ ->
                     val editText = view.findViewById<EditText>(R.id.et_custom_icon)
                     listener?.onIconTextEntered(editText.text.toString())

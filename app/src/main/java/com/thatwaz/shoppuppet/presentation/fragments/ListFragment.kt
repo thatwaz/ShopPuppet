@@ -2,7 +2,6 @@ package com.thatwaz.shoppuppet.presentation.fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ListFragment : Fragment(), ListAdapter.ItemClickListener {
 
+    //todo adjust binding
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
     private lateinit var listAdapter: ListAdapter
@@ -32,7 +32,7 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -55,7 +55,6 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
 
 
     private fun setupRecyclerView() {
-
         val recyclerView: RecyclerView = binding.rvShoppingList
         recyclerView.layoutManager = LinearLayoutManager(context)
         listAdapter = ListAdapter(this)
@@ -63,29 +62,17 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
 
     }
 
-
-    // This is being observed after saving/editing item when it automatically navs to the list fragment
-
-    // todo sp,ewhere this is doubled up isPriority=true)], isPriorityItem=true,
-    // todo isPriorityItem is the delayed var  isPriority=true)], isPriorityItem=false
     private fun observeListData() {
-//        viewModel.refreshUiModels()
-        itemViewModel.itemUiModels.observe(viewLifecycleOwner) { shopList ->
 
+        itemViewModel.itemUiModels.observe(viewLifecycleOwner) { shopList ->
             if (shopList.isNotEmpty()) {
                 // Update the adapter with the new list if it's not empty
-
                 listAdapter.submitList(shopList)
-
-                Log.i("Bazinga", "Shoplist is $shopList")
 
             } else {
                 listAdapter.submitList(emptyList())
-                Log.i("Crispy", "Shoplist is empty")
             }
-
         }
-
     }
 
     override fun onResume() {
@@ -99,8 +86,6 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
         _binding = null
     }
 
-
-    // todo on Edit and on Delete do not sync with the u.i 01/14
 
     override fun onEditItem(item: ItemUiModel) {
         // Prepare arguments
@@ -116,7 +101,6 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
             isPriority = isPriority,
             associatedShopIds = associatedShopIds
         )
-        Log.i("Spacely","$itemName ps is $isPriority")
         findNavController().navigate(action)
     }
 
