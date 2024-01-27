@@ -1,7 +1,6 @@
 package com.thatwaz.shoppuppet.presentation.adapters
 
 import android.content.res.ColorStateList
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,10 +36,8 @@ class ListAdapter(
 
             if (itemUiModel.isPriorityItem) {
                 binding.imgStar.visibility = View.VISIBLE
-                Log.i("Goats","Priority set as ${itemUiModel.itemName} ${itemUiModel.isPriorityItem}")
             } else {
                 binding.imgStar.visibility = View.INVISIBLE
-                Log.i("Goats","NOT PRIORITY set as ${itemUiModel.itemName} ${itemUiModel.isPriorityItem}")
             }
 
             // Clear any existing chips
@@ -75,38 +72,49 @@ class ListAdapter(
                 binding.chipGroupShops.addView(chip)
             }
 
-
             binding.ivArrowDown.setOnClickListener {
-                if (binding.chipGroupShops.visibility == View.VISIBLE) {
-                    binding.apply {
-                        ivDeleteItem.visibility = View.VISIBLE
-                        ivEditItem.visibility = View.VISIBLE
-                    }
-                    binding.chipGroupShops.visibility = View.GONE
-                    binding.apply {
-                        ivDeleteItem.visibility = View.GONE
-                        ivEditItem.visibility = View.GONE
-                    }
-                    binding.ivArrowDown.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it.context,
-                            R.drawable.ic_arrow_down
-                        )
-                    )
-                } else {
-                    binding.chipGroupShops.visibility = View.VISIBLE
-                    binding.apply {
-                        ivDeleteItem.visibility = View.VISIBLE
-                        ivEditItem.visibility = View.VISIBLE
-                    }
-                    binding.ivArrowDown.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            it.context,
-                            R.drawable.ic_arrow_up
-                        )
-                    )
-                }
+                val isChipsVisible = binding.chipGroupShops.visibility == View.VISIBLE
+                binding.chipGroupShops.visibility = if (isChipsVisible) View.GONE else View.VISIBLE
+                val visibility = if (isChipsVisible) View.GONE else View.VISIBLE
+                binding.ivDeleteItem.visibility = visibility
+                binding.ivEditItem.visibility = visibility
+                val arrowIconResId = if (isChipsVisible) R.drawable.ic_arrow_down else R.drawable.ic_arrow_up
+                binding.ivArrowDown.setImageDrawable(ContextCompat.getDrawable(it.context, arrowIconResId))
             }
+
+
+
+//            binding.ivArrowDown.setOnClickListener {
+//                if (binding.chipGroupShops.visibility == View.VISIBLE) {
+//                    binding.apply {
+//                        ivDeleteItem.visibility = View.VISIBLE
+//                        ivEditItem.visibility = View.VISIBLE
+//                    }
+//                    binding.chipGroupShops.visibility = View.GONE
+//                    binding.apply {
+//                        ivDeleteItem.visibility = View.GONE
+//                        ivEditItem.visibility = View.GONE
+//                    }
+//                    binding.ivArrowDown.setImageDrawable(
+//                        ContextCompat.getDrawable(
+//                            it.context,
+//                            R.drawable.ic_arrow_down
+//                        )
+//                    )
+//                } else {
+//                    binding.chipGroupShops.visibility = View.VISIBLE
+//                    binding.apply {
+//                        ivDeleteItem.visibility = View.VISIBLE
+//                        ivEditItem.visibility = View.VISIBLE
+//                    }
+//                    binding.ivArrowDown.setImageDrawable(
+//                        ContextCompat.getDrawable(
+//                            it.context,
+//                            R.drawable.ic_arrow_up
+//                        )
+//                    )
+//                }
+//            }
             binding.ivDeleteItem.setOnClickListener {
                 itemClickListener.onDeleteItem(itemUiModel)
             }
@@ -125,11 +133,6 @@ class ListAdapter(
         }
 
         override fun areContentsTheSame(oldItem: ItemUiModel, newItem: ItemUiModel): Boolean {
-            // Ensure all relevant fields are compared
-            Log.i(
-                "DiffJardin",
-                "areContentsTheSame:  -- OLD ITEM Priority: ${oldItem.isPriorityItem}, NEW ITEM Priority: ${newItem.isPriorityItem}"
-            )
             return oldItem.itemId == newItem.itemId &&
                     oldItem.isPriorityItem == newItem.isPriorityItem &&
                     oldItem.itemName == newItem.itemName &&
@@ -137,11 +140,6 @@ class ListAdapter(
 
         }
 
-
-//        override fun areContentsTheSame(oldItem: ItemUiModel, newItem: ItemUiModel): Boolean {
-//            // Implement this based on your needs
-//            return oldItem == newItem
-//        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShoppingViewHolder {

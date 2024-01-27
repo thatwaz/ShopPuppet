@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class ShopsFragment : Fragment() {
 
     private var _binding: FragmentShopsBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding ?: throw IllegalStateException("Binding cannot be accessed.")
     private val shopsViewModel: ShopsViewModel by viewModels()
     private val shopAdapter: ShopAdapter = ShopAdapter()
 
@@ -115,8 +115,6 @@ class ShopsFragment : Fragment() {
             .setTitle("Shop Actions")
             .setMessage("Choose an action for ${shop.name}")
             .setPositiveButton("Delete") { dialog, _ ->
-                // Handle delete action
-                // Call ViewModel to delete the shop
                 shopsViewModel.deleteShop(shop)
                 dialog.dismiss()
                 shopsViewModel.fetchShopsWithItemCount()
@@ -125,8 +123,6 @@ class ShopsFragment : Fragment() {
                 dialog.dismiss()
             }
             .setNeutralButton("Edit") { dialog, _ ->
-                // Handle edit action
-                // Navigate to edit fragment or show another dialog for editing
                 dialog.dismiss()
             }
             .create()

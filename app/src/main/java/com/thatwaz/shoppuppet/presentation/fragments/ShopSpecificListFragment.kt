@@ -3,7 +3,6 @@ package com.thatwaz.shoppuppet.presentation.fragments
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +17,7 @@ import com.thatwaz.shoppuppet.databinding.FragmentShopSpecificListBinding
 import com.thatwaz.shoppuppet.presentation.adapters.PurchasedItemsAdapter
 import com.thatwaz.shoppuppet.presentation.adapters.ShopSpecificItemAdapter
 import com.thatwaz.shoppuppet.presentation.viewmodel.ShopSpecificListViewModel
+import com.thatwaz.shoppuppet.util.ResourceCache
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -31,13 +31,23 @@ class ShopSpecificListFragment : Fragment() {
 
     private val navigationArgs: ShopSpecificListFragmentArgs by navArgs()
 
+    private lateinit var resourceCache: ResourceCache
+
     private var _binding: FragmentShopSpecificListBinding? = null
-    private val binding get() = _binding!!
+    private val binding
+        get() = _binding ?: throw IllegalStateException("Binding cannot be accessed.")
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Initialize the resource cache to efficiently manage color resource lookups
+        resourceCache = ResourceCache(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentShopSpecificListBinding.inflate(inflater, container, false)
 
         return binding.root
@@ -46,63 +56,92 @@ class ShopSpecificListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initializeUI()
+        setupEventListeners()
+        fetchData()
+        observeViewModel()
+    }
 
-        val shopId = navigationArgs.shopId
-        val shopName = navigationArgs.shopName
+    private fun initializeUI() {
         val shopColorResName = navigationArgs.shopColorResId
+        val colorResId = resourceCache.getColorResId(shopColorResName)
+        val color = if (colorResId != 0) ContextCompat.getColor(
+            requireContext(),
+            colorResId
+        ) else Color.BLACK
 
-        // Convert the color resource name to an actual color resource ID
-        val colorResId = requireContext().resources.getIdentifier(shopColorResName, "color", requireContext().packageName)
-        val color = if (colorResId != 0) ContextCompat.getColor(requireContext(), colorResId) else Color.BLACK // Fallback to a default color if not found
-        Log.i("POOP","Shop color name is $colorResId")
-        binding.tvShopName.text = shopName
+        binding.tvShopName.text = navigationArgs.shopName
         binding.clShopName.setBackgroundColor(color)
-
-        // Set the background color of the FloatingActionButton
         binding.fabDeletePurchasedItems.backgroundTintList = ColorStateList.valueOf(color)
-        Log.d("FragmentLifecycle", "Fetching items for shop ID: $shopId")
-
-        shopSpecificListViewModel.fetchShopSpecificItems(shopId) // This fetches data on view creation
-        observeLiveData()
-        setupAdapters(colorResId) // Pass color instead of shopColorResId
+        setupAdapters(colorResId)
         setupRecyclerViews()
+    }
 
+    private fun setupEventListeners() {
+        binding.fabDeletePurchasedItems.setOnClickListener {
+            handleDeletePurchasedItems()
+        }
+
+        binding.btnBackToShops.setOnClickListener {
+            navigateBackToShops()
+        }
+
+        binding.ivNavigateToListFragment.setOnClickListener {
+            navigateToAddItem()
+        }
+    }
+
+    private fun fetchData() {
+        val shopId = navigationArgs.shopId
+        shopSpecificListViewModel.fetchShopSpecificItems(shopId)
+    }
+
+    private fun observeViewModel() {
+        // Observe changes from the ViewModel to update UI components accordingly
         shopSpecificListViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
             if (errorMessage.isNotEmpty()) {
                 Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
             }
         }
-
-
-        binding.fabDeletePurchasedItems.setOnClickListener {
-            val checkedItems = purchasedItemsAdapter?.getCheckedItems() ?: listOf()
-            // Pass checkedItems to ViewModel for deletion
-            shopSpecificListViewModel.softDeleteCheckedItems(checkedItems)
-
+        shopSpecificListViewModel.unpurchasedItems.observe(viewLifecycleOwner) { items ->
+            shopSpecificItemAdapter?.submitList(items)
         }
 
-        binding.btnBackToShops.setOnClickListener {
-            val action = ShopSpecificListFragmentDirections
-                .actionShopSpecificListFragmentToShopsFragment()
-            findNavController().navigate(action)
+        shopSpecificListViewModel.purchasedAndNotSoftDeletedItems
+            .observe(viewLifecycleOwner) { items ->
 
+            purchasedItemsAdapter?.submitList(items)
         }
-
-        binding.ivNavigateToListFragment.setOnClickListener {
-            val action = ShopSpecificListFragmentDirections
-                .actionShopSpecificListFragmentToAddItemFragment()
-            findNavController().navigate(action)
-        }
-
-
-        Log.d("FragmentLifecycle", "Adapters and RecyclerViews set up, LiveData observed")
-
 
     }
 
+    private fun handleDeletePurchasedItems() {
+        val checkedItems = purchasedItemsAdapter?.getCheckedItems() ?: listOf()
+        shopSpecificListViewModel.softDeleteCheckedItems(checkedItems)
+    }
+
+    private fun navigateBackToShops() {
+        findNavController()
+            .navigate(
+                ShopSpecificListFragmentDirections
+                    .actionShopSpecificListFragmentToShopsFragment()
+            )
+    }
+
+    private fun navigateToAddItem() {
+        findNavController()
+            .navigate(
+                ShopSpecificListFragmentDirections
+                    .actionShopSpecificListFragmentToAddItemFragment()
+            )
+    }
 
     private fun createCheckboxColorStateList(shopColorResId: Int): ColorStateList {
-        val shopColor = if (shopColorResId != 0) ContextCompat.getColor(requireContext(), shopColorResId) else Color.LTGRAY // Fallback to gray if not found
+        // Create a ColorStateList for checkbox coloring based on the shop's theme color
+        val shopColor = if (shopColorResId != 0) ContextCompat.getColor(
+            requireContext(),
+            shopColorResId
+        ) else Color.LTGRAY // Fallback to gray if not found
         return ColorStateList(
             arrayOf(
                 intArrayOf(-android.R.attr.state_checked), // unchecked
@@ -120,14 +159,14 @@ class ShopSpecificListFragment : Fragment() {
         shopSpecificItemAdapter = ShopSpecificItemAdapter(colorStateList) { item ->
             if (!item.isPurchased) {
                 shopSpecificListViewModel.handleUnpurchasedItemChecked(item)
-                Log.d("AdapterLog", "Unpurchased item checked: ${item}")
+
             }
         }
 
         purchasedItemsAdapter = PurchasedItemsAdapter(colorStateList) { item ->
             if (item.isPurchased) {
                 shopSpecificListViewModel.handlePurchasedItemChecked(item)
-                Log.d("AdapterLog", "Purchased item unchecked: ${item.name}")
+
             }
         }
     }
@@ -144,28 +183,12 @@ class ShopSpecificListFragment : Fragment() {
         }
     }
 
-    private fun observeLiveData() {
-        shopSpecificListViewModel.unpurchasedItems.observe(viewLifecycleOwner) { items ->
-            shopSpecificItemAdapter?.submitList(items)
-            // This should reflect the updated list excluding soft-deleted items
-        }
-
-        shopSpecificListViewModel.purchasedAndNotSoftDeletedItems.observe(viewLifecycleOwner) { items ->
-            Log.i("CapNCrunch","purchased items are $items")
-            purchasedItemsAdapter?.submitList(items)
-            // If you wish to show recently purchased items, ensure they are correctly handled
-        }
-    }
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
         shopSpecificItemAdapter = null
         purchasedItemsAdapter = null
-        Log.d("FragmentLifecycle", "onDestroyView called for ShopSpecificListFragment")
     }
-
 
 }
 

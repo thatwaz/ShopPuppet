@@ -32,7 +32,11 @@ class AddItemFragment : Fragment() {
     private val itemViewModel: ItemViewModel by viewModels()
     private val shopSpecificListViewModel: ShopSpecificListViewModel by viewModels()
 
-    private lateinit var adapter: RecentlyPurchasedItemAdapter
+    private val adapter: RecentlyPurchasedItemAdapter = RecentlyPurchasedItemAdapter().apply {
+        onItemClick = { item ->
+            binding.etItemName.setText(item.name)
+        }
+    }
 
 
     override fun onCreateView(
@@ -106,11 +110,6 @@ class AddItemFragment : Fragment() {
     private fun setupRecyclerView() {
         val recyclerView: RecyclerView = binding.rvFrequentlyPurchasedItems
         recyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = RecentlyPurchasedItemAdapter().apply {
-            onItemClick = { item ->
-                binding.etItemName.setText(item.name)
-            }
-        }
         recyclerView.adapter = adapter
     }
 

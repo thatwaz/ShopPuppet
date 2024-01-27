@@ -21,10 +21,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ListFragment : Fragment(), ListAdapter.ItemClickListener {
 
-    //todo adjust binding
     private var _binding: FragmentListBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var listAdapter: ListAdapter
+    private val binding get() = _binding ?: throw IllegalStateException("Binding cannot be accessed.")
+    private val listAdapter: ListAdapter = ListAdapter(this)
 
     private val itemViewModel: ItemViewModel by viewModels()
 
@@ -53,11 +52,9 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
         }
     }
 
-
     private fun setupRecyclerView() {
         val recyclerView: RecyclerView = binding.rvShoppingList
         recyclerView.layoutManager = LinearLayoutManager(context)
-        listAdapter = ListAdapter(this)
         recyclerView.adapter = listAdapter
 
     }
@@ -104,22 +101,20 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
         findNavController().navigate(action)
     }
 
-    override fun onDeleteItem(itemUiModel: ItemUiModel) {
-        val item = itemViewModel.findItemByUiModelForDeletion(itemUiModel)
+    override fun onDeleteItem(item: ItemUiModel) {
+        val itemToDelete = itemViewModel.findItemByUiModelForDeletion(item)
 
-        if (item != null) {
+        if (itemToDelete != null) {
             // Show confirmation dialog before deletion
             AlertDialog.Builder(requireContext())
                 .setTitle("Delete Item") // Set the title of the dialog
                 .setMessage("Are you sure you want to delete this item?") // Set the message
-                .setPositiveButton("Delete") { dialog, which ->
-                    // Call the delete function when user confirms
-                    itemViewModel.hardDeleteItemWithShops(item)
+                .setPositiveButton("Delete") { _, _ ->
+                    itemViewModel.hardDeleteItemWithShops(itemToDelete)
                 }
                 .setNegativeButton("Cancel", null) // Do nothing on cancel
                 .show()
         } else {
-            // Handle the case where the corresponding Item object is not found
             Toast.makeText(requireContext(), "Item not found", Toast.LENGTH_SHORT).show()
         }
     }

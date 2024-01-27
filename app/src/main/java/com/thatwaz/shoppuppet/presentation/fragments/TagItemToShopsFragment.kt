@@ -26,14 +26,16 @@ class TagItemToShopsFragment : Fragment() {
 
     private var _binding: FragmentTagItemToShopsBinding? = null
     private val binding: FragmentTagItemToShopsBinding
-        get() = _binding
-            ?: throw IllegalStateException("Binding accessed outside valid lifecycle.")
+        get() = _binding ?: throw IllegalStateException("Binding cannot be accessed.")
 
     private val tagItemToShopsViewModel: TagItemToShopsViewModel by viewModels()
     private val selectedShopsViewModel: SelectedShopsViewModel by viewModels()
     private val itemViewModel: ItemViewModel by viewModels()
 
-    private lateinit var shopSelectionAdapter: ShopSelectionAdapter
+    private val shopSelectionAdapter: ShopSelectionAdapter = ShopSelectionAdapter { _, _ ->
+
+    }
+
     private var isPriority = false
     private var itemId: Long = -1
 
@@ -69,10 +71,6 @@ class TagItemToShopsFragment : Fragment() {
         // Initializing the RecyclerView for displaying shop selections
         val recyclerView: RecyclerView = binding.rvShopsToTag
         recyclerView.layoutManager = LinearLayoutManager(context)
-
-        shopSelectionAdapter = ShopSelectionAdapter { _, _ ->
-        }
-
         recyclerView.adapter = shopSelectionAdapter
         configureShopSelectionHandling() // Setup item click behavior in the RecyclerView
     }

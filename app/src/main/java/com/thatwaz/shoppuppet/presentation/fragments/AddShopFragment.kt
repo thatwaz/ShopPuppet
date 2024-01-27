@@ -26,7 +26,7 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
     private var _binding: FragmentAddShopBinding? = null
 
     private val binding
-        get() = _binding ?: throw IllegalStateException("Binding accessed outside valid lifecycle.")
+        get() = _binding ?: throw IllegalStateException("Binding cannot be accessed.")
 
     private var selectedIconRef: Int? = null
     private var selectedColor: String = "inactive_grey"
