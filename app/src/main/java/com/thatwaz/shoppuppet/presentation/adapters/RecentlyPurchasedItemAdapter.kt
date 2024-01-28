@@ -30,7 +30,6 @@ class RecentlyPurchasedItemAdapter :
     }
 
 
-
     class ItemViewHolder(private var binding: ItemRecentlyPurchasedBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -45,9 +44,6 @@ class RecentlyPurchasedItemAdapter :
                 true  // Return true to indicate that the callback consumed the long press
             }
         }
-
-
-
     }
 
 

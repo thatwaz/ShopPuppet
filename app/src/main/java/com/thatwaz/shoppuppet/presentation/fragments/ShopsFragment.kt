@@ -17,6 +17,7 @@ import com.thatwaz.shoppuppet.databinding.FragmentShopsBinding
 import com.thatwaz.shoppuppet.domain.model.Shop
 import com.thatwaz.shoppuppet.presentation.adapters.ShopAdapter
 import com.thatwaz.shoppuppet.presentation.viewmodel.ShopsViewModel
+import com.thatwaz.shoppuppet.util.ResourceCache
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,7 +26,14 @@ class ShopsFragment : Fragment() {
     private var _binding: FragmentShopsBinding? = null
     private val binding get() = _binding ?: throw IllegalStateException("Binding cannot be accessed.")
     private val shopsViewModel: ShopsViewModel by viewModels()
-    private val shopAdapter: ShopAdapter = ShopAdapter()
+
+    private lateinit var shopAdapter: ShopAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val resourceCache = ResourceCache(requireContext())
+        shopAdapter = ShopAdapter(resourceCache)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

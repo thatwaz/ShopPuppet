@@ -15,6 +15,7 @@ import com.thatwaz.shoppuppet.databinding.FragmentListBinding
 import com.thatwaz.shoppuppet.domain.model.ItemUiModel
 import com.thatwaz.shoppuppet.presentation.adapters.ListAdapter
 import com.thatwaz.shoppuppet.presentation.viewmodel.ItemViewModel
+import com.thatwaz.shoppuppet.util.ResourceCache
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -23,10 +24,15 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
 
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding ?: throw IllegalStateException("Binding cannot be accessed.")
-    private val listAdapter: ListAdapter = ListAdapter(this)
+    private lateinit var listAdapter: ListAdapter
 
     private val itemViewModel: ItemViewModel by viewModels()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val resourceCache = ResourceCache(requireContext())
+        listAdapter = ListAdapter(this, resourceCache)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

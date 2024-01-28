@@ -30,7 +30,6 @@ class ShopSpecificItemAdapter(
     inner class ItemViewHolder(private val binding: ItemShopSpecificBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Item) {
             binding.tvItemForShop.text = item.name
-            //todo this mark priority
             binding.ivShopSpecificStar.visibility = if (item.isPriorityItem) View.VISIBLE else View.INVISIBLE
             binding.cbPurchased.isChecked = item.isPurchased
             binding.cbPurchased.buttonTintList = colorStateList

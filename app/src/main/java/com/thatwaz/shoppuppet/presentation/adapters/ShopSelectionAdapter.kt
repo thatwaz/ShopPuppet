@@ -20,7 +20,6 @@ import com.thatwaz.shoppuppet.domain.model.ShopWithSelection
 
 class ShopSelectionAdapter(
     var onItemClick: (Shop, Boolean) -> Unit,
-
     ) : ListAdapter<ShopWithSelection, ShopSelectionAdapter.ViewHolder>(ShopDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,7 +33,6 @@ class ShopSelectionAdapter(
         // Get the current item which includes both the Shop and its selection state
         val shopWithSelection = getItem(position)
 
-        /*        val isSelected = selectedShopIds.contains(shopWithSelection.shop.id)*/
         // Use the holder's bind method to set up the shop details and selection state
         holder.bind(shopWithSelection)
     }
@@ -45,10 +43,7 @@ class ShopSelectionAdapter(
 
         fun bind(shopWithSelection: ShopWithSelection) {
             binding.tvShopToTag.text = shopWithSelection.shop.name
-//            shopWithSelection.isSelected = false
-//            binding.cbTagShop.isChecked = shopWithSelection.isSelected
-            //todo Checks are all reading false when going right into edit mode
-            Log.i("SSVM", "checks are ${shopWithSelection.isSelected}")
+
             // Convert the color resource name to an actual color resource ID
             val colorResId = binding.root.context.resources.getIdentifier(
                 shopWithSelection.shop.colorResName,
@@ -60,8 +55,9 @@ class ShopSelectionAdapter(
                 colorResId
             ) else Color.BLACK // Fallback to a default color if not found
 
-            // Set checkbox color
+            // Dynamically set the checkbox color based on the shop's theme color
             val checkboxColorStateList = getCheckboxColorStateList(binding.root.context, color)
+
             binding.cbTagShop.buttonTintList = checkboxColorStateList
 
             // Check if an icon is set
@@ -98,38 +94,18 @@ class ShopSelectionAdapter(
             binding.tvShopToTag.setTextColor(color)
             binding.cbTagShop.setOnCheckedChangeListener(null) // remove listener
             binding.cbTagShop.isChecked = shopWithSelection.isSelected // change check state
-//todo isChecked and isSelected need to be equal
+
 
             binding.cbTagShop.setOnCheckedChangeListener { _, isChecked ->
-                // Log the checkbox interaction
-                Log.d(
-                    "CheckboxDebug",
-                    "Checkbox for ${shopWithSelection.shop.name} is now: $isChecked"
-                )
-
                 if (isChecked != shopWithSelection.isSelected) {
                     // Use the callback to signal change
                     onItemClick(shopWithSelection.shop,isChecked)
-
                 }
 
-                // Specifically log when an item is unchecked
                 if (!isChecked) {
                     Log.d("CheckboxDebug", "Unchecked: ${shopWithSelection.shop.name}")
                 }
             }
-
-
-//            binding.cbTagShop.setOnCheckedChangeListener { _, isChecked ->
-//                if (isChecked != shopWithSelection.isSelected) { // Only if the state has actually changed
-//                    onItemClick(shopWithSelection.shop) // Use the callback to signal change
-//                    Toast.makeText(binding.root.context, "Clicked on: ${shopWithSelection.shop.name}", Toast.LENGTH_SHORT).show()
-//                    Log.d("CheckboxDebug", "Before setOnCheckedChangeListener - isChecked: $isChecked, isSelected: ${shopWithSelection.isSelected}")
-//
-//                }
-//            }
-
-
         }
 
 
@@ -157,43 +133,19 @@ class ShopSelectionAdapter(
             oldItem: ShopWithSelection,
             newItem: ShopWithSelection
         ): Boolean {
-            val sameItem = oldItem.shop.id == newItem.shop.id
-            Log.i(
-                "DiffCallback",
-                "areItemsTheSame: $sameItem -- OLD ID: ${oldItem.shop.id}, NEW ID: ${newItem.shop.id}"
-            )
-            return sameItem
+            return oldItem.shop.id == newItem.shop.id
         }
 
         override fun areContentsTheSame(
             oldItem: ShopWithSelection,
             newItem: ShopWithSelection
         ): Boolean {
-            val sameContent = oldItem == newItem
-            Log.i(
-                "DiffCallback",
-                "areContentsTheSame: $sameContent -- OLD ITEM: $oldItem, NEW ITEM: $newItem"
-            )
-            return sameContent
+            return oldItem == newItem
         }
     }
 }
 
-//    class ShopDiffCallback : DiffUtil.ItemCallback<ShopWithSelection>() {
-//        override fun areItemsTheSame(
-//            oldItem: ShopWithSelection,
-//            newItem: ShopWithSelection
-//        ): Boolean {
-//            return oldItem.shop.id == newItem.shop.id
-//        }
-//
-//        override fun areContentsTheSame(
-//            oldItem: ShopWithSelection,
-//            newItem: ShopWithSelection
-//        ): Boolean {
-//            return oldItem == newItem
-//        }
-//    }
+
 
 
 

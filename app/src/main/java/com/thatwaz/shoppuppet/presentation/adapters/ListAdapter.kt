@@ -11,10 +11,13 @@ import com.google.android.material.chip.Chip
 import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.ShoppingItemBinding
 import com.thatwaz.shoppuppet.domain.model.ItemUiModel
+import com.thatwaz.shoppuppet.domain.model.Shop
+import com.thatwaz.shoppuppet.util.ResourceCache
 
 
 class ListAdapter(
-    private val itemClickListener: ItemClickListener
+    private val itemClickListener: ItemClickListener,
+    private val resourceCache: ResourceCache
 ) : androidx.recyclerview.widget.ListAdapter<ItemUiModel, ListAdapter.ShoppingViewHolder>(
     DiffCallback
 ) {
@@ -26,95 +29,42 @@ class ListAdapter(
 
     class ShoppingViewHolder(
         private val binding: ShoppingItemBinding,
-        private val itemClickListener: ItemClickListener
+        private val itemClickListener: ItemClickListener,
+        private val resourceCache: ResourceCache
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
 
         fun bind(itemUiModel: ItemUiModel) {
             binding.tvItemName.text = itemUiModel.itemName
-
-            if (itemUiModel.isPriorityItem) {
-                binding.imgStar.visibility = View.VISIBLE
-            } else {
-                binding.imgStar.visibility = View.INVISIBLE
-            }
-
-            // Clear any existing chips
+            binding.imgStar.visibility =
+                if (itemUiModel.isPriorityItem) View.VISIBLE else View.INVISIBLE
             binding.chipGroupShops.removeAllViews()
 
-            // Populate chips based on the shops
             itemUiModel.shopNames.forEach { shop ->
-                val chip = Chip(itemView.context)
-
-                // Get the color resource ID from the shop's color name
-                val colorResId = itemView.context.resources.getIdentifier(
-                    shop.colorResName, "color", itemView.context.packageName
-                )
-                chip.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
-                // Use the shop's color for the chip
-                if (colorResId != 0) {
-                    val chipColor = ContextCompat.getColor(itemView.context, colorResId)
-                    chip.chipBackgroundColor = ColorStateList.valueOf(chipColor)
-                } else {
-                    // Fallback color if resource not found
-                    chip.chipBackgroundColor = ColorStateList.valueOf(
-                        ContextCompat.getColor(itemView.context, R.color.black)
-                    )
-                }
-
-                // Set other chip properties
-                chip.text = shop.name
-                chip.isClickable = false
-                chip.isCheckable = false
-
-                // Add chip to the group
+                val chip = createChipForShop(shop)
                 binding.chipGroupShops.addView(chip)
             }
 
             binding.ivArrowDown.setOnClickListener {
+                // Check if chips are currently visible
                 val isChipsVisible = binding.chipGroupShops.visibility == View.VISIBLE
+
+                // Toggle chip group's visibility: If visible, hide it; if hidden, show it
                 binding.chipGroupShops.visibility = if (isChipsVisible) View.GONE else View.VISIBLE
-                val visibility = if (isChipsVisible) View.GONE else View.VISIBLE
-                binding.ivDeleteItem.visibility = visibility
-                binding.ivEditItem.visibility = visibility
+
+                // Adjust visibility of delete and edit icons inversely to the chip group's visibility
+                val iconVisibility = if (isChipsVisible) View.GONE else View.VISIBLE
+                binding.ivDeleteItem.visibility = iconVisibility
+                binding.ivEditItem.visibility = iconVisibility
+
+                // Update the arrow icon to indicate the toggle state: Down arrow when chips are
+                // hidden, up arrow when visible
                 val arrowIconResId = if (isChipsVisible) R.drawable.ic_arrow_down else R.drawable.ic_arrow_up
-                binding.ivArrowDown.setImageDrawable(ContextCompat.getDrawable(it.context, arrowIconResId))
+                binding.ivArrowDown.setImageDrawable(ContextCompat.getDrawable(itemView.context, arrowIconResId))
             }
 
 
-
-//            binding.ivArrowDown.setOnClickListener {
-//                if (binding.chipGroupShops.visibility == View.VISIBLE) {
-//                    binding.apply {
-//                        ivDeleteItem.visibility = View.VISIBLE
-//                        ivEditItem.visibility = View.VISIBLE
-//                    }
-//                    binding.chipGroupShops.visibility = View.GONE
-//                    binding.apply {
-//                        ivDeleteItem.visibility = View.GONE
-//                        ivEditItem.visibility = View.GONE
-//                    }
-//                    binding.ivArrowDown.setImageDrawable(
-//                        ContextCompat.getDrawable(
-//                            it.context,
-//                            R.drawable.ic_arrow_down
-//                        )
-//                    )
-//                } else {
-//                    binding.chipGroupShops.visibility = View.VISIBLE
-//                    binding.apply {
-//                        ivDeleteItem.visibility = View.VISIBLE
-//                        ivEditItem.visibility = View.VISIBLE
-//                    }
-//                    binding.ivArrowDown.setImageDrawable(
-//                        ContextCompat.getDrawable(
-//                            it.context,
-//                            R.drawable.ic_arrow_up
-//                        )
-//                    )
-//                }
-//            }
             binding.ivDeleteItem.setOnClickListener {
                 itemClickListener.onDeleteItem(itemUiModel)
             }
@@ -123,7 +73,23 @@ class ListAdapter(
             }
         }
 
+        private fun createChipForShop(shop: Shop): Chip {
+            val chip = Chip(itemView.context)
+            val colorResId = resourceCache.getColorResId(shop.colorResName, "color")
 
+            chip.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
+            val chipColor = if (colorResId != 0) {
+                ContextCompat.getColor(itemView.context, colorResId)
+            } else {
+                ContextCompat.getColor(itemView.context, R.color.black)
+            }
+            chip.chipBackgroundColor = ColorStateList.valueOf(chipColor)
+            chip.text = shop.name
+            chip.isClickable = false
+            chip.isCheckable = false
+
+            return chip
+        }
     }
 
     companion object DiffCallback : DiffUtil.ItemCallback<ItemUiModel>() {
@@ -137,15 +103,15 @@ class ListAdapter(
                     oldItem.isPriorityItem == newItem.isPriorityItem &&
                     oldItem.itemName == newItem.itemName &&
                     oldItem.shopNames == newItem.shopNames
-
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShoppingViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ShoppingItemBinding.inflate(layoutInflater, parent, false)
-        return ShoppingViewHolder(binding, itemClickListener)
+
+        // Assume resourceCache is a property of the adapter
+        return ShoppingViewHolder(binding, itemClickListener, resourceCache)
     }
 
     override fun onBindViewHolder(holder: ShoppingViewHolder, position: Int) {
