@@ -14,11 +14,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.FragmentTagItemToShopsBinding
+import com.thatwaz.shoppuppet.domain.model.Shop
 import com.thatwaz.shoppuppet.domain.model.ShopWithSelection
 import com.thatwaz.shoppuppet.presentation.adapters.ShopSelectionAdapter
 import com.thatwaz.shoppuppet.presentation.viewmodel.ItemViewModel
 import com.thatwaz.shoppuppet.presentation.viewmodel.SelectedShopsViewModel
 import com.thatwaz.shoppuppet.presentation.viewmodel.TagItemToShopsViewModel
+import com.thatwaz.shoppuppet.util.ResourceCache
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,8 +34,10 @@ class TagItemToShopsFragment : Fragment() {
     private val selectedShopsViewModel: SelectedShopsViewModel by viewModels()
     private val itemViewModel: ItemViewModel by viewModels()
 
-    private val shopSelectionAdapter: ShopSelectionAdapter = ShopSelectionAdapter { _, _ ->
+    private val resourceCache by lazy { ResourceCache(requireContext()) }
 
+    private val shopSelectionAdapter: ShopSelectionAdapter by lazy {
+        ShopSelectionAdapter({ shop, isChecked -> handleShopSelection(shop, isChecked) }, resourceCache)
     }
 
     private var isPriority = false
@@ -67,25 +71,23 @@ class TagItemToShopsFragment : Fragment() {
 
     }
 
+    private fun handleShopSelection(shop: Shop, isChecked: Boolean) {
+        tagItemToShopsViewModel.toggleShopSelection(shop)
+        if (isChecked) {
+            selectedShopsViewModel.addSelectedShop(shop)
+        } else {
+            selectedShopsViewModel.removeSelectedShop(shop)
+        }
+    }
+
     private fun setupRecyclerView() {
         // Initializing the RecyclerView for displaying shop selections
         val recyclerView: RecyclerView = binding.rvShopsToTag
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = shopSelectionAdapter
-        configureShopSelectionHandling() // Setup item click behavior in the RecyclerView
+
     }
 
-    private fun configureShopSelectionHandling() {
-        // Handling shop selection changes by the user in the RecyclerView
-        shopSelectionAdapter.onItemClick = { selectedShop, isChecked ->
-            tagItemToShopsViewModel.toggleShopSelection(selectedShop)
-            if (isChecked) {
-                selectedShopsViewModel.addSelectedShop(selectedShop)
-            } else {
-                selectedShopsViewModel.removeSelectedShop(selectedShop)
-            }
-        }
-    }
 
     private fun observeAndDisplayShops() {
         // Request the ViewModel to fetch shops associated with the current item and update the LiveData
@@ -95,6 +97,7 @@ class TagItemToShopsFragment : Fragment() {
         // the list of shops associated with the current item changes, either due to an initial fetch
         // or subsequent updates in the selection.
         tagItemToShopsViewModel.selectedShopsLiveData.observe(viewLifecycleOwner) { shopsWithSelection ->
+
             // Update the RecyclerView adapter with the new list of shops. This will refresh
             // the UI to display the current selection state (selected/not selected) for each shop.
             shopSelectionAdapter.submitList(shopsWithSelection)
@@ -221,7 +224,6 @@ class TagItemToShopsFragment : Fragment() {
             Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

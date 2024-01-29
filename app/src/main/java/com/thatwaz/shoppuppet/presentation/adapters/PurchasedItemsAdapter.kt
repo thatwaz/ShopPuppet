@@ -22,7 +22,7 @@ class PurchasedItemsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = ItemShopSpecificBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ItemViewHolder(binding)
+        return ItemViewHolder(binding, colorStateList, onItemCheckedListener)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
@@ -30,7 +30,11 @@ class PurchasedItemsAdapter(
         holder.bind(item)
     }
 
-    inner class ItemViewHolder(private val binding: ItemShopSpecificBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ItemViewHolder(
+        private val binding: ItemShopSpecificBinding,
+        private val colorStateList: ColorStateList,
+        private val onItemCheckedListener: (Item) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Item) {
             binding.tvItemForShop.text = item.name
             binding.cbPurchased.isChecked = item.isPurchased

@@ -1,5 +1,6 @@
 package com.thatwaz.shoppuppet.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -83,6 +84,7 @@ class TagItemToShopsViewModel @Inject constructor(
     }
 
     fun fetchAndSetSelectedShops(itemId: Long) {
+
         viewModelScope.launch {
             try {
                 // Fetch IDs of shops associated with the item
@@ -98,6 +100,7 @@ class TagItemToShopsViewModel @Inject constructor(
 
                 // Update the LiveData with the new list
                 _selectedShopsLiveData.value = shopsWithSelection
+                Log.d("TagItemToShopsViewModel", "Fetching and setting selected shops for item ID: $itemId")
             } catch (e: Exception) {
                 _error.postValue("Error fetching associated shop: ${e.localizedMessage}")
             }

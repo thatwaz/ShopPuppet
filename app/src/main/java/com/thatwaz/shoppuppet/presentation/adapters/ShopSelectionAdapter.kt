@@ -3,7 +3,6 @@ package com.thatwaz.shoppuppet.presentation.adapters
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,18 +15,26 @@ import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.ItemShopsToTagBinding
 import com.thatwaz.shoppuppet.domain.model.Shop
 import com.thatwaz.shoppuppet.domain.model.ShopWithSelection
+import com.thatwaz.shoppuppet.util.ResourceCache
 
-
+/**
+ * Adapter for displaying a list of shops with selection functionality.
+ * This adapter is used in TagItemToShopsFragment to allow users to select shops
+ * for tagging them to a specific item.
+ *
+ * @param onItemClick A lambda that is triggered when a shop item is clicked.
+ *                    It takes a [Shop] and a Boolean indicating the selection state.
+ * @param resourceCache A [ResourceCache] instance for efficient resource lookup.
+ */
 class ShopSelectionAdapter(
-    var onItemClick: (Shop, Boolean) -> Unit,
-    ) : ListAdapter<ShopWithSelection, ShopSelectionAdapter.ViewHolder>(ShopDiffCallback()) {
+    private val onItemClick: (Shop, Boolean) -> Unit,
+    private val resourceCache: ResourceCache
+) : ListAdapter<ShopWithSelection, ShopSelectionAdapter.ViewHolder>(ShopDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding =
-            ItemShopsToTagBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
+        val binding = ItemShopsToTagBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding, onItemClick, resourceCache)
     }
-
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // Get the current item which includes both the Shop and its selection state
@@ -37,23 +44,22 @@ class ShopSelectionAdapter(
         holder.bind(shopWithSelection)
     }
 
-    inner class ViewHolder(private val binding: ItemShopsToTagBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-
+    class ViewHolder(
+        private val binding: ItemShopsToTagBinding,
+        private val onItemClick: (Shop, Boolean) -> Unit,
+        private val resourceCache: ResourceCache
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(shopWithSelection: ShopWithSelection) {
+
             binding.tvShopToTag.text = shopWithSelection.shop.name
 
             // Convert the color resource name to an actual color resource ID
-            val colorResId = binding.root.context.resources.getIdentifier(
-                shopWithSelection.shop.colorResName,
-                "color",
-                binding.root.context.packageName
-            )
-            val color = if (colorResId != 0) ContextCompat.getColor(
-                binding.root.context,
-                colorResId
-            ) else Color.BLACK // Fallback to a default color if not found
+            // Fetch color using ResourceCache
+            val colorResId = resourceCache.getColorResId(shopWithSelection.shop.colorResName)
+            val color = if (colorResId != 0) ContextCompat.getColor(binding.root.context, colorResId)
+            else Color.BLACK // Fallback to a default color if not found
+
+
 
             // Dynamically set the checkbox color based on the shop's theme color
             val checkboxColorStateList = getCheckboxColorStateList(binding.root.context, color)
@@ -61,13 +67,9 @@ class ShopSelectionAdapter(
             binding.cbTagShop.buttonTintList = checkboxColorStateList
 
             // Check if an icon is set
-            val iconResId = binding.root.context.resources.getIdentifier(
-                shopWithSelection.shop.iconResName,
-                "drawable",
-                binding.root.context.packageName
-            )
+            // Fetch icon using ResourceCache
+            val iconResId = resourceCache.getDrawableResId(shopWithSelection.shop.iconResName)
             if (iconResId != 0) {
-                // Get and set the icon drawable
                 val iconDrawable = ContextCompat.getDrawable(binding.root.context, iconResId)
                 iconDrawable?.let {
                     val wrappedDrawable = DrawableCompat.wrap(it)
@@ -102,9 +104,6 @@ class ShopSelectionAdapter(
                     onItemClick(shopWithSelection.shop,isChecked)
                 }
 
-                if (!isChecked) {
-                    Log.d("CheckboxDebug", "Unchecked: ${shopWithSelection.shop.name}")
-                }
             }
         }
 

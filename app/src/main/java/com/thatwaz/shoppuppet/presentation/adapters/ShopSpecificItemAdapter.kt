@@ -11,23 +11,35 @@ import com.thatwaz.shoppuppet.databinding.ItemShopSpecificBinding
 import com.thatwaz.shoppuppet.domain.model.Item
 
 
-
+/**
+ * Adapter for displaying items specific to a shop.
+ * It handles the layout and binding of individual items, reflecting their purchased state and priority status.
+ *
+ * @property colorStateList ColorStateList used to tint the checkbox based on the item's state.
+ * @property onItemCheckedListener Lambda function that is called when an item's checked state changes.
+ */
 class ShopSpecificItemAdapter(
     private val colorStateList: ColorStateList,
     private val onItemCheckedListener: (Item) -> Unit
 ) : ListAdapter<Item, ShopSpecificItemAdapter.ItemViewHolder>(ShopSpecificItemDiffCallback) {
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = ItemShopSpecificBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ItemViewHolder(binding)
+        return ItemViewHolder(binding, colorStateList, onItemCheckedListener)
     }
 
+
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val item = getItem(position) // get item from ListAdapter
+        val item = getItem(position)
         holder.bind(item)
     }
 
-    inner class ItemViewHolder(private val binding: ItemShopSpecificBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ItemViewHolder(
+        private val binding: ItemShopSpecificBinding,
+        private val colorStateList: ColorStateList,
+        private val onItemCheckedListener: (Item) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Item) {
             binding.tvItemForShop.text = item.name
             binding.ivShopSpecificStar.visibility = if (item.isPriorityItem) View.VISIBLE else View.INVISIBLE
