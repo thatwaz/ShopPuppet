@@ -115,7 +115,7 @@ class ItemViewModel @Inject constructor(
     fun cleanUpOldSoftDeletedItems() {
         viewModelScope.launch {
             try {
-                itemRepository.deleteOldSoftDeletedItems()
+                itemRepository.deleteOldSoftDeletedItems(1)
             } catch (e: Exception) {
                 _error.postValue("Error cleaning up old items: ${e.localizedMessage}")
             }

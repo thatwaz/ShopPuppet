@@ -13,10 +13,6 @@ import com.thatwaz.shoppuppet.domain.model.Item
 import com.thatwaz.shoppuppet.domain.model.ItemShopCrossRef
 import com.thatwaz.shoppuppet.domain.model.Shop
 
-// todo need migration strategy
-
-
-
 
 @Database(entities = [Item::class, Shop::class, ItemShopCrossRef::class], version = 7, exportSchema = true)
 @TypeConverters(Converters::class)

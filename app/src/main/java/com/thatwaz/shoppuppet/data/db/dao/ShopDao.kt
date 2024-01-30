@@ -24,30 +24,8 @@ interface ShopDao {
     @Update
     suspend fun updateShop(shop: Shop): Int
 
-
-
     @Delete
     suspend fun deleteShop(shop: Shop): Int
-
-    // Assuming you have an ItemDao with a getItemsCountForShop() method
-//    @Query("SELECT COUNT(*) FROM items WHERE shopId = :shopId")
-//    suspend fun getItemsCountForShop(shopId: Long): Int
-
-//    @Query("""
-//    SELECT COUNT(items.id) FROM items
-//    INNER JOIN item_shop_cross_ref ON items.id = item_shop_cross_ref.itemId
-//    WHERE item_shop_cross_ref.shopId = :shopId
-//    AND items.isSoftDeleted = 0  -- Adding this line to exclude soft deleted items
-//""")
-//    suspend fun getItemsCountForShop(shopId: Long): Int
-
-
-//    @Query("""
-//    SELECT COUNT(items.id) FROM items
-//    INNER JOIN item_shop_cross_ref ON items.id = item_shop_cross_ref.itemId
-//    WHERE item_shop_cross_ref.shopId = :shopId
-//""")
-//    suspend fun getItemsCountForShop(shopId: Long): Int
 
 
     @Query("""
@@ -62,43 +40,9 @@ interface ShopDao {
     suspend fun getShopsWithItemCountAndPriorityStatus(): List<ShopWithItemCountAndPriority>
 
 
-
-//    @Query("""
-//    SELECT s.id, s.name, s.iconResName, s.colorResName, s.initials, s.isPriority,
-//           COUNT(i.id) AS itemCount,
-//           MAX(i.isPriorityItem) AS hasPriorityItem
-//    FROM shops s
-//    LEFT JOIN item_shop_cross_ref isr ON s.id = isr.shopId
-//    LEFT JOIN items i ON isr.itemId = i.id
-//    GROUP BY s.id
-//""")
-//    suspend fun getShopsWithItemCountAndPriorityStatus(): List<ShopWithItemCountAndPriority>
-
-
-//    @Query("SELECT s.*, \n" +
-//            "       COUNT(i.id) AS itemCount, \n" +
-//            "       MAX(i.isPriorityItem) AS hasPriorityItem\n" +
-//            "FROM shops s\n" +
-//            "LEFT JOIN item_shop_cross_ref isr ON s.id = isr.shopId\n" +
-//            "LEFT JOIN items i ON isr.itemId = i.id\n" +
-//            "GROUP BY s.id\n")
-//    suspend fun getShopsWithItemCountAndPriorityStatus(): List<ShopWithItemCountAndPriority>
-
     @Query("UPDATE shops SET isPriority = :isPriority WHERE id IN (:shopIds)")
     suspend fun updatePriorityStatus(shopIds: List<Long>, isPriority: Boolean)
 
-//    @Transaction
-//    @Query("SELECT * FROM items INNER JOIN item_shop_cross_ref ON items.id = item_shop_cross_ref.itemId WHERE item_shop_cross_ref.shopId = :shopId")
-//    suspend fun getItemsForShop(shopId: Long): List<Item>
-
-
-//    @Query("""
-//    SELECT * FROM Shops
-//    INNER JOIN item_shop_cross_ref
-//    ON shopId = item_shop_cross_ref.shopId
-//    WHERE item_shop_cross_ref.itemId = :itemId
-//""")
-//    suspend fun getShopsForItem(itemId: Long): List<Shop>
 
     @Query("SELECT * FROM shops WHERE id IN (:shopIds)")
     suspend fun getShopsByIds(shopIds: List<Long>): List<Shop>

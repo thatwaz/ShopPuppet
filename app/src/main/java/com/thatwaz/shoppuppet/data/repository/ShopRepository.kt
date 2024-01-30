@@ -38,9 +38,6 @@ class ShopRepository @Inject constructor(private val shopDao: ShopDao) {
             }
     }
 
-    suspend fun updatePriorityStatusForShops(shopIds: List<Long>, isPriority: Boolean) {
-        shopDao.updatePriorityStatus(shopIds, isPriority)
-    }
 
     suspend fun getShopsByIds(shopIds: List<Long>): List<Shop> {
         return shopDao.getShopsByIds(shopIds)

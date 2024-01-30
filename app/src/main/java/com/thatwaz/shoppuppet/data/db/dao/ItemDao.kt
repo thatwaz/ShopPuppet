@@ -79,20 +79,22 @@ interface ItemDao {
             """)
     fun getPurchasedAndSoftDeletedItems(): LiveData<List<Item>>
 
-    /* used for not adding duplicate items to the database when soft deleting them*/
+
+    /**
+     used for not finding items with duplicate names so they do not appear more than once in
+     recently purchased items list
+     */
     @Query("SELECT * FROM items WHERE name = :name")
     suspend fun getItemsByName(name: String): List<Item>
 
     @Query("SELECT * FROM items WHERE isPurchased = 1 AND isSoftDeleted = 0 ORDER BY name COLLATE NOCASE ASC")
     fun getPurchasedAndNotSoftDeletedItems(): LiveData<List<Item>>
 
-    //    @Query("SELECT * FROM items WHERE isSoftDeleted = 0 AND isPurchased = 0")
-    //    fun getActiveUnpurchasedItems(): LiveData<List<Item>>
 
     @Query("SELECT * FROM items WHERE isSoftDeleted = 0 AND isPurchased = 1 AND lastPurchasedDate >= :thirtyDaysAgo")
     fun getActivePurchasedItems(thirtyDaysAgo: Long): LiveData<List<Item>>
 
-    /*temp code for freq items r.v. */
+    // todo this is only temp code to manually delete items in freq items r.v.
     @Query("DELETE FROM items WHERE isSoftDeleted = 1")
     suspend fun deleteSoftDeletedItems()
 

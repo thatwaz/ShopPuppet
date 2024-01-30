@@ -21,17 +21,11 @@ interface ItemShopCrossRefDao {
     suspend fun deleteAllCrossRefsForItem(itemId: Long)
 
 
-//    @Query("SELECT * FROM item_shop_cross_ref")
-//    suspend fun getAllAssociations(): List<ItemShopCrossRef>
-
     @Query("SELECT s.*, EXISTS (SELECT 1 FROM item_shop_cross_ref isr JOIN items i ON isr.itemId = i.id WHERE isr.shopId = s.id AND i.isPriorityItem = 1) as hasPriorityItem FROM shops s")
     fun getShopsWithPriorityStatus(): LiveData<List<ShopWithPriorityStatus>>
 
 
     @Query("SELECT shopId FROM item_shop_cross_ref WHERE itemId = :itemId")
     suspend fun getShopIdsForItem(itemId: Long): List<Long>
-
-
-
 
 }
