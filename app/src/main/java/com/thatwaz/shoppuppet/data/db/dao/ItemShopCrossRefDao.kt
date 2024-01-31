@@ -16,7 +16,7 @@ interface ItemShopCrossRefDao {
     @Query("DELETE FROM item_shop_cross_ref WHERE itemId = :itemId AND shopId = :shopId")
     suspend fun deleteCrossRef(itemId: Long, shopId: Long)
 
-    // for editing
+    // todo add better comments aside from "for editing"
     @Query("DELETE FROM item_shop_cross_ref WHERE itemId = :itemId")
     suspend fun deleteAllCrossRefsForItem(itemId: Long)
 

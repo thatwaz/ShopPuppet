@@ -1,5 +1,6 @@
 package com.thatwaz.shoppuppet.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -66,12 +67,12 @@ class ItemViewModel @Inject constructor(
         itemNameLiveData.value = itemName
     }
 
-    //Handles finding individual item deletion in List Fragment
+    /** Handles finding individual item deletion in List Fragment */
     fun findItemByUiModelForDeletion(itemUiModel: ItemUiModel): Item? {
         return items.value?.find { it.id == itemUiModel.itemId }
     }
 
-    //Handles actual individual item deletion in List Fragment
+    /** Handles actual individual item deletion in List Fragment */
     fun hardDeleteItemWithShops(item: Item) {
         viewModelScope.launch {
             try {
@@ -260,14 +261,19 @@ class ItemViewModel @Inject constructor(
         }
     }
 
+    // todo replace with non log statements when done configuring
     private fun updateShopAssociations(itemId: Long, newShopIds: List<Long>) {
         viewModelScope.launch {
             try {
+                // Log the removal of existing associations
+                Log.d("ViewModelLog", "Removing all existing associations for item ID: $itemId")
+
                 // First, remove all existing associations for the item
                 crossRefRepository.removeAllAssociationsForItem(itemId)
 
-                // Then, create new associations with the provided shop IDs
+                // Log each new association being created
                 newShopIds.forEach { shopId ->
+                    Log.d("ViewModelLog", "Associating item ID: $itemId with shop ID: $shopId")
                     crossRefRepository.associateItemWithShop(itemId, shopId)
                 }
             } catch (e: Exception) {
@@ -276,6 +282,24 @@ class ItemViewModel @Inject constructor(
             }
         }
     }
+
+
+//    private fun updateShopAssociations(itemId: Long, newShopIds: List<Long>) {
+//        viewModelScope.launch {
+//            try {
+//                // First, remove all existing associations for the item
+//                crossRefRepository.removeAllAssociationsForItem(itemId)
+//
+//                // Then, create new associations with the provided shop IDs
+//                newShopIds.forEach { shopId ->
+//                    crossRefRepository.associateItemWithShop(itemId, shopId)
+//                }
+//            } catch (e: Exception) {
+//                // If an error occurs, post the error message to the LiveData
+//                _error.postValue("Error updating shop associations: ${e.localizedMessage}")
+//            }
+//        }
+//    }
 
 }
 

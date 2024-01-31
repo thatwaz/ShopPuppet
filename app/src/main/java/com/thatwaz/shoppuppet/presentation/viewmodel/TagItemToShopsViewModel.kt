@@ -1,6 +1,5 @@
 package com.thatwaz.shoppuppet.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -39,7 +38,7 @@ class TagItemToShopsViewModel @Inject constructor(
     val shops: LiveData<List<Shop>> = _shops
 
 
-    // LiveData holding the list of all shops
+    /** LiveData holding the list of all shops */
     private val _allShopsLiveData = MutableLiveData<List<Shop>>()
 
     private val _selectedShopsLiveData = MutableLiveData<List<ShopWithSelection>?>()
@@ -70,8 +69,7 @@ class TagItemToShopsViewModel @Inject constructor(
         }
     }
 
-    // Toggle selection state for a shop
-
+    /** Toggle selection state for a shop */
     fun toggleShopSelection(shop: Shop) {
         val updatedList = _selectedShopsLiveData.value?.map { shopWithSelection ->
             if (shopWithSelection.shop.id == shop.id) {
@@ -100,7 +98,6 @@ class TagItemToShopsViewModel @Inject constructor(
 
                 // Update the LiveData with the new list
                 _selectedShopsLiveData.value = shopsWithSelection
-                Log.d("TagItemToShopsViewModel", "Fetching and setting selected shops for item ID: $itemId")
             } catch (e: Exception) {
                 _error.postValue("Error fetching associated shop: ${e.localizedMessage}")
             }

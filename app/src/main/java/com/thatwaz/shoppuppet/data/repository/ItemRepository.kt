@@ -15,7 +15,7 @@ class ItemRepository @Inject constructor(
     private val itemShopCrossRefDao: ItemShopCrossRefDao
 ) {
 
-    // Get all items
+
     suspend fun getAllItems(): List<Item> = itemDao.getAllItems()
 
     suspend fun getItemsByShop(shopId: Long): List<Item> {
@@ -28,7 +28,7 @@ class ItemRepository @Inject constructor(
     }
 
 
-    // Insert a new item
+
     suspend fun insertItem(item: Item): Long {
         return try {
             itemDao.insert(item)
@@ -41,7 +41,7 @@ class ItemRepository @Inject constructor(
 
     suspend fun getItemById(itemId: Long): Item? = itemDao.getItemById(itemId)
 
-    // Used for hard deleting items directly from the list fragment
+    /** Used for hard deleting items directly from the list fragment */
     suspend fun deleteItemWithShops(item: Item) {
         try {
             // Step 1: Delete associations in item_shop_cross_ref
@@ -62,6 +62,17 @@ class ItemRepository @Inject constructor(
     suspend fun deleteSoftDeletedItems() {
         itemDao.deleteSoftDeletedItems()
     }
+
+    /**
+     * Soft deletes a list of [Item]s by setting their `isSoftDeleted` flag to `true` and then
+     * updating them in the database.
+     * Additionally, it finds and hard deletes any older items with the same name that were
+     * purchased before the new item.
+     *
+     * @param items The list of [Item]s to soft delete.
+     * @throws Exception if there's an error during the process, such as finding older items or
+     * updating the database.
+     */
     suspend fun softDeleteItems(items: List<Item>) {
         items.forEach { newItem ->
             try {
@@ -113,7 +124,7 @@ class ItemRepository @Inject constructor(
     }
 
 
-    // used to auto clean up soft-deleted items older thresholdInDays set in view model
+    /** used to auto clean up soft-deleted items older thresholdInDays set in view model */
     suspend fun deleteOldSoftDeletedItems(thresholdInDays: Int) {
         val thresholdDate = Calendar.getInstance().apply {
             add(Calendar.DAY_OF_YEAR, -thresholdInDays)

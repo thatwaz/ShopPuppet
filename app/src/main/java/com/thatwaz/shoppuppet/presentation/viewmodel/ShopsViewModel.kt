@@ -35,7 +35,6 @@ class ShopsViewModel @Inject constructor(
 
     val shopsWithItemCount: LiveData<List<ShopWithItemCount>> get() = _shopsWithItemCount
 
-    // LiveData to track error messages
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
@@ -77,7 +76,6 @@ class ShopsViewModel @Inject constructor(
 
         }
     }
-
 
 }
 
