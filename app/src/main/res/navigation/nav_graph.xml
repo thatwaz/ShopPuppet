@@ -93,7 +93,6 @@
             android:name="itemName"
             app:argType="string"
             android:defaultValue=""/>
-        <!-- New Arguments -->
         <argument
             android:name="itemId"
             app:argType="long"/>
@@ -107,7 +106,9 @@
             app:argType="long[]"/>
         <action
             android:id="@+id/action_tagItemToShopsFragment_to_listFragment"
-            app:destination="@id/listFragment" />
+            app:destination="@id/listFragment"
+            app:popUpTo="@id/listFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
 </navigation>

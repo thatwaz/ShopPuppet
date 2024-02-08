@@ -22,7 +22,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class SelectedShopsViewModel @Inject constructor(
-        private val shopRepository: ShopRepository
+    private val shopRepository: ShopRepository
 ) : ViewModel() {
     private val _selectedShops = MutableLiveData<List<Shop>>(emptyList())
     val selectedShops: LiveData<List<Shop>> get() = _selectedShops
@@ -70,7 +70,3 @@ class SelectedShopsViewModel @Inject constructor(
     }
 
 }
-
-
-
-

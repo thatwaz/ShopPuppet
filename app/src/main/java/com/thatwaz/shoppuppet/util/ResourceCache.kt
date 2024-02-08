@@ -7,6 +7,7 @@ class ResourceCache(private val context: Context) {
     private val colorResourceCache = mutableMapOf<String, Int>()
     private val drawableResourceCache = mutableMapOf<String, Int>()
 
+    //todo refactor without def type(investigate)
     fun getColorResId(colorResName: String, defType: String = "color"): Int{
         return colorResourceCache.getOrPut(colorResName) {
             context.resources.getIdentifier(colorResName, "color", context.packageName)

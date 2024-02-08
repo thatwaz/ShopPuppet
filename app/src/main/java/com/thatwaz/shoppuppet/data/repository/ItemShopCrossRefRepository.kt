@@ -6,6 +6,7 @@ import com.thatwaz.shoppuppet.domain.model.ItemShopCrossRef
 import javax.inject.Inject
 import javax.inject.Singleton
 
+
 @Singleton
 class ItemShopCrossRefRepository @Inject constructor(private val crossRefDao: ItemShopCrossRefDao) {
 
@@ -19,7 +20,7 @@ class ItemShopCrossRefRepository @Inject constructor(private val crossRefDao: It
         }
     }
 
-/** Used to remove previous shops-to-item associations when user is editing an item */
+    /** Used to remove previous shops-to-item associations when user is editing an item */
     suspend fun removeAllAssociationsForItem(itemId: Long) {
         try {
             crossRefDao.deleteAllCrossRefsForItem(itemId)

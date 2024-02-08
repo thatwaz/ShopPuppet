@@ -54,6 +54,10 @@ class ItemViewModel @Inject constructor(
     private val _itemUiModels = MutableLiveData<List<ItemUiModel>>()
     val itemUiModels: LiveData<List<ItemUiModel>> = _itemUiModels
 
+    private val _saveOperationComplete = MutableLiveData<Boolean?>()
+    val saveOperationComplete: MutableLiveData<Boolean?> = _saveOperationComplete
+
+
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
 
@@ -132,14 +136,31 @@ class ItemViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 if (itemId == -1L) {
+                    // Add new item logic
+
                     addItem(itemName, selectedShopIds, isPriority)
                 } else {
+                    // Update existing item logic
+                    Log.d("ItemSave", "Selected Shop IDs for item $itemId: $selectedShopIds")
+
                     updateItem(itemId, itemName, selectedShopIds, isPriority)
                 }
+                _saveOperationComplete.postValue(true) // Indicate save operation completion
             } catch (e: Exception) {
                 _error.postValue("Error saving item: ${e.localizedMessage}")
+                _saveOperationComplete.postValue(false) // Indicate save operation failure
             }
         }
+    }
+
+    /**
+     * Resets the save operation status to null, preparing for a new save action. This method ensures
+     * timely completion of save operations before navigation, maintaining data integrity and
+     * enhancing user experience. Implemented to address issues with ensuring data is saved
+     * properly and promptly before navigating away from the current fragment.
+     */
+    fun resetSaveOperationStatus() {
+        _saveOperationComplete.postValue(null)
     }
 
     private suspend fun addItem(
@@ -168,17 +189,46 @@ class ItemViewModel @Inject constructor(
         selectedShopIds: List<Long>,
         isPriority: Boolean
     ) {
-        // Retrieve and update the existing item
-        val existingItem = itemRepository.getItemById(itemId)
-        existingItem?.let { item ->
-            item.name = itemName
-            item.isPriorityItem = isPriority
-            itemRepository.updateItem(item)
+        try {
+            // Retrieve the existing item
+            val existingItem = itemRepository.getItemById(itemId)
+            if (existingItem != null) {
+                // Update item details
+                existingItem.apply {
+                    name = itemName
+                    isPriorityItem = isPriority
+                }
+                // Persist updated item details
+                itemRepository.updateItem(existingItem)
 
-            updateShopAssociations(itemId, selectedShopIds)
+                // Ensure shop associations are updated
+                updateShopAssociations(itemId, selectedShopIds)
+
+                // Refresh UI or complete update operation
+                refreshUiModels()
+            } else {
+                // Handle case where item not found
+                _error.postValue("Item not found with ID: $itemId")
+            }
+        } catch (e: Exception) {
+            _error.postValue("Error updating item: ${e.localizedMessage}")
         }
-        refreshUiModels()
     }
+
+    private suspend fun updateShopAssociations(itemId: Long, selectedShopIds: List<Long>) {
+        try {
+            // Start by clearing existing associations for this item
+            crossRefRepository.removeAllAssociationsForItem(itemId)
+
+            // Then, create new associations with the updated list of shop IDs
+            selectedShopIds.forEach { shopId ->
+                crossRefRepository.associateItemWithShop(itemId, shopId)
+            }
+        } catch (e: Exception) {
+            _error.postValue("Error updating shop associations for item: ${e.localizedMessage}")
+        }
+    }
+
 
     private fun logItemsWithAssociatedShops() {
         viewModelScope.launch {
@@ -256,50 +306,9 @@ class ItemViewModel @Inject constructor(
                 _itemUiModels.postValue(uiModels)
             } catch (e: Exception) {
                 _error.postValue("Error refreshing UI: ${e.localizedMessage}")
-                // Post an error message to the LiveData when an exception occurs
             }
         }
     }
-
-    // todo replace with non log statements when done configuring
-    private fun updateShopAssociations(itemId: Long, newShopIds: List<Long>) {
-        viewModelScope.launch {
-            try {
-                // Log the removal of existing associations
-                Log.d("ViewModelLog", "Removing all existing associations for item ID: $itemId")
-
-                // First, remove all existing associations for the item
-                crossRefRepository.removeAllAssociationsForItem(itemId)
-
-                // Log each new association being created
-                newShopIds.forEach { shopId ->
-                    Log.d("ViewModelLog", "Associating item ID: $itemId with shop ID: $shopId")
-                    crossRefRepository.associateItemWithShop(itemId, shopId)
-                }
-            } catch (e: Exception) {
-                // If an error occurs, post the error message to the LiveData
-                _error.postValue("Error updating shop associations: ${e.localizedMessage}")
-            }
-        }
-    }
-
-
-//    private fun updateShopAssociations(itemId: Long, newShopIds: List<Long>) {
-//        viewModelScope.launch {
-//            try {
-//                // First, remove all existing associations for the item
-//                crossRefRepository.removeAllAssociationsForItem(itemId)
-//
-//                // Then, create new associations with the provided shop IDs
-//                newShopIds.forEach { shopId ->
-//                    crossRefRepository.associateItemWithShop(itemId, shopId)
-//                }
-//            } catch (e: Exception) {
-//                // If an error occurs, post the error message to the LiveData
-//                _error.postValue("Error updating shop associations: ${e.localizedMessage}")
-//            }
-//        }
-//    }
 
 }
 

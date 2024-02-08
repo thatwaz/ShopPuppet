@@ -37,7 +37,10 @@ class TagItemToShopsFragment : Fragment() {
     private val resourceCache by lazy { ResourceCache(requireContext()) }
 
     private val shopSelectionAdapter: ShopSelectionAdapter by lazy {
-        ShopSelectionAdapter({ shop, isChecked -> handleShopSelection(shop, isChecked) }, resourceCache)
+        ShopSelectionAdapter(
+            { shop, isChecked -> handleShopSelection(shop, isChecked) },
+            resourceCache
+        )
     }
 
     private var isPriority = false
@@ -124,14 +127,28 @@ class TagItemToShopsFragment : Fragment() {
     }
 
     private fun handleSaveButtonClick() {
-        // Triggered when the user clicks the save button
-        // Validates the shop selection and initiates the save operation in the ViewModel
         val itemName = binding.tvItemName.text.toString()
         val selectedShopIds =
             selectedShopsViewModel.selectedShops.value?.map { it.id } ?: emptyList()
 
+        // Start the save operation
         itemViewModel.handleItemSave(itemId, itemName, selectedShopIds, isPriority)
-        navigateToListFragment()
+
+        // Observe the save operation completion
+
+            itemViewModel.saveOperationComplete.observe(viewLifecycleOwner) { isComplete ->
+                if (isComplete == true) { // Use == true to safely handle null
+                    navigateToListFragment()
+                    itemViewModel.resetSaveOperationStatus()
+                } else {
+                    showSaveError()
+                }
+
+        }
+    }
+
+    private fun showSaveError() {
+        Toast.makeText(context, "Failed to save item. Please try again.", Toast.LENGTH_LONG).show()
     }
 
     private fun navigateToListFragment() {

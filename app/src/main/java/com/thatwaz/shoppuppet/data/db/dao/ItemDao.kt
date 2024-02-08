@@ -17,8 +17,9 @@ interface ItemDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: Item): Long
 
-    @Query("SELECT * FROM items")
+    @Query("SELECT * FROM items ORDER BY name COLLATE NOCASE ASC")
     suspend fun getAllItems(): List<Item>
+
 
     @Query("""
                 SELECT items.* FROM items

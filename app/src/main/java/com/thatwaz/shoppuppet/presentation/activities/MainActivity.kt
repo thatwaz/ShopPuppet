@@ -27,9 +27,6 @@ class MainActivity : AppCompatActivity() {
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 
-
-//        val navHostFragment = supportFragmentManager
-//            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
         val toolbar: Toolbar = findViewById(R.id.app_toolbar)
@@ -70,16 +67,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-//    override fun onAddItemClicked() {
-//        // Change the selected item in the BottomNavigationView
-//        // Replace 'R.id.listFragment' with the actual ID of your list fragment in the BottomNavigationView
-//        binding.bnvShopPuppet.selectedItemId = R.id.listFragment
-//    }
-
     override fun onSupportNavigateUp(): Boolean {
         return NavigationUI.navigateUp(navController, null)
     }
 
 
 }
-
