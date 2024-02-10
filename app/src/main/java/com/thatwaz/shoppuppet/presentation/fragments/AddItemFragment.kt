@@ -78,7 +78,7 @@ class AddItemFragment : Fragment() {
 
     private fun setupUIEventHandlers() {
         binding.btnNext.setOnClickListener { navigateToNextFragment() }
-        binding.fabTempDelete.setOnClickListener { showDeleteConfirmationDialog() }
+        binding.ivDeleteAllRecentlyPurchasedItems.setOnClickListener { showDeleteConfirmationDialog() }
         adapter.onItemLongPress = { item -> showSingleItemDeleteConfirmationDialog(item) }
         binding.etItemName.addTextChangedListener(textWatcher)
     }

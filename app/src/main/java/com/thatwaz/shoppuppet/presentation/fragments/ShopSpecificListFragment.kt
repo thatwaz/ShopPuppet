@@ -86,9 +86,6 @@ class ShopSpecificListFragment : Fragment() {
             navigateBackToShops()
         }
 
-        binding.ivNavigateToListFragment.setOnClickListener {
-            navigateToAddItem()
-        }
     }
 
     private fun fetchData() {
@@ -128,13 +125,6 @@ class ShopSpecificListFragment : Fragment() {
             )
     }
 
-    private fun navigateToAddItem() {
-        findNavController()
-            .navigate(
-                ShopSpecificListFragmentDirections
-                    .actionShopSpecificListFragmentToAddItemFragment()
-            )
-    }
 
     private fun createCheckboxColorStateList(shopColorResId: Int): ColorStateList {
         // Create a ColorStateList for checkbox coloring based on the shop's theme color

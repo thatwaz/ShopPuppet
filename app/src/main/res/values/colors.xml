@@ -12,7 +12,8 @@
     <color name="darker_grey">#AAAAAA</color>
 
     <!-- Primary Colors -->
-    <color name="primary">#009688</color> <!-- Teal -->
+    <color name="primary">#009688</color>  <!-- Teal -->
+    <color name="primary_muted">#99009688</color>  <!-- Teal -->
     <color name="colorPrimaryDark">#00695C</color> <!-- Teal Dark -->
     <color name="colorPrimaryLight">#4DB6AC</color> <!-- Teal Light -->
 
@@ -28,9 +29,6 @@
     <color name="card_view2">#FAFAFA</color> <!-- Alabaster -->
 
 
-
-
-
     <color name="colorBackground">#FAFAFA</color> <!-- Alabaster -->
     <color name="card_view_dark_bg">#2C2C2C</color> <!-- Deep Gray -->
     <!-- Soft Light Gray -->
@@ -42,7 +40,9 @@
     <!-- Text Colors -->
     <color name="textColorLight">#FFFFFF</color>
     <color name="textColorDark">#212121</color>
+    <color name="textColorDarkMuted">#80212121</color>
     <color name="textColorGrey">#757575</color>
+    <color name="textColorGreyMuted">#99757575</color>
     <color name="clickable_blue">#2196F3</color> <!-- Material Design Blue 500 -->
     <color name="soft_black">#DE000000</color>
     <color name="medium_gray">#9E9E9E</color>

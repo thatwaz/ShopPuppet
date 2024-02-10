@@ -24,8 +24,6 @@
         app:layout_constraintStart_toEndOf="@id/cb_tag_shop"
         app:layout_constraintGuide_begin="110dp"/>
 
-
-
     <ImageView
         android:id="@+id/iv_shop_icon"
         android:layout_width="wrap_content"
@@ -53,14 +51,11 @@
         app:layout_constraintTop_toTopOf="@id/cb_tag_shop"/>
 
 
-
-    <!-- Shop name -->
     <TextView
         android:id="@+id/tv_shop_to_tag"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-
         app:layout_constraintBottom_toBottomOf="@id/cb_tag_shop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline_start"

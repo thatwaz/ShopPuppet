@@ -56,6 +56,11 @@ class MainActivity : AppCompatActivity() {
                     supportActionBar?.hide()
                     binding.bnvShopPuppet.visibility = View.GONE
                 }
+                R.id.addItemFragment -> {
+                    supportActionBar?.show()
+                    supportActionBar?.title = destination.label
+                    binding.bnvShopPuppet.visibility = View.GONE
+                }
                 else -> {
                     // Show the BottomNavigationView and toolbar for all other fragments
                     binding.bnvShopPuppet.visibility = View.VISIBLE
