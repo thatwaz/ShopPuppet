@@ -18,7 +18,10 @@ interface ItemDao {
     suspend fun insert(item: Item): Long
 
     @Query("SELECT * FROM items ORDER BY name COLLATE NOCASE ASC")
-    suspend fun getAllItems(): List<Item>
+    suspend fun getAllItemsInAlphabeticalOrder(): List<Item>
+
+    @Query("SELECT * FROM items ORDER BY id ASC")
+    suspend fun getAllItemsByOrderOFEntry(): List<Item>
 
 
     @Query("""
@@ -82,7 +85,7 @@ interface ItemDao {
 
 
     /**
-     used for not finding items with duplicate names so they do not appear more than once in
+     Used for not finding items with duplicate names so they do not appear more than once in
      recently purchased items list
      */
     @Query("SELECT * FROM items WHERE name = :name")
@@ -95,7 +98,7 @@ interface ItemDao {
     @Query("SELECT * FROM items WHERE isSoftDeleted = 0 AND isPurchased = 1 AND lastPurchasedDate >= :thirtyDaysAgo")
     fun getActivePurchasedItems(thirtyDaysAgo: Long): LiveData<List<Item>>
 
-    // todo this is only temp code to manually delete items in freq items r.v.
+    /** Used for deleting all frequently purchased items in Add Item Fragment*/
     @Query("DELETE FROM items WHERE isSoftDeleted = 1")
     suspend fun deleteSoftDeletedItems()
 

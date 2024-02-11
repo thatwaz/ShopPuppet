@@ -2,6 +2,7 @@ package com.thatwaz.shoppuppet.presentation.fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,6 +52,7 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
 
         setupRecyclerView()
         observeListData()
+        getAllItemsByOrder()
 
         binding.fabAddItem.setOnClickListener {
             val action = ListFragmentDirections.actionListFragmentToAddItemFragment()
@@ -75,6 +77,16 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
             } else {
                 listAdapter.submitList(emptyList())
             }
+        }
+    }
+
+    private fun getAllItemsByOrder(){
+        binding.ivAlphabetical.setOnClickListener {
+            itemViewModel.onAlphabeticalSortIconClicked()
+            Log.i("ListFrag","Item clicked")
+        }
+        binding.ivOrderOfEntry.setOnClickListener {
+            itemViewModel.onOrderOfEntrySortIconClicked()
         }
     }
 

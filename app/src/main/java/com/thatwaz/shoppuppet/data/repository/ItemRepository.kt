@@ -16,7 +16,9 @@ class ItemRepository @Inject constructor(
 ) {
 
 
-    suspend fun getAllItems(): List<Item> = itemDao.getAllItems()
+    suspend fun getAllItems(): List<Item> = itemDao.getAllItemsByOrderOFEntry()
+
+    suspend fun getAllItemsInAlphabeticalOrder(): List<Item> = itemDao.getAllItemsInAlphabeticalOrder()
 
     suspend fun getItemsByShop(shopId: Long): List<Item> {
         return try {

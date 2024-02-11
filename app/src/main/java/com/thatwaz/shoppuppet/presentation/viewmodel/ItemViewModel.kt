@@ -57,6 +57,10 @@ class ItemViewModel @Inject constructor(
     private val _saveOperationComplete = MutableLiveData<Boolean?>()
     val saveOperationComplete: MutableLiveData<Boolean?> = _saveOperationComplete
 
+//    private val currentSortFunction = MutableLiveData<suspend () -> List<Item>>()
+    // This is a private variable within the ViewModel to keep track of the current sorting function.
+    private var currentSortFunction: suspend () -> List<Item> = { itemRepository.getAllItems() }
+
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
@@ -65,7 +69,34 @@ class ItemViewModel @Inject constructor(
         logItemsWithAssociatedShops()
         fetchAllItems()
         fetchAllShops()
+
     }
+
+//    private fun fetchItemsAccordingToCurrentSort() {
+//        viewModelScope.launch {
+//            currentSortFunction.let { sortFunction ->
+//                try {
+//                    val items = sortFunction()
+//                    _items.postValue(items)
+//                } catch (e: Exception) {
+//                    _error.postValue("Error fetching items: ${e.localizedMessage}")
+//                }
+//            }
+//        }
+//    }
+
+    fun onAlphabeticalSortIconClicked() {
+        currentSortFunction = { itemRepository.getAllItemsInAlphabeticalOrder() }
+        refreshUiModels() // Refresh UI models with the new sort order
+    }
+
+    fun onOrderOfEntrySortIconClicked() {
+        currentSortFunction = { itemRepository.getAllItems() }
+        refreshUiModels() // Refresh UI models with the new sort order
+    }
+
+
+
 
     fun updateItemName(itemName: String) {
         itemNameLiveData.value = itemName
@@ -104,7 +135,7 @@ class ItemViewModel @Inject constructor(
     private fun fetchAllItems() {
         viewModelScope.launch {
             try {
-                val allItems = itemRepository.getAllItems()
+                val allItems = currentSortFunction()
 
                 allItems.forEach { _ ->
 
@@ -234,7 +265,7 @@ class ItemViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 // Fetch all non-deleted items from the repository
-                val allItems = itemRepository.getAllItems()
+                val allItems = currentSortFunction()
 
                 // Initialize a list to store UI models for each item
                 val uiModels = mutableListOf<ItemUiModel>()
@@ -279,7 +310,7 @@ class ItemViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 // Fetch all non-deleted items and transform them into UI models
-                val allItems = itemRepository.getAllItems().filterNot { it.isSoftDeleted }
+                val allItems = currentSortFunction().filterNot { it.isSoftDeleted }
                 val uiModels = mutableListOf<ItemUiModel>()
 
                 for (item in allItems) {
