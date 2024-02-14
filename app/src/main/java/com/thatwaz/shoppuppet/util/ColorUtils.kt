@@ -1,5 +1,6 @@
 package com.thatwaz.shoppuppet.util
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import androidx.core.content.ContextCompat
@@ -7,7 +8,6 @@ import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.FragmentAddShopBinding
 
 object ColorUtils {
-
 
     fun getColorResName(viewId: Int): String? {
         return when (viewId) {
@@ -28,8 +28,8 @@ object ColorUtils {
     }
 
 
+    @SuppressLint("DiscouragedApi")
     fun updateIconColor(binding: FragmentAddShopBinding, colorResName: String, context: Context) {
-
         val colorResId = context.resources.getIdentifier(colorResName, "color", context.packageName)
         if (colorResId != 0) {
             val color = ContextCompat.getColor(context, colorResId)

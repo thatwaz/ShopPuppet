@@ -60,7 +60,6 @@ class ItemRepository @Inject constructor(
     }
 
 
-    // todo temp code for freq items r.v.
     suspend fun deleteSoftDeletedItems() {
         itemDao.deleteSoftDeletedItems()
     }

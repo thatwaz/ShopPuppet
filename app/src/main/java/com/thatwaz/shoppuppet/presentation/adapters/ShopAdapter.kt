@@ -60,6 +60,20 @@ class ShopAdapter(
             }
         }
 
+        /**
+         * Binds the shop data to the UI components of the list item.
+         *
+         * This function sets the shop's name, color, priority status, and either the icon or initials
+         * depending on the shop's data. For icons, it converts the icon name (string) into a drawable
+         * resource ID (integer) for UI representation. This conversion is necessary as Android UI
+         * components require resource IDs to set images. The conversion process and its resulting integer
+         * value (resource ID) are logged for debugging purposes. It's important to note that while the
+         * application logic handles icon names as strings for flexibility and readability, they are
+         * converted to integers only when necessary for UI updates.
+         *
+         * @param shopWithItemCount The shop data including item count and priority status to bind to the UI.
+         */
+
         fun bind(shopWithItemCount: ShopWithItemCount) {
             currentShopWithItemCount = shopWithItemCount
             val shop = shopWithItemCount.shop
@@ -69,7 +83,6 @@ class ShopAdapter(
             val color = resourceCache.getColorResId(shop.colorResName).let { colorResId ->
                 if (colorResId != 0) ContextCompat.getColor(binding.root.context, colorResId)
                 else {
-                    // Log the error or handle it as per your application's need
                     Log.e("ShopAdapter", "Color resource not found: ${shop.colorResName}")
                     ContextCompat.getColor(binding.root.context, R.color.inactive_grey) // Default color
                 }
@@ -99,6 +112,7 @@ class ShopAdapter(
                 val iconResId = resourceCache.getDrawableResId(shop.iconResName)
                 if (iconResId != 0) {
                     binding.shopIcon.setImageResource(iconResId)
+                    Log.i("ShopAdapter","Icon represented as Int: $iconResId")
                     binding.shopIcon.setColorFilter(color)
                     binding.shopIcon.visibility = View.VISIBLE
                 } else {
@@ -108,7 +122,6 @@ class ShopAdapter(
                 }
 
             }
-
             // Set custom shadow for the card view
             binding.cvShop.background = getCustomShadowDrawable(color)
 

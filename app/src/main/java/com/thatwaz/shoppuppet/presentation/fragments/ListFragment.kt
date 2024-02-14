@@ -2,7 +2,6 @@ package com.thatwaz.shoppuppet.presentation.fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,10 +48,10 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
 
         itemViewModel.refreshUiModels()
         itemViewModel.cleanUpOldSoftDeletedItems()
-
+        setupSortingIconsClickListeners()
         setupRecyclerView()
         observeListData()
-        getAllItemsByOrder()
+
 
         binding.fabAddItem.setOnClickListener {
             val action = ListFragmentDirections.actionListFragmentToAddItemFragment()
@@ -64,31 +63,34 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
         val recyclerView: RecyclerView = binding.rvShoppingList
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = listAdapter
-
     }
 
     private fun observeListData() {
-
         itemViewModel.itemUiModels.observe(viewLifecycleOwner) { shopList ->
             if (shopList.isNotEmpty()) {
                 // Update the adapter with the new list if it's not empty
                 listAdapter.submitList(shopList)
+                listAdapter.onListUpdated = {
+                    // This code block will be executed after the list has been updated.
+                    binding.rvShoppingList.scrollToPosition(0)
+                }
 
             } else {
                 listAdapter.submitList(emptyList())
+
             }
         }
     }
 
-    private fun getAllItemsByOrder(){
+    private fun setupSortingIconsClickListeners() {
         binding.ivAlphabetical.setOnClickListener {
             itemViewModel.onAlphabeticalSortIconClicked()
-            Log.i("ListFrag","Item clicked")
         }
         binding.ivOrderOfEntry.setOnClickListener {
             itemViewModel.onOrderOfEntrySortIconClicked()
         }
     }
+
 
     override fun onResume() {
         super.onResume()

@@ -36,7 +36,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <!-- RecyclerView to display shops -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/shopsRecyclerView"
         android:layout_width="0dp"
@@ -53,7 +52,6 @@
         app:spanCount="3"
         tools:listitem="@layout/item_shop" />
 
-    <!-- TextView to display a message when no shops are present -->
     <TextView
         android:id="@+id/noShopsTextView"
         android:layout_width="wrap_content"

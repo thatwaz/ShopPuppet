@@ -1,6 +1,5 @@
 package com.thatwaz.shoppuppet.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,7 +29,6 @@ class SelectedShopsViewModel @Inject constructor(
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
 
-    // todo fix to where shops are still tagged after config. change
     fun addSelectedShop(shop: Shop) {
         val newSelectedShops = selectedShops.value.orEmpty().toMutableList().apply {
             if (!contains(shop)) {
@@ -38,7 +36,6 @@ class SelectedShopsViewModel @Inject constructor(
             }
         }
         _selectedShops.value = newSelectedShops
-        Log.i("ShopObserver","Observing $newSelectedShops")
     }
 
 

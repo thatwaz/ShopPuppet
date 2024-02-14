@@ -1,6 +1,7 @@
 package com.thatwaz.shoppuppet.presentation.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -76,6 +77,8 @@ class AddShopViewModel @Inject constructor(
             try {
                 withContext(Dispatchers.IO) {
                     repository.insertShop(shop)
+                    Log.d("ShopDebug", "Inserting/Updating Shop with iconResName: $iconResName")
+
                 }
                 _saveStatus.postValue(Result.success(Unit))
             } catch (e: Exception) {

@@ -30,7 +30,7 @@
         android:scaleY=".75"
         android:scaleX=".75"
         android:layout_marginStart="36dp"
-        app:tint="@color/clickable_blue" />
+        app:tint="@color/colorPrimaryLight" />
 
     <ImageView
         android:id="@+id/iv_order_of_entry"
@@ -43,7 +43,7 @@
         android:scaleY=".75"
         android:scaleX=".75"
         android:layout_marginStart="36dp"
-        app:tint="@color/clickable_blue" />
+        app:tint="@color/colorPrimaryLight" />
 
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider_sort_by"
@@ -59,9 +59,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:paddingBottom="230dp"
+        android:paddingBottom="330dp"
         android:clipToPadding="false"
-        android:descendantFocusability="blocksDescendants"
         android:scrollbars="vertical"
         android:scrollbarSize="6dp"
         app:layout_constraintEnd_toEndOf="parent"

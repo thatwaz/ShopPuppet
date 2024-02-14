@@ -18,4 +18,5 @@ object IconUtils {
             else -> "ic_store"
         }
     }
+
 }

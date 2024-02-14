@@ -1,6 +1,5 @@
 package com.thatwaz.shoppuppet.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -57,8 +56,7 @@ class ItemViewModel @Inject constructor(
     private val _saveOperationComplete = MutableLiveData<Boolean?>()
     val saveOperationComplete: MutableLiveData<Boolean?> = _saveOperationComplete
 
-//    private val currentSortFunction = MutableLiveData<suspend () -> List<Item>>()
-    // This is a private variable within the ViewModel to keep track of the current sorting function.
+    /** This is a private variable within the ViewModel to keep track of the current sorting function.*/
     private var currentSortFunction: suspend () -> List<Item> = { itemRepository.getAllItems() }
 
 
@@ -72,18 +70,6 @@ class ItemViewModel @Inject constructor(
 
     }
 
-//    private fun fetchItemsAccordingToCurrentSort() {
-//        viewModelScope.launch {
-//            currentSortFunction.let { sortFunction ->
-//                try {
-//                    val items = sortFunction()
-//                    _items.postValue(items)
-//                } catch (e: Exception) {
-//                    _error.postValue("Error fetching items: ${e.localizedMessage}")
-//                }
-//            }
-//        }
-//    }
 
     fun onAlphabeticalSortIconClicked() {
         currentSortFunction = { itemRepository.getAllItemsInAlphabeticalOrder() }
@@ -94,9 +80,6 @@ class ItemViewModel @Inject constructor(
         currentSortFunction = { itemRepository.getAllItems() }
         refreshUiModels() // Refresh UI models with the new sort order
     }
-
-
-
 
     fun updateItemName(itemName: String) {
         itemNameLiveData.value = itemName
@@ -138,9 +121,7 @@ class ItemViewModel @Inject constructor(
                 val allItems = currentSortFunction()
 
                 allItems.forEach { _ ->
-
                 }
-
                 _items.postValue(allItems)
             } catch (e: Exception) {
                 _error.postValue("Error fetching items: ${e.localizedMessage}")
@@ -168,12 +149,9 @@ class ItemViewModel @Inject constructor(
             try {
                 if (itemId == -1L) {
                     // Add new item logic
-
                     addItem(itemName, selectedShopIds, isPriority)
                 } else {
                     // Update existing item logic
-                    Log.d("ItemSave", "Selected Shop IDs for item $itemId: $selectedShopIds")
-
                     updateItem(itemId, itemName, selectedShopIds, isPriority)
                 }
                 _saveOperationComplete.postValue(true) // Indicate save operation completion
@@ -209,7 +187,6 @@ class ItemViewModel @Inject constructor(
         selectedShopIds.forEach { shopId ->
             crossRefRepository.associateItemWithShop(newItemId, shopId)
         }
-
         // Refresh UI models to reflect the new item
         refreshUiModels()
     }

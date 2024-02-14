@@ -27,6 +27,14 @@ class ListAdapter(
         fun onDeleteItem(item: ItemUiModel)
     }
 
+    // This variable is used to notify the Fragment or Activity when the list is updated.
+    var onListUpdated: (() -> Unit)? = null
+
+    override fun onCurrentListChanged(previousList: List<ItemUiModel>, currentList: List<ItemUiModel>) {
+        super.onCurrentListChanged(previousList, currentList)
+        // Notify that the list has been updated. This is where you trigger the callback.
+        onListUpdated?.invoke()
+    }
     class ShoppingViewHolder(
         private val binding: ShoppingItemBinding,
         private val itemClickListener: ItemClickListener,
@@ -75,7 +83,7 @@ class ListAdapter(
 
         private fun createChipForShop(shop: Shop): Chip {
             val chip = Chip(itemView.context)
-            val colorResId = resourceCache.getColorResId(shop.colorResName, "color")
+            val colorResId = resourceCache.getColorResId(shop.colorResName)
 
             chip.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
             val chipColor = if (colorResId != 0) {
@@ -110,7 +118,6 @@ class ListAdapter(
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ShoppingItemBinding.inflate(layoutInflater, parent, false)
 
-        // Assume resourceCache is a property of the adapter
         return ShoppingViewHolder(binding, itemClickListener, resourceCache)
     }
 

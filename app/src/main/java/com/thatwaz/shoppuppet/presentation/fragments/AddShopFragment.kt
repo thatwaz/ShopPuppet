@@ -28,30 +28,10 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
     private val binding
         get() = _binding ?: throw IllegalStateException("Binding cannot be accessed.")
 
-    private var selectedIconRef: Int? = null
+    private var selectedIconRef: String = "ic_shop"
     private var selectedColor: String = "inactive_grey"
 
     private var shopInitials: String? = null
-
-
-    private val iconClickListener = View.OnClickListener { view ->
-        handleIconClick(view.id)
-    }
-
-    @SuppressLint("ResourceType")
-    private fun handleIconClick(viewId: Int) {
-        val iconResName = IconUtils.getIconResName(viewId)
-        iconResName?.let { resName ->
-            // Convert the resource name to an actual drawable resource ID
-            val iconResId = resources
-                .getIdentifier(resName, "drawable", context?.packageName ?: "")
-            if (iconResId != 0) { // Check if resource ID is valid
-                updatePreviewIcon(iconResId)
-                selectedIconRef = iconResId
-            }
-        }
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -144,6 +124,32 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         }
     }
 
+    private fun handleIconClick(view: View) {
+        val iconResName = IconUtils.getIconResName(view.id)
+        iconResName?.let { resName ->
+            // Update the preview icon based on the resource name
+            updatePreviewIconByName(resName)
+            // Save the icon name
+            selectedIconRef = resName
+        }
+    }
+
+    @SuppressLint("ResourceType")
+    private fun updatePreviewIconByName(name: String) {
+        // Check if the name matches the pattern of an icon name
+        if (name.startsWith("ic_")) {
+            val iconResId = resources.getIdentifier(name, "drawable", context?.packageName ?: "")
+            if (iconResId != 0) {
+                binding.previewIcon.setImageResource(iconResId)
+                binding.initialsPreview.text = "" // Clear initials if an icon is set
+                updateIconButtonState()
+            }
+        } else {
+            binding.previewIcon.setImageResource(0) // Clear icon
+            binding.initialsPreview.text = name // Display initials
+        }
+    }
+
     private fun updateSaveButtonState() {
         // Enable the save button if a color is selected
         binding.btnSaveShop.isEnabled =
@@ -192,7 +198,7 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
 
     private fun updateShopDetails(shopName: String) {
         addShopViewModel.updateShopName(shopName)
-        addShopViewModel.updateSelectedIconRef((selectedIconRef ?: 0).toString())
+        addShopViewModel.updateSelectedIconRef(selectedIconRef)
         addShopViewModel.updateSelectedColor(selectedColor)
         addShopViewModel.updateShopInitials(shopInitials)
     }
@@ -209,7 +215,11 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
             binding.ibTelevision, binding.ibShoppingBag, binding.ibStore,
             binding.ibStroller, binding.ibBooks, binding.ibBullseye
         )
-        icons.forEach { it.setOnClickListener(iconClickListener) }
+        icons.forEach {iconView ->
+            iconView.setOnClickListener {
+                handleIconClick(it)
+            }
+        }
     }
 
 
@@ -227,27 +237,18 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         }
     }
 
-    private fun updatePreviewIcon(drawableResId: Int) {
-        // When an icon is selected, clear initials and update UI
-        shopInitials = null
-        binding.initialsPreview.text = ""
-        binding.previewIcon.setImageResource(drawableResId)
-        selectedIconRef = drawableResId
-        updateIconButtonState()
-    }
-
     override fun onIconTextEntered(text: String) {
-        // When initials are entered, clear icon selection and update UI
-        selectedIconRef = null
-        binding.previewIcon.setImageResource(0)  // Clear the icon image
+        // Assume no icon is selected, so clear any icon selection
+        binding.previewIcon.setImageResource(0)
         binding.initialsPreview.text = text
         shopInitials = text
+        selectedIconRef = text // Save initials as the selected icon reference
         updateIconButtonState()
     }
 
     private fun updateIconButtonState() {
         // Enable the save button if either an icon is selected or initials are entered
-        binding.btnShopIcon.isEnabled = selectedIconRef != null || !shopInitials.isNullOrBlank()
+        binding.btnShopIcon.isEnabled = true
     }
 
 
@@ -261,7 +262,7 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         binding.shopNamePreview.text = ""
         selectedColor = "inactive_grey"
         ColorUtils.updateIconColor(binding, selectedColor, requireContext())
-        selectedIconRef = null
+        selectedIconRef = null.toString()
 
         shopInitials = null
 
