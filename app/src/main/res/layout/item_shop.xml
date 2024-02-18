@@ -13,8 +13,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="16dp">
+        android:background="@color/card_view"
+        android:minHeight="125dp"
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/shop_icon"
@@ -60,6 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:ellipsize="end"
+            android:textColor="@color/textColorDark"
             android:maxLines="2"
             android:textAlignment="center"
             android:textSize="14sp"

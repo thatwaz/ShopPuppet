@@ -114,7 +114,7 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
     }
 
 
-    // Handles click events on color views to update the selected color and the save button state
+     //Handles click events on color views to update the selected color and the save button state
     private fun onColorClicked(view: View) {
         val colorResName = ColorUtils.getColorResName(view.id)
         colorResName?.let { name ->
@@ -215,7 +215,7 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
             binding.ibTelevision, binding.ibShoppingBag, binding.ibStore,
             binding.ibStroller, binding.ibBooks, binding.ibBullseye
         )
-        icons.forEach {iconView ->
+        icons.forEach { iconView ->
             iconView.setOnClickListener {
                 handleIconClick(it)
             }
@@ -290,5 +290,7 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         super.onDestroyView()
         _binding = null
     }
+
+
 }
 

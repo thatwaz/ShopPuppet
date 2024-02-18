@@ -16,6 +16,28 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <!-- Positive Button Style -->
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/colorError</item>
+    </style>
+
+    <!-- Negative Button Style -->
+    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/textColorDark</item>
+    </style>
+
+
+
+    <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:textColor">@color/textColorDark</item>
+        <item name="android:textColorPrimary">@color/textColorDark</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+    </style>
+
+
+
+
 
 
 </resources>

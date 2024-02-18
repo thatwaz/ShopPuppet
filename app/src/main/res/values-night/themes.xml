@@ -1,12 +1,16 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
     <style name="Base.Theme.ShopPuppet" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
         <item name="colorPrimary">@color/colorPrimaryDark</item>
+        <item name="colorOnSurface">@color/white</item>
         <item name="toolbarStyle">@style/CustomToolbarStyle</item>
     </style>
 
     <style name="CustomToolbarStyle" parent="Widget.Material3.Toolbar">
         <item name="titleTextAppearance">@style/ToolbarTitleTextAppearance</item>
     </style>
+
+    <style name="CustomAlertDialog" parent="AlertDialogStyle"> </style>
+
+
+    <style name="Theme.ShopPuppet" parent="Base.Theme.ShopPuppet" />
 </resources>

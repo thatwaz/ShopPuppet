@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/rv_background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -19,7 +19,6 @@
         app:layout_constraintTop_toTopOf="@id/tv_item_name"
         app:tint="@color/colorAccent" />
 
-    <!-- Item Name -->
     <TextView
         android:id="@+id/tv_item_name"
         android:layout_width="0dp"
@@ -63,9 +62,9 @@
         android:src="@drawable/ic_arrow_down"
         app:layout_constraintBottom_toBottomOf="@+id/tv_item_name"
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintTop_toTopOf="@+id/tv_item_name"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.5"
+        app:tint="@color/textColorDark" />
 
     <ImageView
         android:id="@+id/iv_arrow_up"
@@ -76,9 +75,9 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/tv_item_name"
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintTop_toTopOf="@+id/tv_item_name"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.5"
+        app:tint="@color/textColorDark"/>
 
     <!-- ChipGroup for Shops -->
     <com.google.android.material.chip.ChipGroup

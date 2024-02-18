@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/colorBackground"
     android:paddingBottom="80dp"
     tools:context=".presentation.fragments.ShopsFragment">
 
@@ -12,13 +12,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_top"
         android:layout_width="match_parent"
-        android:elevation="2dp"
         android:layout_height="50dp"
-        android:background="@color/off_white"
+        android:background="@color/header"
+        android:elevation="2dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/tv_edit_delete_info"
+            android:id="@+id/tv_delete_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -26,7 +26,7 @@
             android:clickable="true"
             android:focusable="true"
             android:minHeight="48dp"
-            android:text="Edit/Delete a Shop"
+            android:text="Delete a Shop?"
             android:textColor="@color/clickable_blue"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -41,9 +41,9 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="16dp"
-        android:requiresFadingEdge="vertical"
-        android:paddingBottom="65dp"
         android:fadingEdgeLength="150dp"
+        android:paddingBottom="65dp"
+        android:requiresFadingEdge="vertical"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -64,17 +64,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/btn_add_shop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:elevation="8dp"
-            android:drawableLeft="@drawable/ic_add"
-            android:text="Add Shop"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="40dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+    <Button
+        android:id="@+id/btn_add_shop"
+        style="@style/ShapeAppearanceOverlay.Material3.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        app:icon="@drawable/ic_add"
+        app:iconTint="@color/textColorLight"
+        android:elevation="8dp"
+        android:text="Add Shop"
+        android:textColor="@color/textColorLight"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

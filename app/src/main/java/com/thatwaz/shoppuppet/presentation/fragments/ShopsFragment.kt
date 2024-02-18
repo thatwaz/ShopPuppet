@@ -13,6 +13,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.FragmentShopsBinding
 import com.thatwaz.shoppuppet.domain.model.Shop
 import com.thatwaz.shoppuppet.presentation.adapters.ShopAdapter
@@ -66,10 +68,10 @@ class ShopsFragment : Fragment() {
     }
 
     private fun setupEditDeleteInfoTextView() {
-        val content = SpannableString(binding.tvEditDeleteInfo.text)
+        val content = SpannableString(binding.tvDeleteInfo.text)
         content.setSpan(UnderlineSpan(), 0, content.length, 0)
-        binding.tvEditDeleteInfo.text = content
-        binding.tvEditDeleteInfo.setOnClickListener {
+        binding.tvDeleteInfo.text = content
+        binding.tvDeleteInfo.setOnClickListener {
             showEditDeleteInstructionsDialog()
         }
     }
@@ -117,11 +119,11 @@ class ShopsFragment : Fragment() {
     }
 
 
+
     private fun showLongPressDialog(shop: Shop) {
-        val context = requireContext()
-        AlertDialog.Builder(context)
-            .setTitle("Shop Actions")
-            .setMessage("Choose an action for ${shop.name}")
+        MaterialAlertDialogBuilder(requireContext(), R.style.CustomAlertDialog)
+            .setTitle("Delete Shop")
+            .setMessage("Deleting '${shop.name}' will require reassigning exclusive items to other shops.")
             .setPositiveButton("Delete") { dialog, _ ->
                 shopsViewModel.deleteShop(shop)
                 dialog.dismiss()
@@ -130,12 +132,9 @@ class ShopsFragment : Fragment() {
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
-            .setNeutralButton("Edit") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .create()
             .show()
     }
+
 
     private fun showEditDeleteInstructionsDialog() {
         AlertDialog.Builder(requireContext())

@@ -1,6 +1,5 @@
 package com.thatwaz.shoppuppet.presentation.fragments
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,12 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.FragmentAddItemBinding
 import com.thatwaz.shoppuppet.domain.model.Item
 import com.thatwaz.shoppuppet.presentation.adapters.RecentlyPurchasedItemAdapter
@@ -85,7 +87,18 @@ class AddItemFragment : Fragment() {
 
     private val textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
-            binding.btnNext.isEnabled = !s.isNullOrEmpty()
+            val isEnabled = !s.isNullOrEmpty()
+            binding.btnNext.isEnabled = isEnabled
+
+            val context = requireContext()
+            if (isEnabled) {
+                binding.btnNext.setBackgroundColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+                binding.btnNext.setTextColor(ContextCompat.getColor(context, R.color.textColorLight))
+            } else {
+                binding.btnNext.setBackgroundColor(ContextCompat.getColor(context, R.color.disabledButtonColor))
+                binding.btnNext.setTextColor(ContextCompat.getColor(context, R.color.disabledTextColor))
+            }
+
             val filterText = s.toString()
             shopSpecificListViewModel.purchasedAndSoftDeletedItems.value?.let { items ->
                 val filteredItems = if (filterText.isEmpty()) {
@@ -114,7 +127,7 @@ class AddItemFragment : Fragment() {
     }
 
     private fun showDeleteConfirmationDialog() {
-        AlertDialog.Builder(context)
+        MaterialAlertDialogBuilder(requireContext(), R.style.CustomAlertDialog)
             .setTitle("Delete Recently Purchased Items")
             .setMessage("Are you sure you want to permanently delete all recently purchased items?")
             .setPositiveButton("Delete") { _, _ ->
@@ -126,7 +139,7 @@ class AddItemFragment : Fragment() {
     }
 
     private fun showSingleItemDeleteConfirmationDialog(item: Item) {
-        AlertDialog.Builder(context)
+        MaterialAlertDialogBuilder(requireContext(), R.style.CustomAlertDialog)
             .setTitle("Delete Recently Purchased Item")
             .setMessage("Are you sure you want to permanently delete this item?")
             .setPositiveButton("Delete") { _, _ ->

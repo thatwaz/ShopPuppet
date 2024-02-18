@@ -27,9 +27,11 @@
     <!-- Background Color -->
     <color name="card_view">#FAFAFA</color> <!-- Alabaster -->
     <color name="card_view2">#FAFAFA</color> <!-- Alabaster -->
+    <color name="header">#F2F4F8</color> <!-- Off White -->
+    <color name="rv_background">#FFFFFFFF</color> <!-- White -->
 
 
-    <color name="colorBackground">#FAFAFA</color> <!-- Alabaster -->
+    <color name="colorBackground">#FFFFFFFF</color> <!-- White -->
     <color name="card_view_dark_bg">#2C2C2C</color> <!-- Deep Gray -->
     <!-- Soft Light Gray -->
 
@@ -43,7 +45,7 @@
     <color name="textColorDarkMuted">#80212121</color>
     <color name="textColorGrey">#757575</color>
     <color name="textColorGreyMuted">#99757575</color>
-    <color name="clickable_blue">#2196F3</color> <!-- Material Design Blue 500 -->
+    <color name="clickable_blue">#0091EA</color>
     <color name="soft_black">#DE000000</color>
     <color name="medium_gray">#9E9E9E</color>
 
@@ -66,6 +68,10 @@
     <color name="positiveAction">#4CAF50</color> <!-- Green for positive actions -->
     <color name="negativeAction">#B0B0B0</color> <!-- Light_Gray for caution/negative actions -->
     <color name="delete">#D32F2F</color>
+
+    <color name="disabledButtonColor">#D3D3D3</color> <!-- Light grey -->
+    <color name="disabledTextColor">#A9A9A9</color> <!-- Dark grey -->
+
 
 
 

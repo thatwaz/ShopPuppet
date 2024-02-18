@@ -10,32 +10,34 @@
 
 
     <!-- Primary Colors -->
-    <color name="primary">#80CBC4</color> <!-- Teal for dark -->
-    <color name="colorPrimaryDark">#4DB6AC</color> <!-- Teal Light for dark -->
-    <color name="colorPrimaryLight">#B2DFDB</color> <!-- Lighter Teal for dark -->
+    <color name="primary">#009688</color>  <!-- Teal -->
+    <color name="primary_muted">#99009688</color>  <!-- Teal -->
+    <color name="colorPrimaryDark">#00695C</color> <!-- Teal Dark -->
+    <color name="colorPrimaryLight">#4DB6AC</color> <!-- Teal Light -->
+
 
     <!-- Accent/Secondary Colors -->
-    <color name="colorAccent">#FFC107
-    </color> <!-- Amber (This can remain the same if it's visible against dark backgrounds) -->
+    <color name="colorAccent">#FFC107</color> <!-- Amber -->
     <color name="colorSecondaryLight">#FFE082</color> <!-- Lighter Amber for dark -->
     <color name="colorSecondaryDark">#FFCA28</color> <!-- Brighter Amber for dark -->
 
     <!-- Background Color -->
-    <color name="colorBackground">#121212</color> <!-- This is the recommended background color for dark themes in Material Design -->
-    <color name="card_view">#2E2E2E</color> <!-- Dark Gray for CardViews -->
+    <color name="header">#2E2E2E</color> <!-- Light Gray -->
+    <color name="card_view">#121212</color> <!-- Dark Gray for CardViews -->
     <color name="card_view2">#1E1E1E</color> <!-- Elevated Dark for CardViews -->
+    <color name="colorBackground">#323232</color>     <!-- Dark Theme BackGround For Material Design -->
+    <color name="rv_background">#2E2E2E</color>     <!-- -->
 
 
     <!-- Error Color -->
     <color name="colorError">#FF6659</color> <!-- Red adjusted for dark themes -->
 
     <!-- Text Colors -->
-    <color name="textColorLight">#E0E0E0
-    </color> <!-- A light gray for better visibility on dark backgrounds -->
+    <color name="textColorLight">#F5F5F5</color> <!-- Off White -->
     <color name="textColorDark">#FFFFFF</color> <!-- White for primary text -->
     <color name="textColorGrey">#BDBDBD
     </color> <!-- A lighter gray for secondary or less emphasized text -->
-    <color name="clickable_blue">#2196F3</color> <!-- Material Design Blue 500 -->
+    <color name="clickable_blue">#64B5F6</color> <!-- Material Design Blue 300 -->
 
 
     <!-- Shop Colors -->
@@ -51,6 +53,10 @@
     <color name="shop_purple">#8A2BE2</color> <!-- Purple for beauty or luxury brands -->
     <color name="shop_teal">#20B2AA</color> <!-- Teal/Cyan for health or tech brands -->
     <color name="shop_brown">#8B4513</color> <!-- Brown for organic, natural brands or coffee shops -->
+
+    <color name="disabledButtonColor">#D3D3D3</color> <!-- Light grey -->
+    <color name="disabledTextColor">#A9A9A9</color> <!-- Dark grey -->
+
 
 
 </resources>
