@@ -30,7 +30,6 @@ class ShopsFragment : Fragment() {
     private val shopsViewModel: ShopsViewModel by viewModels()
 
     private lateinit var shopAdapter: ShopAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val resourceCache = ResourceCache(requireContext())
