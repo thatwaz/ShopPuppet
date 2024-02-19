@@ -60,7 +60,8 @@
     <color name="shop_fashion_red">#C21807</color> <!-- Fashion Red for Clothing -->
     <color name="shop_navy_blue">#001F3F</color> <!-- Navy Blue for Clothing -->
     <color name="shop_orange">#FF4500</color> <!-- Orange for Hardware -->
-    <color name="shop_yellow">#FFD700</color> <!-- Bright Yellow for fast food or discount stores -->
+    <color name="shop_yellow">#FFB300</color> <!-- Warm Mustard Yellow for enhanced contrast/Discount Stores -->
+
     <color name="shop_purple">#8A2BE2</color> <!-- Purple for beauty or luxury brands -->
     <color name="shop_teal">#20B2AA</color> <!-- Teal/Cyan for health or tech brands -->
     <color name="shop_brown">#8B4513</color> <!-- Brown for organic, natural brands or coffee shops -->

@@ -1,6 +1,5 @@
 package com.thatwaz.shoppuppet.presentation.fragments
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.FragmentListBinding
 import com.thatwaz.shoppuppet.domain.model.ItemUiModel
 import com.thatwaz.shoppuppet.presentation.adapters.ListAdapter
@@ -123,12 +124,11 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
 
     override fun onDeleteItem(item: ItemUiModel) {
         val itemToDelete = itemViewModel.findItemByUiModelForDeletion(item)
-
         if (itemToDelete != null) {
             // Show confirmation dialog before deletion
-            AlertDialog.Builder(requireContext())
+            MaterialAlertDialogBuilder(requireContext(), R.style.CustomAlertDialog)
                 .setTitle("Delete Item") // Set the title of the dialog
-                .setMessage("Are you sure you want to delete this item?") // Set the message
+                .setMessage("Are you sure you want to delete ${item.itemName}") // Set the message
                 .setPositiveButton("Delete") { _, _ ->
                     itemViewModel.hardDeleteItemWithShops(itemToDelete)
                 }

@@ -82,22 +82,20 @@ dependencies {
     kapt("com.google.dagger:hilt-compiler:2.48.1")
 
     //LeakCanary
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12")
-
-
+//    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12")
 
     // AndroidX Test - Instrumented testing
     // Test Libraries
-//    testImplementation("junit:junit:4.13.2")
-//    testImplementation("org.mockito:mockito-core:4.2.0")
-//    testImplementation("com.google.truth:truth:1.1.3") // Correct version of Google Truth
-//
-//    // AndroidX Test - Instrumented testing
-//    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-//    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-//    androidTestImplementation("androidx.test:core:1.5.0")
-//    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-//    androidTestImplementation("androidx.test:runner:1.5.2")
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-core:4.2.0")
+    testImplementation("com.google.truth:truth:1.1.3") // Correct version of Google Truth
+
+    // AndroidX Test - Instrumented testing
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test:core:1.5.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test:runner:1.5.2")
 
 
     // Room Testing
