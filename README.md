@@ -56,6 +56,9 @@ This project is open-source and available under the [MIT License](LICENSE).
 
 - **Material Icons**: Icons used within this app are provided by the Material Icons library, which is part of the Material Design system by Google. These icons are licensed under the [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt).
 
+- Paste this link on the website where your app is available for download or in the description section of the platform or marketplace you’re using.
+- <a href="https://www.flaticon.com/free-icons/shopping-bag" title="shopping bag icons">Shopping bag icons created by Freepik - Flaticon</a>
+
 
 
    
