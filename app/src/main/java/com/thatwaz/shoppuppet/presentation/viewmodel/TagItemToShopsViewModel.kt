@@ -11,7 +11,7 @@ import com.thatwaz.shoppuppet.domain.model.ShopWithSelection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+// todo update comments with removed vars
 /**
  * ViewModel for managing item-shop associations and shop selection state.
  * Handles loading shop data, toggling shop selection, and updating item priority.
@@ -44,8 +44,7 @@ class TagItemToShopsViewModel @Inject constructor(
     private val _selectedShopsLiveData = MutableLiveData<List<ShopWithSelection>?>()
     val selectedShopsLiveData: MutableLiveData<List<ShopWithSelection>?> = _selectedShopsLiveData
 
-    private val _isPriority = MutableLiveData(false)
-    val isPriority: LiveData<Boolean> = _isPriority
+
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error

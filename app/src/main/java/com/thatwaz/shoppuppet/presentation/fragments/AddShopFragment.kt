@@ -1,3 +1,5 @@
+@file:Suppress("BooleanMethodIsAlwaysInverted")
+
 package com.thatwaz.shoppuppet.presentation.fragments
 
 
@@ -19,6 +21,7 @@ import com.thatwaz.shoppuppet.util.IconUtils
 import com.thatwaz.shoppuppet.util.KeyboardUtils
 import dagger.hilt.android.AndroidEntryPoint
 
+@Suppress("BooleanMethodIsAlwaysInverted")
 @AndroidEntryPoint
 class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogListener {
 
@@ -126,7 +129,7 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
 
     private fun handleIconClick(view: View) {
         val iconResName = IconUtils.getIconResName(view.id)
-        iconResName?.let { resName ->
+        iconResName.let { resName ->
             // Update the preview icon based on the resource name
             updatePreviewIconByName(resName)
             // Save the icon name
@@ -134,6 +137,8 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         }
     }
 
+
+    //todo validate suppression
     @SuppressLint("ResourceType")
     private fun updatePreviewIconByName(name: String) {
         // Check if the name matches the pattern of an icon name
@@ -191,10 +196,10 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         addShopViewModel.saveShop()
     }
 
-
     private fun isShopNameValid(shopName: String): Boolean {
         return shopName.isNotBlank()
     }
+
 
     private fun updateShopDetails(shopName: String) {
         addShopViewModel.updateShopName(shopName)

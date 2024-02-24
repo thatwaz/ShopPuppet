@@ -13,16 +13,16 @@
 
     <!-- Primary Colors -->
     <color name="primary">#009688</color>  <!-- Teal -->
-    <color name="primary_muted">#99009688</color>  <!-- Teal -->
+    <!-- Teal -->
     <color name="colorPrimaryDark">#00695C</color> <!-- Teal Dark -->
     <color name="colorPrimaryLight">#4DB6AC</color> <!-- Teal Light -->
 
     <!-- Accent/Secondary Colors -->
     <color name="colorAccent">#FFC107</color> <!-- Amber -->
-    <color name="colorSecondaryLight">#FFECB3</color> <!-- Amber Light -->
-    <color name="colorSecondaryDark">#FFA000</color> <!-- Amber Dark -->
+    <!-- Amber Light -->
+    <!-- Amber Dark -->
     <color name="badge">#E9EBEF</color> <!-- Light Gray -->
-    <color name="const_layout">#D8DBDE</color> <!-- Transition -->
+    <!-- Transition -->
 
     <!-- Background Color -->
     <color name="card_view">#FAFAFA</color> <!-- Alabaster -->
@@ -32,7 +32,7 @@
 
 
     <color name="colorBackground">#FFFFFFFF</color> <!-- White -->
-    <color name="card_view_dark_bg">#2C2C2C</color> <!-- Deep Gray -->
+    <!-- Deep Gray -->
     <!-- Soft Light Gray -->
 
 
@@ -42,13 +42,8 @@
     <!-- Text Colors -->
     <color name="textColorLight">#FFFFFF</color>
     <color name="textColorDark">#212121</color>
-    <color name="textColorDarkMuted">#80212121</color>
     <color name="textColorGrey">#757575</color>
-    <color name="textColorGreyMuted">#99757575</color>
     <color name="clickable_blue">#0091EA</color>
-    <color name="soft_black">#DE000000</color>
-    <color name="medium_gray">#9E9E9E</color>
-
 
 
     <!-- Shop Colors -->
@@ -68,7 +63,6 @@
 
     <color name="positiveAction">#4CAF50</color> <!-- Green for positive actions -->
     <color name="negativeAction">#B0B0B0</color> <!-- Light_Gray for caution/negative actions -->
-    <color name="delete">#D32F2F</color>
 
     <color name="disabledButtonColor">#D3D3D3</color> <!-- Light grey -->
     <color name="disabledTextColor">#A9A9A9</color> <!-- Dark grey -->

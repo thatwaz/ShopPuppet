@@ -36,22 +36,22 @@ interface ItemDao {
     @Delete
     suspend fun deleteItem(item: Item): Int
 
-    @Query("DELETE FROM item_shop_cross_ref WHERE shopId = :shopId")
-    suspend fun deleteItemsByShop(shopId: Long): Int
+//    @Query("DELETE FROM item_shop_cross_ref WHERE shopId = :shopId")
+//    suspend fun deleteItemsByShop(shopId: Long): Int
 
 
-    @Query("""
-                SELECT COUNT(items.id) FROM items
-                INNER JOIN item_shop_cross_ref ON items.id = item_shop_cross_ref.itemId
-                WHERE item_shop_cross_ref.shopId = :shopId
-            """)
-    suspend fun getItemsCountForShop(shopId: Long): Int
+//    @Query("""
+//                SELECT COUNT(items.id) FROM items
+//                INNER JOIN item_shop_cross_ref ON items.id = item_shop_cross_ref.itemId
+//                WHERE item_shop_cross_ref.shopId = :shopId
+//            """)
+//    suspend fun getItemsCountForShop(shopId: Long): Int
 
     @Query("SELECT * FROM items WHERE id = :itemId")
     suspend fun getItemById(itemId: Long): Item?
 
-    @Query("UPDATE Items SET isPurchased = :purchased WHERE id = :itemId")
-    suspend fun setItemPurchasedStatus(itemId: Long, purchased: Boolean)
+//    @Query("UPDATE Items SET isPurchased = :purchased WHERE id = :itemId")
+//    suspend fun setItemPurchasedStatus(itemId: Long, purchased: Boolean)
 
     @Transaction
     suspend fun deleteItemsWithShopAssociation(itemIds: List<Long>) {
@@ -95,8 +95,8 @@ interface ItemDao {
     fun getPurchasedAndNotSoftDeletedItems(): LiveData<List<Item>>
 
 
-    @Query("SELECT * FROM items WHERE isSoftDeleted = 0 AND isPurchased = 1 AND lastPurchasedDate >= :thirtyDaysAgo")
-    fun getActivePurchasedItems(thirtyDaysAgo: Long): LiveData<List<Item>>
+//    @Query("SELECT * FROM items WHERE isSoftDeleted = 0 AND isPurchased = 1 AND lastPurchasedDate >= :thirtyDaysAgo")
+//    fun getActivePurchasedItems(thirtyDaysAgo: Long): LiveData<List<Item>>
 
     /** Used for deleting all frequently purchased items in Add Item Fragment*/
     @Query("DELETE FROM items WHERE isSoftDeleted = 1")

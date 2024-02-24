@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
 import com.thatwaz.shoppuppet.domain.model.Shop
 import com.thatwaz.shoppuppet.domain.model.ShopWithItemCountAndPriority
 
@@ -18,11 +17,11 @@ interface ShopDao {
     @Query("SELECT * FROM shops")
     suspend fun getAllShops(): List<Shop>
 
-    @Query("SELECT * FROM shops WHERE id = :shopId")
-    suspend fun getShopById(shopId: Long): Shop?
+//    @Query("SELECT * FROM shops WHERE id = :shopId")
+//    suspend fun getShopById(shopId: Long): Shop?
 
-    @Update
-    suspend fun updateShop(shop: Shop): Int
+//    @Update
+//    suspend fun updateShop(shop: Shop): Int
 
     @Delete
     suspend fun deleteShop(shop: Shop): Int
@@ -40,8 +39,8 @@ interface ShopDao {
     suspend fun getShopsWithItemCountAndPriorityStatus(): List<ShopWithItemCountAndPriority>
 
 
-    @Query("UPDATE shops SET isPriority = :isPriority WHERE id IN (:shopIds)")
-    suspend fun updatePriorityStatus(shopIds: List<Long>, isPriority: Boolean)
+//    @Query("UPDATE shops SET isPriority = :isPriority WHERE id IN (:shopIds)")
+//    suspend fun updatePriorityStatus(shopIds: List<Long>, isPriority: Boolean)
 
 
     @Query("SELECT * FROM shops WHERE id IN (:shopIds)")

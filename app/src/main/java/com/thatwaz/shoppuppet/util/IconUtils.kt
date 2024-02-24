@@ -3,7 +3,7 @@ package com.thatwaz.shoppuppet.util
 import com.thatwaz.shoppuppet.R
 
 object IconUtils {
-    fun getIconResName(viewId: Int): String? {
+    fun getIconResName(viewId: Int): String {
         return when (viewId) {
             R.id.ib_grocery_store -> "ic_grocery_store"
             R.id.ib_pharmacy -> "ic_pharmacy"

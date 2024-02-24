@@ -29,7 +29,7 @@ class ShopsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _shops = MutableLiveData<List<Shop>>()
-    val shops: LiveData<List<Shop>> get() = _shops
+//    val shops: LiveData<List<Shop>> get() = _shops
 
     private val _shopsWithItemCount = MutableLiveData<List<ShopWithItemCount>>()
 
