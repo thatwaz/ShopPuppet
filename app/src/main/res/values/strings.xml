@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">ShopPuppet</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="enter_up_to_3_letters_to_represent_your_shop">Enter up to 3 letters to represent your shop.</string>
+    <string name="custom_dialog_hint">ABC</string>
+
 
 </resources>

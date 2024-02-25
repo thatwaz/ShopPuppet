@@ -11,15 +11,13 @@
 
     <!-- Primary Colors -->
     <color name="primary">#009688</color>  <!-- Teal -->
-    <!-- Teal -->
     <color name="colorPrimaryDark">#00695C</color> <!-- Teal Dark -->
     <color name="colorPrimaryLight">#4DB6AC</color> <!-- Teal Light -->
+    <color name="colorPrimaryLightMuted">#BF4DB6AC</color> <!-- Teal Light -->
 
 
     <!-- Accent/Secondary Colors -->
     <color name="colorAccent">#FFC107</color> <!-- Amber -->
-    <!-- Lighter Amber for dark -->
-    <!-- Brighter Amber for dark -->
 
     <!-- Background Color -->
     <color name="header">#2E2E2E</color> <!-- Light Gray -->

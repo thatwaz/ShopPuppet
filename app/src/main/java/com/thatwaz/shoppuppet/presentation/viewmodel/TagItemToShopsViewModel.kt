@@ -11,7 +11,7 @@ import com.thatwaz.shoppuppet.domain.model.ShopWithSelection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-// todo update comments with removed vars
+
 /**
  * ViewModel for managing item-shop associations and shop selection state.
  * Handles loading shop data, toggling shop selection, and updating item priority.
@@ -20,12 +20,10 @@ import javax.inject.Inject
  * - `loadShops()`: Fetches and updates the list of all available shops.
  * - `toggleShopSelection(shop: Shop)`: Toggles the selection state of a given shop.
  * - `fetchAndSetSelectedShops(itemId: Long)`: Sets selected shops based on an item's associated shop IDs.
- * - `setIsPriority(priority: Boolean)`: Updates the priority status of an item.
  *
  * LiveData:
  * - `selectedShopsLiveData`: Tracks shop selection state.
  * - `error`: LiveData for communicating errors during data processing.
- * - `isPriority`: LiveData reflecting item priority status.
  */
 
 @HiltViewModel
@@ -43,8 +41,6 @@ class TagItemToShopsViewModel @Inject constructor(
 
     private val _selectedShopsLiveData = MutableLiveData<List<ShopWithSelection>?>()
     val selectedShopsLiveData: MutableLiveData<List<ShopWithSelection>?> = _selectedShopsLiveData
-
-
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
@@ -81,7 +77,6 @@ class TagItemToShopsViewModel @Inject constructor(
     }
 
     fun fetchAndSetSelectedShops(itemId: Long) {
-
         viewModelScope.launch {
             try {
                 // Fetch IDs of shops associated with the item
