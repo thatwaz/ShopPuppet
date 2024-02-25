@@ -15,7 +15,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginStart="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="Sort List"
+        android:text="@string/sort_list"
         android:textStyle="bold"
         android:textSize="16sp"/>
 
@@ -23,27 +23,31 @@
         android:id="@+id/iv_alphabetical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:contentDescription="@string/sort_list_alphabetically"
+        android:scaleX=".75"
+        android:scaleY=".75"
+        android:src="@drawable/ic_alphabet"
+        app:layout_constraintBottom_toBottomOf="@id/lbl_sort_by"
         app:layout_constraintStart_toEndOf="@id/lbl_sort_by"
         app:layout_constraintTop_toTopOf="@id/lbl_sort_by"
-        app:layout_constraintBottom_toBottomOf="@id/lbl_sort_by"
-        android:src="@drawable/ic_alphabet"
-        android:scaleY=".75"
-        android:scaleX=".75"
-        android:layout_marginStart="36dp"
-        app:tint="@color/colorPrimaryLight" />
+        app:tint="@color/colorPrimaryLight"
+        tools:ignore="ImageContrastCheck" />
 
     <ImageView
         android:id="@+id/iv_order_of_entry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:contentDescription="@string/sort_list_by_order_of_input"
+        android:scaleX=".75"
+        android:scaleY=".75"
+        android:src="@drawable/ic_numbered_list"
+        app:layout_constraintBottom_toBottomOf="@id/lbl_sort_by"
         app:layout_constraintStart_toEndOf="@id/iv_alphabetical"
         app:layout_constraintTop_toTopOf="@id/lbl_sort_by"
-        app:layout_constraintBottom_toBottomOf="@id/lbl_sort_by"
-        android:src="@drawable/ic_numbered_list"
-        android:scaleY=".75"
-        android:scaleX=".75"
-        android:layout_marginStart="36dp"
-        app:tint="@color/colorPrimaryLight" />
+        app:tint="@color/colorPrimaryLight"
+        tools:ignore="ImageContrastCheck" />
 
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divider_sort_by"
@@ -79,6 +83,7 @@
         app:tint="@color/white"
         android:src="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/add_new_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

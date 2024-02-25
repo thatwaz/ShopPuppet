@@ -92,9 +92,7 @@ class ShopAdapter(
             binding.cvShop.setCardBackgroundColor(color)
 
             // Use outlineSpotShadowColor for Android P and above
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                binding.cvShop.outlineSpotShadowColor = color
-            }
+            binding.cvShop.outlineSpotShadowColor = color
 
             // Set badge background based on priority
             binding.badgeCount.setBackgroundResource(

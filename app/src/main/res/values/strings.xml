@@ -2,6 +2,25 @@
     <string name="app_name">ShopPuppet</string>
     <string name="enter_up_to_3_letters_to_represent_your_shop">Enter up to 3 letters to represent your shop.</string>
     <string name="custom_dialog_hint">ABC</string>
+    <string name="add_new_item">Add New Item</string>
+    <string name="recently_purchased_items">Recently Purchased Items</string>
+    <string name="next">Next</string>
+    <string name="delete_all_recently_purchased_items_description">Delete all recently purchased items</string>
+    <string name="sort_list">Sort List</string>
+    <string name="sort_list_alphabetically">Sort list alphabetically</string>
+    <string name="sort_list_by_order_of_input">Sort list by order Of input</string>
+    <string name="items_to_purchase">Items to purchase</string>
+    <string name="purchased_items">Purchased items</string>
+    <string name="return_to_my_shops">Return to my shops</string>
+    <string name="delete_all_purchased_items">Delete all purchased items.</string>
+    <string name="delete_a_shop">Delete a Shop?</string>
+    <string name="you_currently_have_no_shops">You currently have no shops</string>
+    <string name="add_shop">Add Shop</string>
+    <string name="mark_item_as_priority">Mark Item As Priority</string>
+    <string name="save">Save</string>
+    <string name="mark_item_as_a_priority">Mark item as a priority.</string>
+    <string name="my_list">My List</string>
+    <string name="my_shops">My Shops</string>
 
 
 </resources>

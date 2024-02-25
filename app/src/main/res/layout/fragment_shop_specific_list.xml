@@ -33,10 +33,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:background="@null"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
             android:src="@drawable/ic_arrow_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/return_to_my_shops" />
 
 
         <TextView
@@ -45,7 +48,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Winn-Dixie"
             android:layout_marginEnd="36dp"
             android:maxWidth="50dp"
             android:textColor="@color/white"
@@ -82,7 +84,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="@dimen/margin"
                 android:layout_marginBottom="10dp"
-                android:text="Items To Purchase"
+                android:text="@string/items_to_purchase"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -112,7 +114,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="@dimen/margin"
                 android:layout_marginBottom="10dp"
-                android:text="Purchased Items"
+                android:text="@string/purchased_items"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -139,11 +141,13 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="90dp"
+        android:contentDescription="@string/delete_all_purchased_items"
         android:src="@drawable/ic_delete"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/off_white" />
+        app:tint="@color/off_white"
+        tools:ignore="ImageContrastCheck" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
