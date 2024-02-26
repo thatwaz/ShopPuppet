@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/rv_background"
@@ -23,14 +24,15 @@
         android:id="@+id/iv_shop_specific_star"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/item_marked_as_a_priority"
         android:scaleX=".50"
         android:scaleY=".50"
-        app:tint="@color/colorAccent"
         android:src="@drawable/ic_star"
         app:layout_constraintBottom_toBottomOf="parent"
-
         app:layout_constraintStart_toEndOf="@id/cb_purchased"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/colorAccent"
+        tools:ignore="ImageContrastCheck" />
 
 
     <TextView
@@ -39,7 +41,7 @@
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:layout_marginEnd="16dp"
-        android:text="Item Name"
+        android:text="@string/item_name"
         android:textColor="@color/textColorDark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

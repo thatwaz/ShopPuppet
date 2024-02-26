@@ -21,6 +21,41 @@
     <string name="mark_item_as_a_priority">Mark item as a priority.</string>
     <string name="my_list">My List</string>
     <string name="my_shops">My Shops</string>
+    <string name="open_shop">Open shop</string>
+    <string name="item_name">Item Name</string>
+    <string name="item_marked_as_a_priority">Item marked as a priority</string>
+    <string name="delete_this_item">Delete this item.</string>
+    <string name="edit_this_item">Edit this item.</string>
+    <string name="show_shops_tagged_to_this_item">Show shops tagged to this item.</string>
+    <string name="hide_shops_tagged_to_this_item">Hide shops tagged to this item.</string>
+    <string name="shop_name">Shop Name</string>
+    <string name="choose_icon">Choose Icon</string>
+    <string name="choose_color">Choose Color</string>
+    <string name="preview">Preview</string>
+    <string name="save_shop">Save Shop</string>
+    <string name="start_over">Start Over</string>
+    <string name="grocery_store">Grocery Store</string>
+    <string name="pharmacy">Pharmacy</string>
+    <string name="hardware">Hardware</string>
+    <string name="store_front">Store Front</string>
+    <string name="electronics">Electronics</string>
+    <string name="shopping_bag">Shopping bag</string>
+    <string name="store">Store</string>
+    <string name="stroller">Stroller</string>
+    <string name="books">Books</string>
+    <string name="bull_s_eye">Bull\'s Eye</string>
+    <string name="light_blue">Light Blue</string>
+    <string name="green">Green</string>
+    <string name="fashion_red">Fashion Red</string>
+    <string name="dark_gray">Dark Gray</string>
+    <string name="red">Red</string>
+    <string name="orange">Orange</string>
+    <string name="pink">Pink</string>
+    <string name="navy_blue">Navy Blue</string>
+    <string name="yellow">Yellow</string>
+    <string name="purple">Purple</string>
+    <string name="teal">Teal</string>
+    <string name="brown">Brown</string>
 
 
 </resources>

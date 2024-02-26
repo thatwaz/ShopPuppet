@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/rv_background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,19 +12,21 @@
         android:id="@+id/img_star"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/item_marked_as_a_priority"
         android:scaleX=".50"
         android:scaleY=".50"
         android:src="@drawable/ic_star"
         app:layout_constraintBottom_toBottomOf="@id/tv_item_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_item_name"
-        app:tint="@color/colorAccent" />
+        app:tint="@color/colorAccent"
+        tools:ignore="ImageContrastCheck" />
 
     <TextView
         android:id="@+id/tv_item_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Item Name"
+        android:text="@string/item_name"
         android:textSize="16sp"
         android:layout_marginEnd="12dp"
         app:layout_constraintStart_toEndOf="@id/img_star"
@@ -40,7 +43,8 @@
         app:layout_constraintBottom_toBottomOf="@id/tv_item_name"
         app:layout_constraintEnd_toStartOf="@id/iv_edit_item"
         app:layout_constraintTop_toTopOf="@id/tv_item_name"
-        app:tint="@color/negativeAction" />
+        app:tint="@color/negativeAction"
+        android:contentDescription="@string/delete_this_item" />
 
     <ImageButton
         android:id="@+id/iv_edit_item"
@@ -52,7 +56,8 @@
         app:layout_constraintBottom_toBottomOf="@id/tv_item_name"
         app:layout_constraintEnd_toStartOf="@id/iv_arrow_down"
         app:layout_constraintTop_toTopOf="@id/tv_item_name"
-        app:tint="@color/positiveAction" />
+        app:tint="@color/positiveAction"
+        android:contentDescription="@string/edit_this_item" />
 
     <ImageView
         android:id="@+id/iv_arrow_down"
@@ -64,7 +69,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_item_name"
         app:layout_constraintVertical_bias="0.5"
-        app:tint="@color/textColorDark" />
+        app:tint="@color/textColorDark"
+        android:contentDescription="@string/show_shops_tagged_to_this_item" />
 
     <ImageView
         android:id="@+id/iv_arrow_up"
@@ -77,11 +83,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_item_name"
         app:layout_constraintVertical_bias="0.5"
-        app:tint="@color/textColorDark"/>
+        app:tint="@color/textColorDark"
+        android:contentDescription="@string/hide_shops_tagged_to_this_item" />
 
-    <!-- ChipGroup for Shops -->
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroupShops"
+        android:id="@+id/chip_group_shops"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -91,12 +97,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_item_name">
 
-        <!-- Example Chip, this will be dynamically added based on the shops the item is available in -->
         <com.google.android.material.chip.Chip
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Shop Name" />
+            android:layout_height="wrap_content"/>
 
     </com.google.android.material.chip.ChipGroup>
 
@@ -105,7 +109,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/chipGroupShops" />
+        app:layout_constraintTop_toBottomOf="@id/chip_group_shops" />
 
 
 
