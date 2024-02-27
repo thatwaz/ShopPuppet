@@ -13,6 +13,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.FragmentShopSpecificListBinding
 import com.thatwaz.shoppuppet.presentation.adapters.PurchasedItemsAdapter
 import com.thatwaz.shoppuppet.presentation.adapters.ShopSpecificItemAdapter
@@ -79,7 +81,7 @@ class ShopSpecificListFragment : Fragment() {
 
     private fun setupEventListeners() {
         binding.fabDeletePurchasedItems.setOnClickListener {
-            handleDeletePurchasedItems()
+            showPurchasedItemsDeleteConfirmationDialog()
         }
 
         binding.btnBackToShops.setOnClickListener {
@@ -110,6 +112,16 @@ class ShopSpecificListFragment : Fragment() {
             purchasedItemsAdapter?.submitList(items)
         }
 
+    }
+    private fun showPurchasedItemsDeleteConfirmationDialog() {
+        MaterialAlertDialogBuilder(requireContext(), R.style.CustomAlertDialog)
+            .setTitle("Delete Purchased Items")
+            .setMessage("This will remove the selected items from your list, this shop, and any other tagged shops.")
+            .setPositiveButton("Delete") { _, _ ->
+                handleDeletePurchasedItems()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     private fun handleDeletePurchasedItems() {

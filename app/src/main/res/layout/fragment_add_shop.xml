@@ -205,7 +205,7 @@
                         android:layout_height="50dp"
                         android:background="@drawable/ib_selected"
                         android:clickable="true"
-                        android:src="@drawable/ic_bullseye"
+                        android:src="@drawable/ic_bullseye_icon"
                         app:tint="@color/inactive_grey"
                         android:focusable="true"
                         android:contentDescription="@string/bull_s_eye" />

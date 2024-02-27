@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     android:paddingBottom="80dp"
-    tools:context=".presentation.fragments.ShopsFragment">
+    tools:context=".presentation.fragments.ShopsFragment"
+    tools:ignore="Overdraw">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

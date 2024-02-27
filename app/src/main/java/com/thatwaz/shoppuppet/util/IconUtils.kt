@@ -14,7 +14,7 @@ object IconUtils {
             R.id.ib_store -> "ic_store"
             R.id.ib_stroller -> "ic_stroller"
             R.id.ib_books -> "ic_books"
-            R.id.ib_bullseye -> "ic_bullseye"
+            R.id.ib_bullseye -> "ic_bullseye_icon"
             else -> "ic_store"
         }
     }
