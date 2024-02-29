@@ -26,12 +26,22 @@ ShopPuppet is an intuitive shopping list app for Android devices, leveraging the
 
 ## Getting Started
 
-To get a local copy up and running, follow these simple steps:2. **Open the project in Android Studio:**
-   - Launch Android Studio.
-   - Choose "Open an existing Android Studio project".
-   - Navigate to the cloned repository and open it.
+To get a local copy up and running, follow these simple steps:
 
-Android Studio should automatically handle the Gradle sync process and set up your project.
+1. **Clone the repository directly in Android Studio**:
+   - Launch Android Studio.
+   - On the Welcome screen, choose "Get from Version Control".
+   - In the URL field, paste the URL of this repository.
+   - Click "Clone".
+
+Alternatively, if you have already launched Android Studio:
+
+- Choose "File" -> "New" -> "Project from Version Control".
+- In the URL field, paste the URL of this repository.
+- Click "Clone".
+
+Android Studio should automatically handle the Gradle sync process and set up your project after the cloning is complete.
+
 
 ## Running the App
 
@@ -39,7 +49,15 @@ After syncing, you can run the app on an Android emulator or physical device by 
 
 ## Feedback & Contributions
 
-Your feedback and contributions are welcome! Feel free to open issues or pull requests if you have suggestions or encounter bugs.
+Your feedback and contributions are welcome! If you have suggestions to improve the app or encounter any bugs, please feel free to contribute. You can do so in the following ways:
+
+- **Reporting bugs or suggesting enhancements**: Please visit the [Issues](https://github.com/yourusername/ShopPuppet/issues) section of my GitHub repository to report bugs or suggest new features.
+- **Submitting changes**: If you'd like to contribute directly to the code base, please make a pull request. You can do this by visiting the [Pull Requests](https://github.com/yourusername/ShopPuppet/pulls) section of my GitHub repository. For more information on creating a pull request, see GitHub's documentation on [Creating a pull request](https://help.github.com/en/articles/creating-a-pull-request).
+
+Please make sure to check the contribution guidelines for more details on how to submit a good pull request.
+
+
+
 
 ## Credits
 
