@@ -51,8 +51,8 @@ After syncing, you can run the app on an Android emulator or physical device by 
 
 Your feedback and contributions are welcome! If you have suggestions to improve the app or encounter any bugs, please feel free to contribute. You can do so in the following ways:
 
-- **Reporting bugs or suggesting enhancements**: Please visit the [Issues](https://github.com/yourusername/ShopPuppet/issues) section of my GitHub repository to report bugs or suggest new features.
-- **Submitting changes**: If you'd like to contribute directly to the code base, please make a pull request. You can do this by visiting the [Pull Requests](https://github.com/yourusername/ShopPuppet/pulls) section of my GitHub repository. For more information on creating a pull request, see GitHub's documentation on [Creating a pull request](https://help.github.com/en/articles/creating-a-pull-request).
+- **Reporting bugs or suggesting enhancements**: Please visit the [Issues](https://github.com/thatwaz/ShopPuppet/issues) section of my GitHub repository to report bugs or suggest new features.
+- **Submitting changes**: If you'd like to contribute directly to the code base, please make a pull request. You can do this by visiting the [Pull Requests](https://github.com/thatwaz/ShopPuppet/pulls) section of my GitHub repository. For more information on creating a pull request, see GitHub's documentation on [Creating a pull request](https://help.github.com/en/articles/creating-a-pull-request).
 
 Please make sure to check the contribution guidelines for more details on how to submit a good pull request.
 
