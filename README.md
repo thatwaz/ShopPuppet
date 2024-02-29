@@ -1,6 +1,19 @@
 # ShopPuppet
 
-ShopPuppet is an intuitive shopping list app for Android devices, leveraging the MVVM architectural pattern. The app allows users to create and manage their shopping lists with ease, tag items to specific shops, and prioritize their shopping needs. It features a clean and user-friendly interface, making shopping planning simpler and more efficient.
+# ShopPuppet
+
+# ShopPuppet
+
+# ShopPuppet
+
+ShopPuppet is an adaptable shopping list app for Android, designed to streamline your shopping, regardless of what you're buying. Whether it's toothpaste, groceries, or household essentials, ShopPuppet allows you to tag each item with the shops you can purchase them from, like your local grocery store, hardware store, or drug store. This unique tagging system ensures that when you're in a specific store, you know exactly what needs to be picked up there.
+
+Adding items is straightforward: if you need toothpaste, and you've already categorized your shops into a hardware store, a grocery store, and a drug store, simply add toothpaste to your list and tag it with the grocery and drug stores. ShopPuppet's shops page will then show you how many items are linked to each shop. Selecting a shop will display all the tagged items for that location, so toothpaste will appear under both the grocery store and drug store but not under the hardware store. Once an item is purchased from any tagged store, it's marked off across all locations, simplifying your shopping experience.
+
+With ShopPuppet, your shopping lists become more organized and tailored, making sure you never forget an item again, no matter where you need to buy it from.
+
+
+
 
 ## Features
 
@@ -12,6 +25,7 @@ ShopPuppet is an intuitive shopping list app for Android devices, leveraging the
 - **Dagger-Hilt**: Simplifies dependency injection, providing a scalable way to manage object creation.
 - **Android Navigation Component**: Manages UI navigation within the app, ensuring a consistent and predictable user experience.
 - **Material Design**: Incorporates Material Design components for a modern and cohesive look.
+-  **Dark Mode Support**: Offers a built-in dark mode, reducing eye strain in low light conditions and providing a stylish interface option for users who prefer darker color schemes.
 
 ## Technologies Used
 
