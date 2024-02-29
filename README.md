@@ -45,6 +45,7 @@ Your feedback and contributions are welcome! Feel free to open issues or pull re
 
 - **UI Design and Icons**: Designed with Material Design guidelines for a cohesive and intuitive user experience.
 - **Data Handling**: Room and LiveData are used for efficient data management and UI updates.
+- - **Bullseye Icon**: Sourced from [Iconfinder](https://www.iconfinder.com). For more details on the licensing and usage terms, please visit [Iconfinder's License Overview](https://support.iconfinder.com/en/articles/18233-license-overview).
 
 ## Licenses
 
