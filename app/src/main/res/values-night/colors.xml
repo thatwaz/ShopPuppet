@@ -11,15 +11,13 @@
 
     <!-- Primary Colors -->
     <color name="primary">#009688</color>  <!-- Teal -->
-    <color name="primary_muted">#99009688</color>  <!-- Teal -->
     <color name="colorPrimaryDark">#00695C</color> <!-- Teal Dark -->
     <color name="colorPrimaryLight">#4DB6AC</color> <!-- Teal Light -->
+    <color name="colorPrimaryLightMuted">#BF4DB6AC</color> <!-- Teal Light -->
 
 
     <!-- Accent/Secondary Colors -->
     <color name="colorAccent">#FFC107</color> <!-- Amber -->
-    <color name="colorSecondaryLight">#FFE082</color> <!-- Lighter Amber for dark -->
-    <color name="colorSecondaryDark">#FFCA28</color> <!-- Brighter Amber for dark -->
 
     <!-- Background Color -->
     <color name="header">#2E2E2E</color> <!-- Light Gray -->
@@ -43,11 +41,11 @@
     <!-- Shop Colors -->
     <color name="shop_blue">#007BFF</color> <!-- Bright Blue for Grocery & Hardware -->
     <color name="shop_green">#4CAF50</color> <!-- Green for Grocery -->
-    <color name="shop_red">#C62828</color> <!-- Even softer Red for dark mode -->
+    <color name="shop_red">#E44646</color> <!-- Even softer Red for dark mode -->
     <color name="shop_navy_blue">#3F729B</color> <!-- Lighter Navy Blue for better visibility in dark mode -->
     <color name="shop_pink">#F06292</color> <!-- Maroon/Dark Red for Department -->
     <color name="shop_dark_gray">#616161</color> <!-- Dark Gray/Black for Department & Clothing -->
-    <color name="shop_fashion_red">#872A2A</color> <!-- Deep Muted Fashion Red for dark mode -->
+    <color name="shop_fashion_red">#dc7e7e</color> <!-- Deep Muted Fashion Red for dark mode -->
     <color name="shop_orange">#FF4500</color> <!-- Orange for Hardware -->
     <color name="shop_yellow">#FFB300</color> <!-- Warm Mustard Yellow for enhanced contrast -->
     <color name="shop_purple">#8A2BE2</color> <!-- Purple for beauty or luxury brands -->

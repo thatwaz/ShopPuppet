@@ -48,7 +48,6 @@ class ItemViewModel @Inject constructor(
     val items: LiveData<List<Item>> get() = _items
 
     private val _shops = MutableLiveData<List<Shop>>()
-    val shops: LiveData<List<Shop>> get() = _shops
 
     private val _itemUiModels = MutableLiveData<List<ItemUiModel>>()
     val itemUiModels: LiveData<List<ItemUiModel>> = _itemUiModels
@@ -69,7 +68,6 @@ class ItemViewModel @Inject constructor(
         fetchAllShops()
 
     }
-
 
     fun onAlphabeticalSortIconClicked() {
         currentSortFunction = { itemRepository.getAllItemsInAlphabeticalOrder() }

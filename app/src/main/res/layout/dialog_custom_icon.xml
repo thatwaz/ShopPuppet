@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp">
 
     <TextView
+        android:id="@+id/lbl_use_shop_letters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Enter up to 3 letters to represent your shop."
+        android:textColor="@color/textColorDark"
+        android:gravity="center"
+        android:text="@string/enter_up_to_3_letters_to_represent_your_shop"
         android:layout_marginBottom="8dp" />
 
     <EditText
         android:id="@+id/et_custom_icon"
-        android:layout_width="match_parent"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:hint="@string/custom_dialog_hint"
+        android:importantForAutofill="no"
         android:inputType="textCapCharacters"
-        android:maxLength="3" />
+        android:maxLength="3"
+        android:minHeight="48dp"
+        android:textColor="@color/textColorDark"
+        android:textColorHint="@color/colorPrimaryLightMuted"
+        tools:ignore="TextContrastCheck" />
 
 </LinearLayout>

@@ -1,6 +1,61 @@
 <resources>
     <string name="app_name">ShopPuppet</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="enter_up_to_3_letters_to_represent_your_shop">Enter up to 3 letters to represent your shop.</string>
+    <string name="custom_dialog_hint">ABC</string>
+    <string name="add_new_item">Add New Item</string>
+    <string name="recently_purchased_items">Recently Purchased Items</string>
+    <string name="next">Next</string>
+    <string name="delete_all_recently_purchased_items_description">Delete all recently purchased items</string>
+    <string name="sort_list">Sort List</string>
+    <string name="sort_list_alphabetically">Sort list alphabetically</string>
+    <string name="sort_list_by_order_of_input">Sort list by order Of input</string>
+    <string name="items_to_purchase">Items to purchase</string>
+    <string name="purchased_items">Purchased items</string>
+    <string name="return_to_my_shops">Return to my shops</string>
+    <string name="delete_all_purchased_items">Delete all purchased items.</string>
+    <string name="delete_a_shop">Delete a Shop?</string>
+    <string name="you_currently_have_no_shops">You currently have no shops</string>
+    <string name="add_shop">Add Shop</string>
+    <string name="mark_item_as_priority">Mark Item As Priority</string>
+    <string name="save">Save</string>
+    <string name="mark_item_as_a_priority">Mark item as a priority.</string>
+    <string name="my_list">My List</string>
+    <string name="my_shops">My Shops</string>
+    <string name="open_shop">Open shop</string>
+    <string name="item_name">Item Name</string>
+    <string name="item_marked_as_a_priority">Item marked as a priority</string>
+    <string name="delete_this_item">Delete this item.</string>
+    <string name="edit_this_item">Edit this item.</string>
+    <string name="show_shops_tagged_to_this_item">Show shops tagged to this item.</string>
+    <string name="hide_shops_tagged_to_this_item">Hide shops tagged to this item.</string>
+    <string name="shop_name">Shop Name</string>
+    <string name="choose_icon">Choose Icon</string>
+    <string name="choose_color">Choose Color</string>
+    <string name="preview">Preview</string>
+    <string name="save_shop">Save Shop</string>
+    <string name="start_over">Start Over</string>
+    <string name="grocery_store">Grocery Store</string>
+    <string name="pharmacy">Pharmacy</string>
+    <string name="hardware">Hardware</string>
+    <string name="store_front">Store Front</string>
+    <string name="electronics">Electronics</string>
+    <string name="shopping_bag">Shopping bag</string>
+    <string name="store">Store</string>
+    <string name="stroller">Stroller</string>
+    <string name="books">Books</string>
+    <string name="bull_s_eye">Bull\'s Eye</string>
+    <string name="light_blue">Light Blue</string>
+    <string name="green">Green</string>
+    <string name="fashion_red">Fashion Red</string>
+    <string name="dark_gray">Dark Gray</string>
+    <string name="red">Red</string>
+    <string name="orange">Orange</string>
+    <string name="pink">Pink</string>
+    <string name="navy_blue">Navy Blue</string>
+    <string name="yellow">Yellow</string>
+    <string name="purple">Purple</string>
+    <string name="teal">Teal</string>
+    <string name="brown">Brown</string>
+
 
 </resources>

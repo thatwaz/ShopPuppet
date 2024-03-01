@@ -1,3 +1,5 @@
+@file:Suppress("BooleanMethodIsAlwaysInverted")
+
 package com.thatwaz.shoppuppet.presentation.fragments
 
 
@@ -19,6 +21,7 @@ import com.thatwaz.shoppuppet.util.IconUtils
 import com.thatwaz.shoppuppet.util.KeyboardUtils
 import dagger.hilt.android.AndroidEntryPoint
 
+@Suppress("BooleanMethodIsAlwaysInverted")
 @AndroidEntryPoint
 class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogListener {
 
@@ -54,9 +57,7 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
 
     private fun setupInitialButtonStates() {
         // Set initial button states (enable/disable)
-        binding.btnShopName.isEnabled = false
-        binding.btnShopIcon.isEnabled = false
-        binding.btnSaveShop.isEnabled = false
+        disableButtons(binding.btnSaveShop, binding.btnShopIcon, binding.btnShopName)
     }
 
     private fun initializeViews() {
@@ -77,11 +78,17 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         binding.etShopName.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 val shopName = s.toString()
-                binding.btnShopName.isEnabled = isShopNameValid(shopName)
+
+                binding.btnShopName.apply {
+                    isEnabled = isShopNameValid(shopName)
+                    alpha = 1f
+                }
+
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // Not needed
+
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -105,6 +112,7 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         dialog.show(childFragmentManager, "CustomIconDialog")
     }
 
+    // Removes Choose Icon Card View and allows for Choose Color Card View to be visible
     private fun toggleIconView() {
         binding.apply {
             cvChooseColor.visibility = View.VISIBLE
@@ -126,13 +134,15 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
 
     private fun handleIconClick(view: View) {
         val iconResName = IconUtils.getIconResName(view.id)
-        iconResName?.let { resName ->
+        iconResName.let { resName ->
             // Update the preview icon based on the resource name
             updatePreviewIconByName(resName)
             // Save the icon name
             selectedIconRef = resName
         }
     }
+
+
 
     @SuppressLint("ResourceType")
     private fun updatePreviewIconByName(name: String) {
@@ -152,8 +162,11 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
 
     private fun updateSaveButtonState() {
         // Enable the save button if a color is selected
-        binding.btnSaveShop.isEnabled =
-            selectedColor.isNotBlank() && isShopNameValid(binding.etShopName.text.toString())
+        binding.btnSaveShop.apply {
+            isEnabled =
+                selectedColor.isNotBlank() && isShopNameValid(binding.etShopName.text.toString())
+            alpha = 1f
+        }
     }
 
     private fun handleShopNameInput() {
@@ -191,10 +204,10 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         addShopViewModel.saveShop()
     }
 
-
     private fun isShopNameValid(shopName: String): Boolean {
         return shopName.isNotBlank()
     }
+
 
     private fun updateShopDetails(shopName: String) {
         addShopViewModel.updateShopName(shopName)
@@ -218,6 +231,7 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         icons.forEach { iconView ->
             iconView.setOnClickListener {
                 handleIconClick(it)
+                binding.btnShopIcon.alpha = 1f
             }
         }
     }
@@ -244,6 +258,7 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         shopInitials = text
         selectedIconRef = text // Save initials as the selected icon reference
         updateIconButtonState()
+        binding.btnShopIcon.alpha = 1f
     }
 
     private fun updateIconButtonState() {
@@ -271,9 +286,8 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         binding.initialsPreview.text = ""
 
         // Reset button states
-        binding.btnSaveShop.isEnabled = false
-        binding.btnShopIcon.isEnabled = false
-        binding.btnShopName.isEnabled = false
+        disableButtons(binding.btnSaveShop, binding.btnShopIcon, binding.btnShopName)
+
     }
 
     // Observes error messages from ViewModel and displays them as Toast messages
@@ -284,6 +298,14 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
             }
         }
     }
+
+    private fun disableButtons(vararg buttons: View) {
+        buttons.forEach { button ->
+            button.isEnabled = false
+            button.alpha = 0.5f
+        }
+    }
+
 
 
     override fun onDestroyView() {

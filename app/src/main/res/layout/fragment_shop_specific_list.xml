@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/card_view2">
+    android:background="@color/card_view2"
+    tools:ignore="Overdraw">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_top"
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:background="@color/white"
-        android:elevation="4dp"
+        android:background="@color/card_view"
         app:layout_constraintTop_toTopOf="parent">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -31,12 +31,14 @@
             android:id="@+id/btn_back_to_shops"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
             android:background="@null"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
             android:src="@drawable/ic_arrow_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/return_to_my_shops" />
 
 
         <TextView
@@ -45,16 +47,15 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Winn-Dixie"
-            android:layout_marginEnd="36dp"
             android:maxWidth="50dp"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/cl_shop_name"
             app:layout_constraintHorizontal_bias="0.5"
             android:gravity="center"
+            android:layout_marginEnd="60dp"
             app:layout_constraintStart_toEndOf="@id/btn_back_to_shops"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5" />
@@ -74,7 +75,7 @@
             android:orientation="vertical"
             android:paddingBottom="50dp">
 
-            <!-- TextView for Unpurchased Items -->
+
             <TextView
                 android:id="@+id/tv_unpurchased_label"
                 android:layout_width="wrap_content"
@@ -82,12 +83,11 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="@dimen/margin"
                 android:layout_marginBottom="10dp"
-                android:text="Items To Purchase"
+                android:text="@string/items_to_purchase"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
 
-            <!-- RecyclerView for Unpurchased Items -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_unpurchased_items"
                 android:layout_width="match_parent"
@@ -112,11 +112,11 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="@dimen/margin"
                 android:layout_marginBottom="10dp"
-                android:text="Purchased Items"
+                android:text="@string/purchased_items"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <!-- RecyclerView for Purchased Items -->
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_purchased_items"
                 android:layout_width="match_parent"
@@ -124,12 +124,10 @@
                 android:layout_marginTop="8dp"
                 android:fadingEdgeLength="70dp"
                 android:requiresFadingEdge="vertical"
-
                 tools:listitem="@layout/item_shop_specific" />
 
-            <!-- Additional Views if any -->
-
         </LinearLayout>
+
     </ScrollView>
 
 
@@ -139,11 +137,13 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="90dp"
+        android:contentDescription="@string/delete_all_purchased_items"
         android:src="@drawable/ic_delete"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/off_white" />
+        app:tint="@color/off_white"
+        tools:ignore="ImageContrastCheck" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

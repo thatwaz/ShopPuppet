@@ -2,7 +2,6 @@ package com.thatwaz.shoppuppet.util
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import androidx.core.content.ContextCompat
 import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.FragmentAddShopBinding
@@ -35,19 +34,13 @@ object ColorUtils {
             val color = ContextCompat.getColor(context, colorResId)
             binding.previewIcon.setColorFilter(color)
             binding.initialsPreview.setTextColor(color)
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                binding.cvShopPreview.outlineSpotShadowColor = color
-            }
+            binding.cvShopPreview.outlineSpotShadowColor = color
 
         } else {
             val defaultColor = ContextCompat.getColor(context, R.color.inactive_grey)
             binding.previewIcon.setColorFilter(defaultColor)
             binding.initialsPreview.setTextColor(defaultColor)
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                binding.cvShopPreview.outlineSpotShadowColor = defaultColor
-            }
+            binding.cvShopPreview.outlineSpotShadowColor = defaultColor
         }
     }
 
