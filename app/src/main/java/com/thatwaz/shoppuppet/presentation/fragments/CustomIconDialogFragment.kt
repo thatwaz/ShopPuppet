@@ -30,7 +30,6 @@ class CustomIconDialogFragment : DialogFragment() {
         }
     }
 
-    //todo add Material Alert Dialog
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = MaterialAlertDialogBuilder(requireContext(), R.style.CustomAlertDialog)
