@@ -1,14 +1,5 @@
 package com.thatwaz.shoppuppet.presentation.viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import com.thatwaz.shoppuppet.data.repository.ItemRepository
-import com.thatwaz.shoppuppet.domain.model.Item
-import junit.framework.TestCase.assertEquals
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-
-
 
 //class ItemViewModelTest {
 //

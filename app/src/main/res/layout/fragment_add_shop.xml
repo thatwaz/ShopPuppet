@@ -7,6 +7,7 @@
     android:fillViewport="true"
     tools:context=".presentation.fragments.AddShopFragment">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,21 +20,23 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:hint="Shop Name"
+            android:hint="@string/shop_name"
             android:background="@color/header"
             app:hintTextColor="@color/textColorDark"
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="488dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_shop_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords"
-                android:textColor="@color/textColorDark" />
+                android:textColor="@color/textColorDark"
+                tools:ignore="TextContrastCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -42,11 +45,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Next"
+            android:text="@string/next"
+            app:layout_constraintWidth_max="320dp"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:textColor="@color/textColorLight"
             app:layout_constraintEnd_toEndOf="@id/til_shop_name"
             app:layout_constraintStart_toStartOf="@id/til_shop_name"
-            app:layout_constraintTop_toBottomOf="@id/til_shop_name" />
+            app:layout_constraintTop_toBottomOf="@id/til_shop_name"/>
 
 
         <androidx.cardview.widget.CardView
@@ -73,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Choose Icon"
+                    android:text="@string/choose_icon"
                     android:textColor="@color/textColorDark"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -103,7 +108,8 @@
                         android:clickable="true"
                         android:src="@drawable/ic_grocery_store"
                         app:tint="@color/inactive_grey"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/grocery_store" />
 
                     <ImageButton
                         android:id="@+id/ib_pharmacy"
@@ -113,7 +119,8 @@
                         android:clickable="true"
                         android:src="@drawable/ic_pharmacy"
                         app:tint="@color/inactive_grey"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/pharmacy" />
 
                     <ImageButton
                         android:id="@+id/ib_hardware"
@@ -123,7 +130,8 @@
                         android:clickable="true"
                         android:src="@drawable/ic_hardware"
                         app:tint="@color/inactive_grey"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/hardware" />
 
                     <ImageButton
                         android:id="@+id/ib_storefront"
@@ -133,7 +141,8 @@
                         android:clickable="true"
                         android:src="@drawable/ic_storefront"
                         app:tint="@color/inactive_grey"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/store_front" />
 
                     <ImageButton
                         android:id="@+id/ib_television"
@@ -143,7 +152,8 @@
                         android:clickable="true"
                         android:src="@drawable/ic_television"
                         app:tint="@color/inactive_grey"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/electronics" />
 
                     <ImageButton
                         android:id="@+id/ib_shopping_bag"
@@ -153,7 +163,8 @@
                         android:clickable="true"
                         android:src="@drawable/ic_shopping_bag"
                         app:tint="@color/inactive_grey"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/shopping_bag" />
 
                     <ImageButton
                         android:id="@+id/ib_store"
@@ -163,7 +174,8 @@
                         android:clickable="true"
                         android:src="@drawable/ic_store"
                         app:tint="@color/inactive_grey"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/store" />
 
                     <ImageButton
                         android:id="@+id/ib_stroller"
@@ -173,7 +185,8 @@
                         android:clickable="true"
                         android:src="@drawable/ic_stroller"
                         app:tint="@color/inactive_grey"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/stroller" />
 
                     <ImageButton
                         android:id="@+id/ib_books"
@@ -183,7 +196,8 @@
                         android:clickable="true"
                         android:src="@drawable/ic_books"
                         app:tint="@color/inactive_grey"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/books" />
 
                     <ImageButton
                         android:id="@+id/ib_bullseye"
@@ -191,9 +205,10 @@
                         android:layout_height="50dp"
                         android:background="@drawable/ib_selected"
                         android:clickable="true"
-                        android:src="@drawable/ic_bullseye"
+                        android:src="@drawable/ic_bullseye_icon"
                         app:tint="@color/inactive_grey"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/bull_s_eye" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -211,7 +226,8 @@
                             android:padding="8dp"
                             android:src="@drawable/ic_alphabet"
                             app:tint="@color/clickable_blue"
-                            android:focusable="true" />
+                            android:focusable="true"
+                            tools:ignore="ContentDescription" />
 
                     </LinearLayout>
                 </GridLayout>
@@ -241,7 +257,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Choose Color"
+                    android:text="@string/choose_color"
                     android:textColor="@color/textColorDark"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -268,7 +284,8 @@
                         android:layout_margin="16dp"
                         android:background="@color/shop_blue"
                         android:clickable="true"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/light_blue"/>
 
                     <View
                         android:id="@+id/shop_green"
@@ -277,7 +294,8 @@
                         android:layout_margin="16dp"
                         android:background="@color/shop_green"
                         android:clickable="true"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/green"/>
 
                     <View
                         android:id="@+id/shop_fashion_red"
@@ -286,7 +304,8 @@
                         android:layout_margin="16dp"
                         android:background="@color/shop_fashion_red"
                         android:clickable="true"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/fashion_red"/>
 
                     <View
                         android:id="@+id/shop_dark_gray"
@@ -295,7 +314,8 @@
                         android:layout_margin="16dp"
                         android:background="@color/shop_dark_gray"
                         android:clickable="true"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/dark_gray"/>
 
                     <View
                         android:id="@+id/shop_red"
@@ -304,7 +324,8 @@
                         android:layout_margin="16dp"
                         android:background="@color/shop_red"
                         android:clickable="true"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/red"/>
 
                     <View
                         android:id="@+id/shop_orange"
@@ -313,7 +334,8 @@
                         android:layout_margin="16dp"
                         android:background="@color/shop_orange"
                         android:clickable="true"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/orange"/>
 
                     <View
                         android:id="@+id/shop_pink"
@@ -322,7 +344,8 @@
                         android:layout_margin="16dp"
                         android:background="@color/shop_pink"
                         android:clickable="true"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/pink"/>
 
                     <View
                         android:id="@+id/shop_navy_blue"
@@ -331,7 +354,8 @@
                         android:layout_margin="16dp"
                         android:background="@color/shop_navy_blue"
                         android:clickable="true"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/navy_blue"/>
 
                     <View
                         android:id="@+id/shop_yellow"
@@ -340,7 +364,8 @@
                         android:layout_margin="16dp"
                         android:background="@color/shop_yellow"
                         android:clickable="true"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/yellow"/>
 
                     <View
                         android:id="@+id/shop_purple"
@@ -349,7 +374,8 @@
                         android:layout_margin="16dp"
                         android:background="@color/shop_purple"
                         android:clickable="true"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/purple"/>
 
                     <View
                         android:id="@+id/shop_teal"
@@ -358,7 +384,8 @@
                         android:layout_margin="16dp"
                         android:background="@color/shop_teal"
                         android:clickable="true"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/teal"/>
 
                     <View
                         android:id="@+id/shop_brown"
@@ -367,7 +394,8 @@
                         android:layout_margin="16dp"
                         android:background="@color/shop_brown"
                         android:clickable="true"
-                        android:focusable="true" />
+                        android:focusable="true"
+                        android:contentDescription="@string/brown"/>
 
 
                 </GridLayout>
@@ -379,9 +407,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Next"
+            android:text="@string/next"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:textColor="@color/textColorLight"
             android:visibility="gone"
+            app:layout_constraintWidth_max="320dp"
             app:layout_constraintEnd_toEndOf="@id/cv_choose_icon"
             app:layout_constraintStart_toStartOf="@id/cv_choose_icon"
             app:layout_constraintTop_toBottomOf="@id/cv_choose_icon" />
@@ -410,7 +440,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Preview"
+                    android:text="@string/preview"
                     android:textColor="@color/textColorDark"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -464,7 +494,8 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:tint="@color/inactive_grey" />
+                            app:tint="@color/inactive_grey"
+                            android:importantForAccessibility="no" />
 
                         <TextView
                             android:id="@+id/shop_name_preview"
@@ -488,7 +519,8 @@
                     android:id="@+id/btn_save_shop"
                     android:layout_width="135dp"
                     android:layout_height="wrap_content"
-                    android:text="Save Shop"
+                    android:text="@string/save_shop"
+                    android:backgroundTint="@color/colorPrimaryDark"
                     android:textColor="@color/textColorLight"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/cv_shop_preview"
@@ -499,7 +531,7 @@
                     android:layout_width="135dp"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/colorPrimaryDark"
-                    android:text="Start Over"
+                    android:text="@string/start_over"
                     android:textColor="@color/textColorLight"
                     app:layout_constraintBottom_toBottomOf="@id/cv_shop_preview"
                     app:layout_constraintEnd_toEndOf="parent"

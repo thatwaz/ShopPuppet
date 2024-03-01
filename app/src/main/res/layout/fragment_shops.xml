@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     android:paddingBottom="80dp"
-    tools:context=".presentation.fragments.ShopsFragment">
+    tools:context=".presentation.fragments.ShopsFragment"
+    tools:ignore="Overdraw">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,12 +27,13 @@
             android:clickable="true"
             android:focusable="true"
             android:minHeight="48dp"
-            android:text="Delete a Shop?"
+            android:text="@string/delete_a_shop"
             android:textColor="@color/clickable_blue"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="parent" />
+            app:layout_constraintTop_toBottomOf="parent"
+            tools:ignore="TouchTargetSizeCheck,VisualLintBounds" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -52,11 +54,12 @@
         app:spanCount="3"
         tools:listitem="@layout/item_shop" />
 
+    <!-- TODO: Implement you currently have no shops -->
     <TextView
         android:id="@+id/noShopsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="You currently have no shops"
+        android:text="@string/you_currently_have_no_shops"
         android:textSize="16sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -72,11 +75,11 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="40dp"
         android:backgroundTint="@color/colorPrimaryDark"
+        android:elevation="8dp"
+        android:text="@string/add_shop"
+        android:textColor="@color/textColorLight"
         app:icon="@drawable/ic_add"
         app:iconTint="@color/textColorLight"
-        android:elevation="8dp"
-        android:text="Add Shop"
-        android:textColor="@color/textColorLight"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

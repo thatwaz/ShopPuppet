@@ -4,11 +4,11 @@
         android:id="@+id/shopsFragment"
         android:icon="@drawable/ic_store"
         android:iconTint="@color/colorPrimaryDark"
-        android:title="My Shops" />
+        android:title="@string/my_shops" />
     <item
         android:id="@+id/listFragment"
         android:icon="@drawable/ic_list"
         android:iconTint="@color/colorPrimaryDark"
-        android:title="My List" />
+        android:title="@string/my_list" />
 
 </menu>
