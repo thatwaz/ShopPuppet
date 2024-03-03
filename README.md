@@ -18,7 +18,13 @@ With ShopPuppet, your shopping lists become more organized and tailored, making 
 - **Dagger-Hilt**: Simplifies dependency injection, providing a scalable way to manage object creation.
 - **Android Navigation Component**: Manages UI navigation within the app, ensuring a consistent and predictable user experience.
 - **Material Design**: Incorporates Material Design components for a modern and cohesive look.
--  **Dark Mode Support**: Offers a built-in dark mode, reducing eye strain in low light conditions and providing a stylish interface option for users who prefer darker color schemes.
+- **Dark Mode Support**: Offers a built-in dark mode, reducing eye strain in low light conditions and providing a stylish interface option for users who prefer darker color schemes.
+
+## Advanced Database Integration
+
+ShopPuppet enhances shopping efficiency with an intricate database setup, leveraging Room for local data persistence. A standout feature is the app's ability to smartly manage item-shop associations through a robust Item-Shop cross-reference DAO. For instance, if you're planning a BBQ and need charcoal, which is available at both your local hardware store and supermarket, ShopPuppet allows you to tag charcoal to these stores. The app then intelligently organizes your list, showing charcoal under both tagged shops. This setup not only simplifies tracking where to buy each item but also underscores the app's capability to streamline shopping trips across multiple retailers. Such detailed item-shop tagging ensures that ShopPuppet is not just user-friendly but a powerful tool for meticulous shopping planning.
+
+
 
 ## Technologies Used
 
