@@ -36,9 +36,10 @@ Brief description of the feature and what the screenshot illustrates.
 
 
 ### Feature 3: User-Friendly Interface
-<img src="https://github.com/thatwaz/ShopPuppet/blob/master/user_friendly_interface.jpg" width="250" alt="User-Friendly Interface">&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/thatwaz/ShopPuppet/blob/master/user_interface2.jpg" width="250" alt="User Interface">
+<img src="https://github.com/thatwaz/ShopPuppet/blob/master/user_friendly_interface.jpg" width="250" alt="User-Friendly Interface">&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/thatwaz/ShopPuppet/blob/master/user_interface2.jpg" width="250" alt="User Interface">&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/thatwaz/ShopPuppet/blob/master/user_interface3.jpg" width="250" alt="User Interface 3">
 
 Showcase of the app's clean and intuitive interface.
+
 
 
 
