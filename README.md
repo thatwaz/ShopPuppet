@@ -25,6 +25,26 @@ With ShopPuppet, your shopping lists become more organized and tailored, making 
 ShopPuppet enhances shopping efficiency with an intricate database setup, leveraging Room for local data persistence. A standout feature is the app's ability to smartly manage item-shop associations through a robust Item-Shop cross-reference DAO. For instance, if you're planning a BBQ and need charcoal, which is available at both your local hardware store and supermarket, ShopPuppet allows you to tag charcoal to these stores. The app then intelligently organizes your list, showing charcoal under both tagged shops. This setup not only simplifies tracking where to buy each item but also underscores the app's capability to streamline shopping trips across multiple retailers. Such detailed item-shop tagging ensures that ShopPuppet is not just user-friendly but a powerful tool for meticulous shopping planning.
 
 
+## Key Features
+
+### Feature 1: Dynamic Shop Tagging
+![Dynamic Shop Tagging](C:\Users\wazow\OneDrive\Pictures\shopPuppetPics\Screenshot_20240303_063036_ShopPuppet.jpg)
+Brief description of the feature and what the screenshot illustrates.
+
+### Feature 2: Prioritized Shopping Lists
+![Prioritized Shopping Lists](url-to-screenshot)
+Explanation of how users can prioritize their shopping needs.
+
+### Feature 3: User-Friendly Interface
+![User-Friendly Interface](url-to-screenshot)
+Showcase of the app's clean and intuitive interface.
+
+...
+
+[View More Screenshots](link-to-more-screenshots)
+
+
+
 
 ## Technologies Used
 
