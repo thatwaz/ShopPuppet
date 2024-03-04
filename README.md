@@ -29,7 +29,7 @@ ShopPuppet enhances shopping efficiency with an intricate database setup, levera
 
 ### Feature 1: Dynamic Shop Tagging
 <img src="https://github.com/thatwaz/ShopPuppet/blob/master/dynamic_shop_tagging.jpg" width="250" alt="Dynamic Shop Tagging">
-Brief description of the feature and what the screenshot illustrates.
+
 
 ### Feature 2: Prioritized Shopping Lists
 <img src="https://github.com/thatwaz/ShopPuppet/blob/master/prioritized_list.jpg" width="250" alt="Prioritized Shopping Lists">
@@ -38,7 +38,12 @@ Brief description of the feature and what the screenshot illustrates.
 ### Feature 3: User-Friendly Interface
 <img src="https://github.com/thatwaz/ShopPuppet/blob/master/user_friendly_interface.jpg" width="250" alt="User-Friendly Interface">&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/thatwaz/ShopPuppet/blob/master/user_interface2.jpg" width="250" alt="User Interface">&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/thatwaz/ShopPuppet/blob/master/user_interface3.jpg" width="250" alt="User Interface 3">
 
-Showcase of the app's clean and intuitive interface.
+
+
+### Feature 4: Customize Your Shop
+<img src="https://github.com/thatwaz/ShopPuppet/blob/master/customize_shop1.jpg" width="250" alt="Customize Shop 1">&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/thatwaz/ShopPuppet/blob/master/customize_shop2.jpg" width="250" alt="Customize Shop 2">
+
+With ShopPuppet, take full control over how you organize and visualize your shopping venues. Start by assigning your shops real names, turning a generic "Grocery Store" placeholder into any specific store name you prefer. Dive deeper into personalization by selecting an iconic representation for your shop from the list of available icons, or opt for simplicity by using the shop's initials with the intuitive blue A-Z button. Customize even further by selecting a distinctive color for each shop. This level of customization ensures your shopping list is not only precisely organized but also visually aligned with your shopping journey and preferences.
 
 
 
@@ -46,7 +51,7 @@ Showcase of the app's clean and intuitive interface.
 
 ...
 
-[View More Screenshots](link-to-more-screenshots)
+
 
 
 
