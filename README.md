@@ -28,16 +28,17 @@ ShopPuppet enhances shopping efficiency with an intricate database setup, levera
 ## Key Features
 
 ### Feature 1: Dynamic Shop Tagging
-![Dynamic Shop Tagging](https://github.com/thatwaz/ShopPuppet/commit/b291b0d83b28a7f6f772ff55ef8cf41f1f37ef1f)
+<img src="" width="250" alt="Dynamic Shop Tagging">
 Brief description of the feature and what the screenshot illustrates.
 
 ### Feature 2: Prioritized Shopping Lists
-![Prioritized Shopping Lists](url-to-screenshot)
+<img src="url-to-screenshot" width="250" alt="Prioritized Shopping Lists">
 Explanation of how users can prioritize their shopping needs.
 
 ### Feature 3: User-Friendly Interface
-![User-Friendly Interface](url-to-screenshot)
+<img src="url-to-screenshot" width="250" alt="User-Friendly Interface">
 Showcase of the app's clean and intuitive interface.
+
 
 ...
 
