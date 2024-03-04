@@ -32,7 +32,7 @@ ShopPuppet enhances shopping efficiency with an intricate database setup, levera
 Brief description of the feature and what the screenshot illustrates.
 
 ### Feature 2: Prioritized Shopping Lists
-<img src="url-to-screenshot" width="250" alt="Prioritized Shopping Lists">
+<img src="https://github.com/thatwaz/ShopPuppet/blob/master/prioritized_list.jpg" width="250" alt="Prioritized Shopping Lists">
 
 
 ### Feature 3: User-Friendly Interface
