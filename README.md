@@ -33,7 +33,7 @@ Brief description of the feature and what the screenshot illustrates.
 
 ### Feature 2: Prioritized Shopping Lists
 <img src="url-to-screenshot" width="250" alt="Prioritized Shopping Lists">
-Explanation of how users can prioritize their shopping needs.
+
 
 ### Feature 3: User-Friendly Interface
 <img src="url-to-screenshot" width="250" alt="User-Friendly Interface">
