@@ -28,7 +28,7 @@ ShopPuppet enhances shopping efficiency with an intricate database setup, levera
 ## Key Features
 
 ### Feature 1: Dynamic Shop Tagging
-<img src="" width="250" alt="Dynamic Shop Tagging">
+<img src="https://github.com/thatwaz/ShopPuppet/blob/master/dynamic_shop_tagging.jpg" width="250" alt="Dynamic Shop Tagging">
 Brief description of the feature and what the screenshot illustrates.
 
 ### Feature 2: Prioritized Shopping Lists
