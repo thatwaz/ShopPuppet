@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- User Instructions -->
+    <item
+        android:id="@+id/action_user_guide"
+        android:title="@string/user_guide"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <!-- Contact Support -->
+    <item
+        android:id="@+id/action_contact_support"
+        android:title="in development"
+        android:orderInCategory="200"
+        app:showAsAction="never" />
+</menu>
