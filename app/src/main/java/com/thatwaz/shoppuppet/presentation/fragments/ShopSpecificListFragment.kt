@@ -3,6 +3,7 @@ package com.thatwaz.shoppuppet.presentation.fragments
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -92,6 +93,8 @@ class ShopSpecificListFragment : Fragment() {
 
     private fun fetchData() {
         val shopId = navigationArgs.shopId
+        //todo new
+        shopSpecificListViewModel.setShopId(shopId)
         shopSpecificListViewModel.fetchShopSpecificItems(shopId)
     }
 
@@ -103,6 +106,7 @@ class ShopSpecificListFragment : Fragment() {
             }
         }
         shopSpecificListViewModel.unpurchasedItems.observe(viewLifecycleOwner) { items ->
+            Log.i("DOH!","unpurchased is $items")
             shopSpecificItemAdapter?.submitList(items)
         }
 

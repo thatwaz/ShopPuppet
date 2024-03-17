@@ -9,8 +9,6 @@
     <string name="sort_list">Sort List</string>
     <string name="sort_list_alphabetically">Sort list alphabetically</string>
     <string name="sort_list_by_order_of_input">Sort list by order Of input</string>
-    <string name="items_to_purchase">Items to purchase</string>
-    <string name="purchased_items">Purchased items</string>
     <string name="return_to_my_shops">Return to my shops</string>
     <string name="delete_all_purchased_items">Delete all purchased items.</string>
     <string name="delete_a_shop">Delete a Shop?</string>
@@ -56,6 +54,9 @@
     <string name="purple">Purple</string>
     <string name="teal">Teal</string>
     <string name="brown">Brown</string>
+    <string name="user_guide">User Guide</string>
+    <string name="acquired_items">Acquired items</string>
+    <string name="items_to_acquire">Items to acquire</string>
 
 
 </resources>

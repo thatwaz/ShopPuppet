@@ -80,6 +80,18 @@ interface ItemDao {
     @Query("SELECT * FROM items WHERE isPurchased = 1 AND isSoftDeleted = 0 ORDER BY name COLLATE NOCASE ASC")
     fun getPurchasedAndNotSoftDeletedItems(): LiveData<List<Item>>
 
+    @Query("""
+    SELECT items.* FROM items
+    INNER JOIN item_shop_cross_ref ON items.id = item_shop_cross_ref.itemId
+    WHERE items.isPurchased = 1
+    AND items.isSoftDeleted = 0
+    AND item_shop_cross_ref.shopId = :shopId
+    ORDER BY items.name COLLATE NOCASE ASC
+""")
+    fun getPurchasedAndNotSoftDeletedItemsByShop(shopId: Long): LiveData<List<Item>>
+
+
+
 
     /** Used for deleting all frequently purchased items in Add Item Fragment*/
     @Query("DELETE FROM items WHERE isSoftDeleted = 1")
@@ -90,6 +102,9 @@ interface ItemDao {
 
     @Query("SELECT * FROM items WHERE isSoftDeleted = 1 AND lastPurchasedDate <= :thresholdDate")
     suspend fun getOldSoftDeletedItems(thresholdDate: Date): List<Item>
+
+    @Query("SELECT * FROM items WHERE id IN (:itemIds)")
+    suspend fun getItemsByIds(itemIds: List<Long>): List<Item>
 
 }
 

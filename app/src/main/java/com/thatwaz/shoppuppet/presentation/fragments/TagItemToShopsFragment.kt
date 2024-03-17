@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.FragmentTagItemToShopsBinding
 import com.thatwaz.shoppuppet.domain.model.Shop
@@ -134,22 +135,40 @@ class TagItemToShopsFragment : Fragment() {
         // Start the save operation
         itemViewModel.handleItemSave(itemId, itemName, selectedShopIds, isPriority)
 
-        // Observe the save operation completion
 
-            itemViewModel.saveOperationComplete.observe(viewLifecycleOwner) { isComplete ->
-                if (isComplete == true) { // Use == true to safely handle null
-                    navigateToListFragment()
-                    itemViewModel.resetSaveOperationStatus()
-                } else {
-                    showSaveError()
-                }
+        // Observe the save operation completion
+        itemViewModel.saveOperationComplete.observe(viewLifecycleOwner) { isComplete ->
+            if (isComplete == true) { // Use == true to safely handle null
+                navigateToListFragment()
+                itemViewModel.resetSaveOperationStatus()
+            } else {
+                showSaveError()
+            }
 
         }
     }
 
+//    private fun showSaveError() {
+//        Toast.makeText(context, "If this message appears after extended use, see 'Contact Support' in menu.", Toast.LENGTH_LONG).show()
+//    }
+
+    // todo test snackbar in next beta release
     private fun showSaveError() {
-        Toast.makeText(context, "Failed to save item. Please try again.", Toast.LENGTH_LONG).show()
+        Snackbar.make(
+            binding.root, // Use the ID of your main content view
+            "Item saved. If you notice this message often, tap here.",
+            Snackbar.LENGTH_LONG
+        ).setAction("Support") {
+            // Code to navigate to the support section
+            navigateToSupportSection()
+        }.show()
     }
+
+    private fun navigateToSupportSection() {
+        // Implementation depends on how your app is structured.
+        // For example, you could start an activity, navigate using a NavController, or open a web page.
+    }
+
 
     private fun navigateToListFragment() {
         findNavController().navigate(
