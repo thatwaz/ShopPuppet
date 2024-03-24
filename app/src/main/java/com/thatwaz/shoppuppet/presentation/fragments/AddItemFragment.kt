@@ -1,14 +1,15 @@
 package com.thatwaz.shoppuppet.presentation.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -25,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class AddItemFragment : Fragment() {
+class AddItemFragment : BaseFragment() {
 
     private var _binding: FragmentAddItemBinding? = null
     private val binding
@@ -55,6 +56,17 @@ class AddItemFragment : Fragment() {
         setupRecyclerView()
         setupObservers()
         setupUIEventHandlers()
+    }
+
+    override fun showUserGuideDialog() {
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.user_guide_title))
+            .setMessage(Html.fromHtml(getString(R.string.add_new_item_to_shopping_list), Html.FROM_HTML_MODE_COMPACT))
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+        alertDialog.show()
     }
 
     private fun setupObservers() {
