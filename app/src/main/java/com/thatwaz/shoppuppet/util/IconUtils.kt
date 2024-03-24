@@ -15,6 +15,9 @@ object IconUtils {
             R.id.ib_stroller -> "ic_stroller"
             R.id.ib_books -> "ic_books"
             R.id.ib_bullseye -> "ic_bullseye_icon"
+            R.id.ib_car -> "ic_car"
+            R.id.ib_bank -> "ic_bank2"
+            R.id.ib_home -> "ic_home"
             else -> "ic_store"
         }
     }
