@@ -1,15 +1,16 @@
 package com.thatwaz.shoppuppet.presentation.fragments
 
+import android.app.AlertDialog
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -25,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class ShopSpecificListFragment : Fragment() {
+class ShopSpecificListFragment : BaseFragment() {
 
     private val shopSpecificListViewModel: ShopSpecificListViewModel by viewModels()
 
@@ -63,6 +64,33 @@ class ShopSpecificListFragment : Fragment() {
         setupEventListeners()
         fetchData()
         observeViewModel()
+
+    }
+
+    private fun showPopupMenu(view: View) {
+        val popup = PopupMenu(requireContext(), view)
+        popup.menuInflater.inflate(R.menu.shop_specific_menu, popup.menu)
+        popup.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_user_guide -> {
+                    showUserGuideDialog()
+                    true
+                }
+                else -> false
+            }
+        }
+        popup.show()
+    }
+
+    override fun showUserGuideDialog() {
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.user_guide_title))
+            .setMessage(Html.fromHtml(getString(R.string.shop_user_guide), Html.FROM_HTML_MODE_COMPACT))
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+        alertDialog.show()
     }
 
     private fun initializeUI() {
@@ -88,6 +116,9 @@ class ShopSpecificListFragment : Fragment() {
         binding.btnBackToShops.setOnClickListener {
             navigateBackToShops()
         }
+        binding.btnShopSpecificMenu.setOnClickListener { v ->
+            showPopupMenu(v)
+        }
 
     }
 
@@ -105,8 +136,7 @@ class ShopSpecificListFragment : Fragment() {
                 Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
             }
         }
-        shopSpecificListViewModel.unpurchasedItems.observe(viewLifecycleOwner) { items ->
-            Log.i("DOH!","unpurchased is $items")
+        shopSpecificListViewModel.itemsToAcquire.observe(viewLifecycleOwner) { items ->
             shopSpecificItemAdapter?.submitList(items)
         }
 

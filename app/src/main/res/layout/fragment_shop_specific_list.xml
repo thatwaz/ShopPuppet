@@ -59,6 +59,20 @@
             app:layout_constraintStart_toEndOf="@id/btn_back_to_shops"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5" />
+
+        <ImageButton
+            android:id="@+id/btn_shop_specific_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/menu" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -137,11 +151,13 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="90dp"
-        android:text="Purchased"
+        android:text="@string/purchased"
+        android:textColor="@color/white"
         app:icon="@drawable/ic_purchased"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="ImageContrastCheck" />
+        tools:ignore="ImageContrastCheck"
+        app:iconTint="@color/white"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

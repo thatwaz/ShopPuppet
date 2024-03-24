@@ -2,13 +2,11 @@ package com.thatwaz.shoppuppet.presentation.fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.UnderlineSpan
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -23,7 +21,7 @@ import com.thatwaz.shoppuppet.util.ResourceCache
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ShopsFragment : Fragment() {
+class ShopsFragment : BaseFragment() {
 
     private var _binding: FragmentShopsBinding? = null
     private val binding get() = _binding ?: throw IllegalStateException("Binding cannot be accessed.")
@@ -44,6 +42,8 @@ class ShopsFragment : Fragment() {
         return binding.root
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -51,11 +51,22 @@ class ShopsFragment : Fragment() {
         observeShopData()
         setupAddShopButton()
         observeErrorMessages()
-        setupEditDeleteInfoTextView()
         setupAdapterClickListeners()
 
         // Refreshes item count for each shop
         shopsViewModel.fetchShopsWithItemCount()
+    }
+
+    override fun showUserGuideDialog() {
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.user_guide_title))
+            .setMessage(Html.fromHtml(getString(R.string.my_shops_user_guide_message), Html.FROM_HTML_MODE_COMPACT))
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+        alertDialog.show()
+
     }
 
     private fun observeErrorMessages() {
@@ -63,15 +74,6 @@ class ShopsFragment : Fragment() {
             if (errorMessage.isNotEmpty()) {
                 Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
             }
-        }
-    }
-
-    private fun setupEditDeleteInfoTextView() {
-        val content = SpannableString(binding.tvDeleteInfo.text)
-        content.setSpan(UnderlineSpan(), 0, content.length, 0)
-        binding.tvDeleteInfo.text = content
-        binding.tvDeleteInfo.setOnClickListener {
-            showEditDeleteInstructionsDialog()
         }
     }
 
@@ -133,16 +135,6 @@ class ShopsFragment : Fragment() {
             }
             .show()
     }
-
-
-    private fun showEditDeleteInstructionsDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Edit/Delete Shop")
-            .setMessage("Long press on a shop to edit or delete it.")
-            .setPositiveButton("OK", null)
-            .show()
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

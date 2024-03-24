@@ -1,12 +1,13 @@
 package com.thatwaz.shoppuppet.presentation.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -25,7 +26,7 @@ import com.thatwaz.shoppuppet.util.ResourceCache
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class TagItemToShopsFragment : Fragment() {
+class TagItemToShopsFragment : BaseFragment() {
 
     private var _binding: FragmentTagItemToShopsBinding? = null
     private val binding: FragmentTagItemToShopsBinding
@@ -73,6 +74,17 @@ class TagItemToShopsFragment : Fragment() {
         observeAndDisplayShops()
         setupErrorObservers()
 
+    }
+
+    override fun showUserGuideDialog() {
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.user_guide_title))
+            .setMessage(Html.fromHtml(getString(R.string.tag_item_to_shops), Html.FROM_HTML_MODE_COMPACT))
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+        alertDialog.show()
     }
 
     private fun handleShopSelection(shop: Shop, isChecked: Boolean) {

@@ -3,6 +3,7 @@ package com.thatwaz.shoppuppet.presentation.viewmodel
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.thatwaz.shoppuppet.data.repository.ItemRepository
@@ -41,20 +42,17 @@ class ShopSpecificListViewModel @Inject constructor(
 
     private var currentShopId: Long? = null
 
-    private val _unpurchasedItems = MutableLiveData<List<Item>>()
-    val unpurchasedItems: LiveData<List<Item>> = _unpurchasedItems
+    private val _itemsToAcquire = MutableLiveData<List<Item>>()
+    val itemsToAcquire: LiveData<List<Item>> = _itemsToAcquire
 
-    private val _purchasedItems = MutableLiveData<List<Item>>()
+    private val _acquiredItems = MutableLiveData<List<Item>>()
 
     private val _purchasedAndSoftDeletedItems = itemRepository.getPurchasedAndSoftDeletedItems()
     val purchasedAndSoftDeletedItems: LiveData<List<Item>> = _purchasedAndSoftDeletedItems
 
-//    private val _purchasedAndNotSoftDeletedItems = itemRepository.getPurchasedAndNotSoftDeletedItemsByShop()
+// Observed in Shop Specific List Fragment. This handles the rv checkbox state of the item as acquired/to acquire
     private val _purchasedAndNotSoftDeletedItems = MutableLiveData<List<Item>>()
     val purchasedAndNotSoftDeletedItems: LiveData<List<Item>> = _purchasedAndNotSoftDeletedItems
-
-//    // Observed in Shop Specific List Fragment. This handles the rv checkbox state of the item as purchased/unpurchased
-//    val purchasedAndNotSoftDeletedItems: LiveData<List<Item>> = _purchasedAndNotSoftDeletedItems
 
     // LiveData to track error messages
     private val _error = MutableLiveData<String>()
@@ -65,14 +63,33 @@ class ShopSpecificListViewModel @Inject constructor(
         fetchPurchasedAndNotSoftDeletedItemsForShop()
     }
 
+    private val observer = Observer<List<Item>> { purchasedItems ->
+        _purchasedAndNotSoftDeletedItems.value = purchasedItems
+        Log.i("DOH!","Purchased items in vm are $purchasedItems")
+    }
+
+    // todo alt function to clear memory leak from using observe forever
     private fun fetchPurchasedAndNotSoftDeletedItemsForShop() {
         currentShopId?.let { shopId ->
-            itemRepository.getPurchasedAndNotSoftDeletedItemsByShop(shopId).observeForever { purchasedItems ->
-                _purchasedAndNotSoftDeletedItems.value = purchasedItems ?: emptyList()
-                Log.i("DOH!","Purchased items in vm are $purchasedItems")
-            }
+            itemRepository.getPurchasedAndNotSoftDeletedItemsByShop(shopId).observeForever(observer)
         }
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        // Remove the observer when the ViewModel is cleared
+        _purchasedAndNotSoftDeletedItems.removeObserver(observer)
+    }
+
+
+//    private fun fetchPurchasedAndNotSoftDeletedItemsForShop() {
+//        currentShopId?.let { shopId ->
+//            itemRepository.getPurchasedAndNotSoftDeletedItemsByShop(shopId).observeForever { purchasedItems ->
+//                _purchasedAndNotSoftDeletedItems.value = purchasedItems ?: emptyList()
+//                Log.i("DOH!","Purchased items in vm are $purchasedItems")
+//            }
+//        }
+//    }
 
 
 
@@ -103,16 +120,16 @@ class ShopSpecificListViewModel @Inject constructor(
             }
         }
     }
-// todo fix to where purchased items only show up for the specific shop
+
     private fun updateLists() {
         currentShopId?.let { shopId ->
             viewModelScope.launch {
                 try {
                     val allItems = itemRepository.getItemsByShop(shopId)
                     Log.d("ShopSpecific"," all items are $allItems")
-                    _unpurchasedItems.value = allItems.filter { !it.isPurchased && !it.isSoftDeleted }
-                    Log.i("DOH!","Unpurchased - ${_unpurchasedItems.value}")
-                    _purchasedItems.value = allItems.filter { it.isPurchased }
+                    _itemsToAcquire.value = allItems.filter { !it.isPurchased && !it.isSoftDeleted }
+                    Log.i("DOH!","Unpurchased - ${_itemsToAcquire.value}")
+                    _acquiredItems.value = allItems.filter { it.isPurchased }
                 } catch (e: Exception) {
                     _error.postValue("Failed to update lists: ${e.localizedMessage}")
                 }
@@ -120,7 +137,7 @@ class ShopSpecificListViewModel @Inject constructor(
         }
     }
 
-// todo compare filtering with above function
+
     fun fetchShopSpecificItems(shopId: Long) {
         currentShopId = shopId
         viewModelScope.launch {
@@ -128,13 +145,13 @@ class ShopSpecificListViewModel @Inject constructor(
                 val allItems = itemRepository.getItemsByShop(shopId)
                 // Filter for active unpurchased items
                 val activeUnpurchasedItems = allItems.filter { !it.isPurchased && !it.isSoftDeleted }
-                _unpurchasedItems.value = activeUnpurchasedItems
+                _itemsToAcquire.value = activeUnpurchasedItems
 
                 // Filter for active purchased items (not soft deleted)
                 val activePurchasedItems = allItems.filter {
                     it.isPurchased && !it.isSoftDeleted
                 }
-                _purchasedItems.value = activePurchasedItems
+                _acquiredItems.value = activePurchasedItems
             } catch (e: Exception) {
                 _error.postValue("Error fetching shop-specific items: ${e.localizedMessage}")
             }
