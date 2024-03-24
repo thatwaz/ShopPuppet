@@ -112,6 +112,9 @@
     <string name="ok">OK</string>
     <string name="purchased">Purchased</string>
     <string name="menu">menu</string>
+    <string name="car">Car</string>
+    <string name="home">Home</string>
+    <string name="bank">Bank</string>
 
 
 </resources>
