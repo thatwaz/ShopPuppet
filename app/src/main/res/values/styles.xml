@@ -2,8 +2,7 @@
 <resources>
 
     <style name="TransparentIndicatorStyle">
-        <!-- Set the relevant attributes to make the indicator transparent.
-             This is just a placeholder; you'll need to identify the correct attributes. -->
+
         <item name="android:background">@color/transparent</item>
     </style>
 
@@ -11,6 +10,21 @@
         <item name="android:fontFamily">@font/toolbar_font</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="actionOverflowButtonStyle">@style/OverflowMenuButtonStyle</item>
+    </style>
+
+    <style name="PopupTheme" parent="ThemeOverlay.AppCompat.Light">
+
+        <item name="android:textColor">@color/textColorDark</item>
+    </style>
+
+
+    <style name="OverflowMenuButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_menu</item> <!-- Your custom icon -->
+    </style>
+
 
     <!-- Positive Button Style -->
     <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.Borderless">

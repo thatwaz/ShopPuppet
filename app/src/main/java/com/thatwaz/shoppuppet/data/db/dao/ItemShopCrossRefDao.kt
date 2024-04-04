@@ -22,4 +22,7 @@ interface ItemShopCrossRefDao {
     @Query("SELECT shopId FROM item_shop_cross_ref WHERE itemId = :itemId")
     suspend fun getShopIdsForItem(itemId: Long): List<Long>
 
+    @Query("SELECT itemId FROM item_shop_cross_ref WHERE shopId = :shopId")
+    suspend fun getItemIdsByShop(shopId: Long): List<Long>
+
 }

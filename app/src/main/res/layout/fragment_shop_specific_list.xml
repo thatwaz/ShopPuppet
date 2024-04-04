@@ -32,33 +32,47 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
+            android:contentDescription="@string/return_to_my_shops"
             android:minWidth="48dp"
             android:minHeight="48dp"
             android:src="@drawable/ic_arrow_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/return_to_my_shops" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
             android:id="@+id/tv_shop_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="60dp"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:gravity="center"
             android:maxWidth="50dp"
+            android:maxLines="1"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/cl_shop_name"
             app:layout_constraintHorizontal_bias="0.5"
-            android:gravity="center"
-            android:layout_marginEnd="60dp"
             app:layout_constraintStart_toEndOf="@id/btn_back_to_shops"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5" />
+
+        <ImageButton
+            android:id="@+id/btn_shop_specific_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/menu" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -83,7 +97,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="@dimen/margin"
                 android:layout_marginBottom="10dp"
-                android:text="@string/items_to_purchase"
+                android:text="@string/items_to_acquire"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -112,7 +126,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="@dimen/margin"
                 android:layout_marginBottom="10dp"
-                android:text="@string/purchased_items"
+                android:text="@string/acquired_items"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -131,19 +145,19 @@
     </ScrollView>
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/fab_delete_purchased_items"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="90dp"
-        android:contentDescription="@string/delete_all_purchased_items"
-        android:src="@drawable/ic_delete"
-        app:fabSize="normal"
+        android:text="@string/purchased"
+        android:textColor="@color/white"
+        app:icon="@drawable/ic_purchased"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/off_white"
-        tools:ignore="ImageContrastCheck" />
+        tools:ignore="ImageContrastCheck"
+        app:iconTint="@color/white"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

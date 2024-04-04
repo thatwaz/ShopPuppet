@@ -1,11 +1,12 @@
 package com.thatwaz.shoppuppet.presentation.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class ListFragment : Fragment(), ListAdapter.ItemClickListener {
+class ListFragment : BaseFragment(), ListAdapter.ItemClickListener {
 
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding ?: throw IllegalStateException("Binding cannot be accessed.")
@@ -58,6 +59,17 @@ class ListFragment : Fragment(), ListAdapter.ItemClickListener {
             val action = ListFragmentDirections.actionListFragmentToAddItemFragment()
             findNavController().navigate(action)
         }
+    }
+
+    override fun showUserGuideDialog() {
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.user_guide_title))
+            .setMessage(Html.fromHtml(getString(R.string.my_shopping_list_user_guide_message), Html.FROM_HTML_MODE_COMPACT))
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+        alertDialog.show()
     }
 
     private fun setupRecyclerView() {
