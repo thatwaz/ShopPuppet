@@ -17,3 +17,7 @@ buildscript*
 abc*
 aar_metadata*
 daemon/
+gradle/
+wrapper/
+caches/
+
