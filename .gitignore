@@ -20,3 +20,8 @@ aar_metadata*
 daemon/
 =======
 >>>>>>> c79d272f008447a9c9d674d9dec007d2c359cee8
+gradle/
+wrapper/
+caches/
+
+>>>>>>> bug_fixes
