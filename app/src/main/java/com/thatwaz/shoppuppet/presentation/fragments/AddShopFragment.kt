@@ -4,16 +4,18 @@ package com.thatwaz.shoppuppet.presentation.fragments
 
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.FragmentAddShopBinding
 import com.thatwaz.shoppuppet.presentation.viewmodel.AddShopViewModel
 import com.thatwaz.shoppuppet.util.ColorUtils
@@ -23,7 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @Suppress("BooleanMethodIsAlwaysInverted")
 @AndroidEntryPoint
-class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogListener {
+class AddShopFragment : BaseFragment(), CustomIconDialogFragment.CustomIconDialogListener {
 
     private val addShopViewModel: AddShopViewModel by viewModels()
     private var _binding: FragmentAddShopBinding? = null
@@ -53,6 +55,17 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         setupTextWatcher()
         setupObservers()
 
+    }
+
+    override fun showUserGuideDialog() {
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.user_guide_title))
+            .setMessage(Html.fromHtml(getString(R.string.add_new_shop_user_guide_message), Html.FROM_HTML_MODE_COMPACT))
+            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+        alertDialog.show()
     }
 
     private fun setupInitialButtonStates() {
@@ -226,7 +239,7 @@ class AddShopFragment : Fragment(), CustomIconDialogFragment.CustomIconDialogLis
         val icons = listOf(
             binding.ibGroceryStore, binding.ibPharmacy, binding.ibHardware, binding.ibStorefront,
             binding.ibTelevision, binding.ibShoppingBag, binding.ibStore,
-            binding.ibStroller, binding.ibBooks, binding.ibBullseye
+            binding.ibStroller, binding.ibBooks, binding.ibBullseye, binding.ibCar, binding.ibBank, binding.ibHome
         )
         icons.forEach { iconView ->
             iconView.setOnClickListener {

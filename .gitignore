@@ -16,4 +16,7 @@ local.properties
 buildscript*
 abc*
 aar_metadata*
+<<<<<<< HEAD
 daemon/
+=======
+>>>>>>> c79d272f008447a9c9d674d9dec007d2c359cee8

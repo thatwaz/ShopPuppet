@@ -210,6 +210,39 @@
                         android:focusable="true"
                         android:contentDescription="@string/bull_s_eye" />
 
+                    <ImageButton
+                        android:id="@+id/ib_car"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/ib_selected"
+                        android:clickable="true"
+                        android:src="@drawable/ic_car"
+                        app:tint="@color/inactive_grey"
+                        android:focusable="true"
+                        android:contentDescription="@string/car" />
+
+                    <ImageButton
+                        android:id="@+id/ib_bank"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/ib_selected"
+                        android:clickable="true"
+                        android:src="@drawable/ic_bank2"
+                        app:tint="@color/inactive_grey"
+                        android:focusable="true"
+                        android:contentDescription="@string/bank" />
+
+                    <ImageButton
+                        android:id="@+id/ib_home"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/ib_selected"
+                        android:clickable="true"
+                        android:src="@drawable/ic_home"
+                        app:tint="@color/inactive_grey"
+                        android:focusable="true"
+                        android:contentDescription="@string/home" />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

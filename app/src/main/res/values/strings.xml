@@ -9,11 +9,8 @@
     <string name="sort_list">Sort List</string>
     <string name="sort_list_alphabetically">Sort list alphabetically</string>
     <string name="sort_list_by_order_of_input">Sort list by order Of input</string>
-    <string name="items_to_purchase">Items to purchase</string>
-    <string name="purchased_items">Purchased items</string>
     <string name="return_to_my_shops">Return to my shops</string>
     <string name="delete_all_purchased_items">Delete all purchased items.</string>
-    <string name="delete_a_shop">Delete a Shop?</string>
     <string name="you_currently_have_no_shops">You currently have no shops</string>
     <string name="add_shop">Add Shop</string>
     <string name="mark_item_as_priority">Mark Item As Priority</string>
@@ -56,6 +53,68 @@
     <string name="purple">Purple</string>
     <string name="teal">Teal</string>
     <string name="brown">Brown</string>
+    <string name="user_guide">User Guide</string>
+    <string name="acquired_items">Acquired items</string>
+    <string name="items_to_acquire">Items to acquire</string>
+    <string name="user_guide_title">User Guide</string>
+    <string name="my_shops_user_guide_message">
+    <![CDATA[
+        <b>Add a Shop:</b> Click on the &quot;Add Shops&quot; button.<br><br>
+        <b>Delete a Shop:</b> Long-press on the shop you wish to remove.<br><br>
+        <b>View Shopping List:</b> Tap the &quot;My List&quot; icon at the bottom of the screen.
+    ]]>
+</string>
+
+    <string name="add_new_shop_user_guide_message">
+    <![CDATA[
+        <b>Shop Name:</b> Enter the name of the shop, then click next.<br><br>
+        <b>Choose Icon:</b> Choose an Icon that to represent your shop or click the blue  &quot;a-z&quot; icon to use initials as an icon instead.<br><br>
+        <b>Choose Color:</b> Choose a color to represent your shop.<br><br>
+        <b>Preview:</b> If you are happy with the preview of your shop, click  &quot;Save Shop &quot;, or else  &quot;Start Over&quot;.
+    ]]>
+</string>
+
+    <string name="my_shopping_list_user_guide_message">
+    <![CDATA[
+        <b>My Shopping List:</b> Click the &quot;Plus&quot; button to add items to your shopping list .<br><br>
+        <b>View Tagged Shop(s):</b> Once your list is populated, click the &quot;Down&quot; arrow to view what shop(s) each item is tagged to. Items can be deleted or edited here by clicking on their respective icon.<br><br>
+        <b>Sort List:</b> Click the &quot;A-Z&quot; icon to view the list in &quot;Alphabetical&quot; order, and the &quot;List&quot; icon to view the order it was saved.<br><br>
+        <b>My Shops:</b> Once your list is complete Click the &quot;My Shops&quot; button at the bottom to start shopping.
+    ]]>
+</string>
+
+    <string name="add_new_item_to_shopping_list">
+    <![CDATA[
+        <b>Add New Item:</b> Type the name of the item you are adding to your list, then click the &quot;Next&quot; button.<br><br>
+        <b>Recently Purchased Items:</b> Any items you have purchased in the last 14 days will appear, so you can just &quot;Tap&quot; on the item insetad of having to retype it.<br><br>
+        <b>Delete All Recently Purchased Items:</b> Click the &quot;Trash&quot; icon to delete all recently purchased items.<br><br>
+        <b>Delete Single Recently Purchased Item:</b> Long Press on the individual item will prompt for deletion.
+    ]]>
+</string>
+
+    <string name="tag_item_to_shops">
+    <![CDATA[
+        <b>Tag Item To Shop(s):</b> Tag the item to any shops where it is available. You can manage your shops in the &quot;My Shops&quot; section.<br><br>
+        <b>Edit The Item:</b> Click on the &quot;Text&quot; box to edit the item name.<br><br>
+        <b>Mark Item As Priority:</b> Click the &quot;Star&quot; icon to mark the item as a priority. It will be indicated with a star in your list and the shop-specific list. Shops with priority items will be marked in the &quot;My Shops&quot; section.<br><br>
+        <b>Save Item:</b> Click the &quot;Save&quot; button after assigning the item to its respective shop(s). You will be returned to your list.<br><br>
+    ]]>
+</string>
+
+    <string name="shop_user_guide">
+    <![CDATA[
+        <b>Items To Acquire:</b> Once you &quot;Check&quot; items from this shop it will drop it down into the &quot;Acquired&quot; items section.<br><br>
+        <b>Acquired Items:</b> Once you have acquired your items from this shop, clicking the &quot;Purchased&quot; button will remove items from your list and any other shops these particular items are tagged to.
+    ]]>
+</string>
+
+
+    <string name="ok">OK</string>
+    <string name="purchased">Purchased</string>
+    <string name="menu">menu</string>
+    <string name="car">Car</string>
+    <string name="home">Home</string>
+    <string name="bank">Bank</string>
 
 
 </resources>

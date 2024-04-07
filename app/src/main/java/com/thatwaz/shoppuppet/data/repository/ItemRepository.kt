@@ -105,6 +105,17 @@ class ItemRepository @Inject constructor(
         }
     }
 
+    suspend fun getPurchasedItemsForShop(shopId: Long): List<Item> {
+        return try {
+            val itemIds = itemShopCrossRefDao.getItemIdsByShop(shopId)
+            itemDao.getItemsByIds(itemIds)
+        } catch (e: Exception) {
+            Log.e("ItemRepository", "Error fetching purchased items for shop: ${e.localizedMessage}")
+            emptyList()
+        }
+    }
+
+
 
     suspend fun updateItem(item: Item): Int {
         return try {
@@ -120,9 +131,15 @@ class ItemRepository @Inject constructor(
         return itemDao.getPurchasedAndSoftDeletedItems()
     }
 
+    //todo this might be the issue
     fun getPurchasedAndNotSoftDeletedItems(): LiveData<List<Item>> {
         return itemDao.getPurchasedAndNotSoftDeletedItems()
     }
+
+    fun getPurchasedAndNotSoftDeletedItemsByShop(shopId: Long): LiveData<List<Item>> {
+        return itemDao.getPurchasedAndNotSoftDeletedItemsByShop(shopId)
+    }
+
 
 
     /** used to auto clean up soft-deleted items older thresholdInDays set in view model */

@@ -1,5 +1,6 @@
 package com.thatwaz.shoppuppet.domain.model
 
+//todo delete
 //data class ShopWithPriorityStatus(
 //    val id: Long,
 //    val name: String,
