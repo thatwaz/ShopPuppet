@@ -21,4 +21,9 @@ gradle/
 wrapper/
 caches/
 kotlin-profile/
+*.jar
+native/
+jdks/
+*.lock
+
 
