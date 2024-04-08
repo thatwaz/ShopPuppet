@@ -20,4 +20,5 @@ daemon/
 gradle/
 wrapper/
 caches/
+kotlin-profile/
 

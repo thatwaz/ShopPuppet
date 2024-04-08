@@ -33,7 +33,7 @@ import javax.inject.Inject
  */
 
 
-
+//todo kdoc difference between acquire AND delete
 @HiltViewModel
 class ShopSpecificListViewModel @Inject constructor(
     private val itemRepository: ItemRepository

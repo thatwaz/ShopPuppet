@@ -11,7 +11,6 @@
     <string name="sort_list_by_order_of_input">Sort list by order Of input</string>
     <string name="return_to_my_shops">Return to my shops</string>
     <string name="delete_all_purchased_items">Delete all purchased items.</string>
-    <string name="you_currently_have_no_shops">You currently have no shops</string>
     <string name="add_shop">Add Shop</string>
     <string name="mark_item_as_priority">Mark Item As Priority</string>
     <string name="save">Save</string>
@@ -115,6 +114,14 @@
     <string name="car">Car</string>
     <string name="home">Home</string>
     <string name="bank">Bank</string>
+
+    <string name="you_currently_have_no_shops">
+    <![CDATA[
+        <b>You currently have no shops.</b><br><br>
+        Click on the <b>Add Shops</b> button to create.<br><br>
+        For further instructions, see the <b>User Guide</b> located in the menu. Each section of the app has its own user guide for your convenience.
+    ]]>
+</string>
 
 
 </resources>

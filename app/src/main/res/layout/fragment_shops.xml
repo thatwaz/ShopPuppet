@@ -38,14 +38,16 @@
         app:spanCount="3"
         tools:listitem="@layout/item_shop" />
 
-    <!-- TODO: Implement you currently have no shops -->
     <TextView
-        android:id="@+id/noShopsTextView"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_no_shops"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/you_currently_have_no_shops"
         android:textSize="16sp"
         android:visibility="gone"
+        android:gravity="center_horizontal"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
