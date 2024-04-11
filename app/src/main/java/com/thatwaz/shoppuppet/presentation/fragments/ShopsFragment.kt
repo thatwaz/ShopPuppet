@@ -52,9 +52,22 @@ class ShopsFragment : BaseFragment() {
         setupAddShopButton()
         observeErrorMessages()
         setupAdapterClickListeners()
+        setupNoShopsMessage()
+        observeShops()
 
         // Refreshes item count for each shop
         shopsViewModel.fetchShopsWithItemCount()
+    }
+
+    private fun setupNoShopsMessage() {
+        val noShopsText = Html.fromHtml(getString(R.string.you_currently_have_no_shops), Html.FROM_HTML_MODE_COMPACT)
+        binding.tvNoShops.text = noShopsText
+    }
+
+    private fun observeShops() {
+        shopsViewModel.shopsWithItemCount.observe(viewLifecycleOwner) { shops ->
+            binding.tvNoShops.visibility = if (shops.isEmpty()) View.VISIBLE else View.GONE
+        }
     }
 
     override fun showUserGuideDialog() {

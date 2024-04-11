@@ -20,4 +20,7 @@ aar_metadata*
 /gradle/
 /wrapper/
 /caches/
+.tmp/
+kotlin-profile/
+
 
