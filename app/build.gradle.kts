@@ -69,7 +69,7 @@ dependencies {
     // Room
     implementation ("androidx.room:room-runtime:2.6.1")
     implementation ("androidx.room:room-ktx:2.6.1")
-    implementation("androidx.activity:activity:1.8.0")
+    implementation("androidx.activity:activity:1.8.2")
     kapt ("androidx.room:room-compiler:2.6.1")
 
 
@@ -84,7 +84,7 @@ dependencies {
     // Test Libraries
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:4.2.0")
-    testImplementation("com.google.truth:truth:1.1.3")
+    testImplementation("com.google.truth:truth:1.4.2")
 
     // AndroidX Test - Instrumented testing
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
