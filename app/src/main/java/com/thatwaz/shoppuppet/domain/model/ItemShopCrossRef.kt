@@ -2,7 +2,7 @@ package com.thatwaz.shoppuppet.domain.model
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
-
+import androidx.room.Index
 
 @Entity(
     tableName = "item_shop_cross_ref",

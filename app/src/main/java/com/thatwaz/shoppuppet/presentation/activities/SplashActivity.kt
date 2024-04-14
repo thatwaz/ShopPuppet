@@ -25,7 +25,7 @@ class SplashActivity : AppCompatActivity() {
             val mainIntent = Intent(this, MainActivity::class.java)
             startActivity(mainIntent)
             finish()
-        }, 2000) // 2000 ms for 2 seconds delay
+        }, 1000) // 1000 ms for 1 second delay
 
     }
 }

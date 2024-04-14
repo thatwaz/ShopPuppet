@@ -1,6 +1,6 @@
 package com.thatwaz.shoppuppet.presentation.viewmodel
 
-import android.util.Log
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -30,6 +30,11 @@ import javax.inject.Inject
  * - Fetch and update lists of items based on their purchase and deletion status.
  *
  * Utilizes a repository for data operations and LiveData to communicate updates to the UI layer.
+ *
+ * Items To Acquire and Acquired Items have been refactored for a better u.i. experience.  Acquired
+ * Items are actually items that are "soft-deleted" for 14 days and if are not added back to
+ * the user's list, they become permanently deleted. Items To Acquire are just items
+ * the user has in their list that are not soft-deleted.
  */
 
 
@@ -65,10 +70,8 @@ class ShopSpecificListViewModel @Inject constructor(
 
     private val observer = Observer<List<Item>> { purchasedItems ->
         _purchasedAndNotSoftDeletedItems.value = purchasedItems
-        Log.i("DOH!","Purchased items in vm are $purchasedItems")
     }
 
-    // todo alt function to clear memory leak from using observe forever
     private fun fetchPurchasedAndNotSoftDeletedItemsForShop() {
         currentShopId?.let { shopId ->
             itemRepository.getPurchasedAndNotSoftDeletedItemsByShop(shopId).observeForever(observer)
@@ -77,20 +80,11 @@ class ShopSpecificListViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        // Remove the observer when the ViewModel is cleared
-        _purchasedAndNotSoftDeletedItems.removeObserver(observer)
+        // Correct LiveData source from which to remove the observer
+        currentShopId?.let { shopId ->
+            itemRepository.getPurchasedAndNotSoftDeletedItemsByShop(shopId).removeObserver(observer)
+        }
     }
-
-
-//    private fun fetchPurchasedAndNotSoftDeletedItemsForShop() {
-//        currentShopId?.let { shopId ->
-//            itemRepository.getPurchasedAndNotSoftDeletedItemsByShop(shopId).observeForever { purchasedItems ->
-//                _purchasedAndNotSoftDeletedItems.value = purchasedItems ?: emptyList()
-//                Log.i("DOH!","Purchased items in vm are $purchasedItems")
-//            }
-//        }
-//    }
-
 
 
 
@@ -126,9 +120,7 @@ class ShopSpecificListViewModel @Inject constructor(
             viewModelScope.launch {
                 try {
                     val allItems = itemRepository.getItemsByShop(shopId)
-                    Log.d("ShopSpecific"," all items are $allItems")
                     _itemsToAcquire.value = allItems.filter { !it.isPurchased && !it.isSoftDeleted }
-                    Log.i("DOH!","Unpurchased - ${_itemsToAcquire.value}")
                     _acquiredItems.value = allItems.filter { it.isPurchased }
                 } catch (e: Exception) {
                     _error.postValue("Failed to update lists: ${e.localizedMessage}")

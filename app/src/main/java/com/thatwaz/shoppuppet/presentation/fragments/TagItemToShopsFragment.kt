@@ -9,11 +9,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import com.thatwaz.shoppuppet.R
 import com.thatwaz.shoppuppet.databinding.FragmentTagItemToShopsBinding
 import com.thatwaz.shoppuppet.domain.model.Shop
@@ -24,6 +24,8 @@ import com.thatwaz.shoppuppet.presentation.viewmodel.SelectedShopsViewModel
 import com.thatwaz.shoppuppet.presentation.viewmodel.TagItemToShopsViewModel
 import com.thatwaz.shoppuppet.util.ResourceCache
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TagItemToShopsFragment : BaseFragment() {
@@ -150,35 +152,21 @@ class TagItemToShopsFragment : BaseFragment() {
 
         // Observe the save operation completion
         itemViewModel.saveOperationComplete.observe(viewLifecycleOwner) { isComplete ->
-            if (isComplete == true) { // Use == true to safely handle null
-                navigateToListFragment()
-                itemViewModel.resetSaveOperationStatus()
-            } else {
-                showSaveError()
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(200)
+                if (isComplete == true) { // Use == true to safely handle null
+                    Toast.makeText(context, "Item Saved.", Toast.LENGTH_SHORT).show()
+                    navigateToListFragment()
+                    itemViewModel.resetSaveOperationStatus()
+                } else if (isComplete == false) {
+                    showSaveError()
+                }
             }
-
         }
     }
 
-//    private fun showSaveError() {
-//        Toast.makeText(context, "If this message appears after extended use, see 'Contact Support' in menu.", Toast.LENGTH_LONG).show()
-//    }
-
-    // todo test snackbar in next beta release
     private fun showSaveError() {
-        Snackbar.make(
-            binding.root, // Use the ID of your main content view
-            "Item saved. If you notice this message often, tap here.",
-            Snackbar.LENGTH_LONG
-        ).setAction("Support") {
-            // Code to navigate to the support section
-            navigateToSupportSection()
-        }.show()
-    }
-
-    private fun navigateToSupportSection() {
-        // Implementation depends on how your app is structured.
-        // For example, you could start an activity, navigate using a NavController, or open a web page.
+        Toast.makeText(context, "Save Error Occurred.", Toast.LENGTH_SHORT).show()
     }
 
 

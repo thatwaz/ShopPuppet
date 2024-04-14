@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.RewriteQueriesToDropUnusedColumns
 import com.thatwaz.shoppuppet.domain.model.Shop
 import com.thatwaz.shoppuppet.domain.model.ShopWithItemCountAndPriority
 
@@ -21,6 +22,7 @@ interface ShopDao {
     suspend fun deleteShop(shop: Shop): Int
 
 
+    @RewriteQueriesToDropUnusedColumns
     @Query("""
     SELECT s.id, s.name, s.iconResName, s.colorResName, s.initials, s.isPriority, 
            COUNT(CASE WHEN i.isSoftDeleted = 0 THEN i.id ELSE NULL END) AS itemCount, 
@@ -31,6 +33,7 @@ interface ShopDao {
     GROUP BY s.id
 """)
     suspend fun getShopsWithItemCountAndPriorityStatus(): List<ShopWithItemCountAndPriority>
+
 
 
     @Query("SELECT * FROM shops WHERE id IN (:shopIds)")

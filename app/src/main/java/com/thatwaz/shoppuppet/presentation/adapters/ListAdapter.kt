@@ -30,11 +30,15 @@ class ListAdapter(
     // This variable is used to notify the Fragment or Activity when the list is updated.
     var onListUpdated: (() -> Unit)? = null
 
-    override fun onCurrentListChanged(previousList: List<ItemUiModel>, currentList: List<ItemUiModel>) {
+    override fun onCurrentListChanged(
+        previousList: List<ItemUiModel>,
+        currentList: List<ItemUiModel>
+    ) {
         super.onCurrentListChanged(previousList, currentList)
         // Notify that the list has been updated. This is where you trigger the callback.
         onListUpdated?.invoke()
     }
+
     class ShoppingViewHolder(
         private val binding: ShoppingItemBinding,
         private val itemClickListener: ItemClickListener,
@@ -68,8 +72,14 @@ class ListAdapter(
 
                 // Update the arrow icon to indicate the toggle state: Down arrow when chips are
                 // hidden, up arrow when visible
-                val arrowIconResId = if (isChipsVisible) R.drawable.ic_arrow_down else R.drawable.ic_arrow_up
-                binding.ivArrowDown.setImageDrawable(ContextCompat.getDrawable(itemView.context, arrowIconResId))
+                val arrowIconResId =
+                    if (isChipsVisible) R.drawable.ic_arrow_down else R.drawable.ic_arrow_up
+                binding.ivArrowDown.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        itemView.context,
+                        arrowIconResId
+                    )
+                )
             }
 
 
@@ -110,8 +120,11 @@ class ListAdapter(
             return oldItem.itemId == newItem.itemId &&
                     oldItem.isPriorityItem == newItem.isPriorityItem &&
                     oldItem.itemName == newItem.itemName &&
-                    oldItem.shopNames == newItem.shopNames
+                    oldItem.shopNames.containsAll(newItem.shopNames) && newItem.shopNames.containsAll(
+                oldItem.shopNames
+            )
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShoppingViewHolder {
