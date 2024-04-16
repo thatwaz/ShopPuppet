@@ -22,5 +22,6 @@ aar_metadata*
 /caches/
 .tmp/
 kotlin-profile/
+app/release/
 
 
