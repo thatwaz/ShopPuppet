@@ -238,7 +238,7 @@ class AddShopFragment : BaseFragment(), CustomIconDialogFragment.CustomIconDialo
     private fun setupIconClickListeners() {
         val icons = listOf(
             binding.ibGroceryStore, binding.ibPharmacy, binding.ibHardware, binding.ibStorefront,
-            binding.ibTelevision, binding.ibShoppingBag, binding.ibStore,
+            binding.ibTelevision, binding.ibPets, binding.ibStore,
             binding.ibStroller, binding.ibBooks, binding.ibBullseye, binding.ibCar, binding.ibBank, binding.ibHome
         )
         icons.forEach { iconView ->

@@ -156,15 +156,15 @@
                         android:contentDescription="@string/electronics" />
 
                     <ImageButton
-                        android:id="@+id/ib_shopping_bag"
+                        android:id="@+id/ib_pets"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:background="@drawable/ib_selected"
                         android:clickable="true"
-                        android:src="@drawable/ic_shopping_bag"
+                        android:src="@drawable/ic_pets"
                         app:tint="@color/inactive_grey"
                         android:focusable="true"
-                        android:contentDescription="@string/shopping_bag" />
+                        android:contentDescription="@string/pets" />
 
                     <ImageButton
                         android:id="@+id/ib_store"

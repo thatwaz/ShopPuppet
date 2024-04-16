@@ -10,7 +10,7 @@ object IconUtils {
             R.id.ib_hardware -> "ic_hardware"
             R.id.ib_storefront -> "ic_storefront"
             R.id.ib_television -> "ic_television"
-            R.id.ib_shopping_bag -> "ic_shopping_bag"
+            R.id.ib_pets -> "ic_pets"
             R.id.ib_store -> "ic_store"
             R.id.ib_stroller -> "ic_stroller"
             R.id.ib_books -> "ic_books"

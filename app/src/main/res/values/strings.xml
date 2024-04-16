@@ -34,7 +34,6 @@
     <string name="hardware">Hardware</string>
     <string name="store_front">Store Front</string>
     <string name="electronics">Electronics</string>
-    <string name="shopping_bag">Shopping bag</string>
     <string name="store">Store</string>
     <string name="stroller">Stroller</string>
     <string name="books">Books</string>
@@ -121,6 +120,7 @@
     <string name="car">Car</string>
     <string name="home">Home</string>
     <string name="bank">Bank</string>
+    <string name="pets">Pets</string>
 
 
 </resources>
