@@ -46,6 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/next"
+            android:contentDescription="@string/proceed_to_next_step_after_entering_shop_name"
             app:layout_constraintWidth_max="320dp"
             android:backgroundTint="@color/colorPrimaryDark"
             android:textColor="@color/textColorLight"
@@ -257,10 +258,10 @@
                             android:background="@drawable/ib_selected"
                             android:clickable="true"
                             android:padding="8dp"
+                            android:contentDescription="@string/use_shop_initials"
                             android:src="@drawable/ic_alphabet"
                             app:tint="@color/clickable_blue"
-                            android:focusable="true"
-                            tools:ignore="ContentDescription" />
+                            android:focusable="true"/>
 
                     </LinearLayout>
                 </GridLayout>
@@ -441,6 +442,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/next"
+            android:contentDescription="@string/proceed_to_the_next_step_after_selecting_your_icon"
             android:backgroundTint="@color/colorPrimaryDark"
             android:textColor="@color/textColorLight"
             android:visibility="gone"
@@ -553,6 +555,7 @@
                     android:layout_width="135dp"
                     android:layout_height="wrap_content"
                     android:text="@string/save_shop"
+                    android:contentDescription="@string/save_your_shop_if_you_are_satisfied_with_your_selection"
                     android:backgroundTint="@color/colorPrimaryDark"
                     android:textColor="@color/textColorLight"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -565,6 +568,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/colorPrimaryDark"
                     android:text="@string/start_over"
+                    android:contentDescription="@string/restart_the_process_of_adding_a_new_shop_clearing_all_current_selections"
                     android:textColor="@color/textColorLight"
                     app:layout_constraintBottom_toBottomOf="@id/cv_shop_preview"
                     app:layout_constraintEnd_toEndOf="parent"

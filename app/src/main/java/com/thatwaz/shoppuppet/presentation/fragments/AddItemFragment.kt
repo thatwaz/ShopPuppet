@@ -133,7 +133,7 @@ class AddItemFragment : BaseFragment() {
     }
 
     private fun setupRecyclerView() {
-        val recyclerView: RecyclerView = binding.rvFrequentlyPurchasedItems
+        val recyclerView: RecyclerView = binding.rvRecentlyPurchasedItems
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
     }

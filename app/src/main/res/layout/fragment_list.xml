@@ -19,16 +19,15 @@
         app:layout_constraintStart_toStartOf="parent"
         android:text="@string/sort_list"
         android:textStyle="bold"
-        android:textSize="16sp"/>
+        android:textSize="18sp"/>
 
     <ImageView
         android:id="@+id/iv_alphabetical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="6dp"
         android:layout_marginStart="36dp"
         android:contentDescription="@string/sort_list_alphabetically"
-        android:scaleX=".75"
-        android:scaleY=".75"
         android:src="@drawable/ic_alphabet"
         app:layout_constraintBottom_toBottomOf="@id/lbl_sort_by"
         app:layout_constraintStart_toEndOf="@id/lbl_sort_by"
@@ -38,12 +37,11 @@
 
     <ImageView
         android:id="@+id/iv_order_of_entry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="6dp"
         android:layout_marginStart="36dp"
         android:contentDescription="@string/sort_list_by_order_of_input"
-        android:scaleX=".75"
-        android:scaleY=".75"
         android:src="@drawable/ic_numbered_list"
         app:layout_constraintBottom_toBottomOf="@id/lbl_sort_by"
         app:layout_constraintStart_toEndOf="@id/iv_alphabetical"
@@ -69,6 +67,7 @@
         android:clipToPadding="false"
         android:scrollbars="vertical"
         android:scrollbarSize="6dp"
+        android:contentDescription="@string/your_shopping_list"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/divider_sort_by"

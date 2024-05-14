@@ -40,6 +40,7 @@
         android:layout_marginTop="@dimen/margin"
         android:fadingEdgeLength="150dp"
         android:requiresFadingEdge="vertical"
+        android:contentDescription="@string/your_list_of_shops_you_can_tag_your_item_to"
         app:layout_constraintBottom_toTopOf="@id/cl_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

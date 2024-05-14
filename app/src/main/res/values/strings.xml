@@ -121,6 +121,16 @@
     <string name="home">Home</string>
     <string name="bank">Bank</string>
     <string name="pets">Pets</string>
+    <string name="use_shop_initials">Use shop initials</string>
+
+    <string name="rv_recently_purchased_items_description">List of recently purchased items</string>
+    <string name="your_shopping_list">Your shopping list</string>
+    <string name="your_list_of_shops_you_can_tag_your_item_to">Your list of shops you can tag your item to</string>
+    <string name="your_shops">Your Shops</string>
+    <string name="proceed_to_next_step_after_entering_shop_name">Proceed to next step after entering shop name</string>
+    <string name="proceed_to_the_next_step_after_selecting_your_icon">Proceed to the next step after selecting your icon</string>
+    <string name="save_your_shop_if_you_are_satisfied_with_your_selection">Save your shop if you are satisfied with your selection</string>
+    <string name="restart_the_process_of_adding_a_new_shop_clearing_all_current_selections">Restart the process of adding a new shop, clearing all current selections</string>
 
 
 </resources>
