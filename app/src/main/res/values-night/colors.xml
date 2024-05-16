@@ -28,7 +28,8 @@
 
 
     <!-- Error Color -->
-    <color name="colorError">#FF6659</color> <!-- Red adjusted for dark themes -->
+
+    <color name="colorError">#FCABAB</color> <!-- Lighter Red adjusted for dark themes -->
 
     <!-- Text Colors -->
     <color name="textColorLight">#F5F5F5</color> <!-- Off White -->

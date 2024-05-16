@@ -313,8 +313,8 @@
 
                     <View
                         android:id="@+id/shop_blue"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layout_margin="16dp"
                         android:background="@color/shop_blue"
                         android:clickable="true"
@@ -323,8 +323,8 @@
 
                     <View
                         android:id="@+id/shop_green"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layout_margin="16dp"
                         android:background="@color/shop_green"
                         android:clickable="true"
@@ -333,8 +333,8 @@
 
                     <View
                         android:id="@+id/shop_fashion_red"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layout_margin="16dp"
                         android:background="@color/shop_fashion_red"
                         android:clickable="true"
@@ -343,8 +343,8 @@
 
                     <View
                         android:id="@+id/shop_dark_gray"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layout_margin="16dp"
                         android:background="@color/shop_dark_gray"
                         android:clickable="true"
@@ -353,8 +353,8 @@
 
                     <View
                         android:id="@+id/shop_red"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layout_margin="16dp"
                         android:background="@color/shop_red"
                         android:clickable="true"
@@ -363,8 +363,8 @@
 
                     <View
                         android:id="@+id/shop_orange"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layout_margin="16dp"
                         android:background="@color/shop_orange"
                         android:clickable="true"
@@ -373,8 +373,8 @@
 
                     <View
                         android:id="@+id/shop_pink"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layout_margin="16dp"
                         android:background="@color/shop_pink"
                         android:clickable="true"
@@ -383,8 +383,8 @@
 
                     <View
                         android:id="@+id/shop_navy_blue"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layout_margin="16dp"
                         android:background="@color/shop_navy_blue"
                         android:clickable="true"
@@ -393,8 +393,8 @@
 
                     <View
                         android:id="@+id/shop_yellow"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layout_margin="16dp"
                         android:background="@color/shop_yellow"
                         android:clickable="true"
@@ -403,8 +403,8 @@
 
                     <View
                         android:id="@+id/shop_purple"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layout_margin="16dp"
                         android:background="@color/shop_purple"
                         android:clickable="true"
@@ -413,8 +413,8 @@
 
                     <View
                         android:id="@+id/shop_teal"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layout_margin="16dp"
                         android:background="@color/shop_teal"
                         android:clickable="true"
@@ -423,8 +423,8 @@
 
                     <View
                         android:id="@+id/shop_brown"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         android:layout_margin="16dp"
                         android:background="@color/shop_brown"
                         android:clickable="true"
