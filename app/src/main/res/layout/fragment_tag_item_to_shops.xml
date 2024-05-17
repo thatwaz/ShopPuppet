@@ -91,7 +91,7 @@
             app:layout_constraintEnd_toEndOf="@id/tv_priority_label"
             app:layout_constraintStart_toStartOf="@id/tv_priority_label"
             app:layout_constraintTop_toTopOf="@id/btn_save"
-            app:tint="@color/darker_grey"
+            app:tint="@color/colorAccent"
             tools:ignore="ImageContrastCheck"
             android:contentDescription="@string/mark_item_as_a_priority" />
 

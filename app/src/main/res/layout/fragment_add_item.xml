@@ -61,12 +61,15 @@
         app:layout_constraintTop_toBottomOf="@id/recently_purchased_label"/>
 
 
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_recently_purchased_items"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="18dp"
         android:layout_marginEnd="10dp"
+
         android:fadingEdgeLength="75dp"
         android:requiresFadingEdge="vertical"
         android:layout_marginTop="4dp"

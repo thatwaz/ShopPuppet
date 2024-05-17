@@ -18,6 +18,10 @@
 
     <!-- Accent/Secondary Colors -->
     <color name="colorAccent">#FFC107</color> <!-- Amber -->
+    <color name="icons">#4DB6AC</color> <!-- Primary Light -->
+    <color name="bottomNavColors">#4DB6AC</color> <!-- Teal Light -->
+    <color name="fab">#009688</color> <!-- Primary -->
+    <color name="rvShopsToTag">#1E1E1E</color> <!-- Dark -->
 
     <!-- Background Color -->
     <color name="header">#2E2E2E</color> <!-- Light Gray -->

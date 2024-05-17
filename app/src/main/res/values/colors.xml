@@ -21,6 +21,12 @@
     <color name="colorAccent">#FFC107</color> <!-- Amber -->
     <color name="badge">#E9EBEF</color> <!-- Light Gray -->
 
+    <!-- Misc -->
+    <color name="icons">#00695C</color> <!-- Primary Dark -->
+    <color name="bottomNavColors">#00695C</color> <!-- Primary Dark -->
+    <color name="fab">#00695C</color> <!-- Primary Dark-->
+    <color name="rvShopsToTag">#FFFFFFFF</color> <!-- White -->
+
     <!-- Background Color -->
     <color name="card_view">#FAFAFA</color> <!-- Alabaster -->
     <color name="card_view2">#FAFAFA</color> <!-- Alabaster -->

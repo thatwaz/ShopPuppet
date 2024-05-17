@@ -32,7 +32,7 @@
         app:layout_constraintBottom_toBottomOf="@id/lbl_sort_by"
         app:layout_constraintStart_toEndOf="@id/lbl_sort_by"
         app:layout_constraintTop_toTopOf="@id/lbl_sort_by"
-        app:tint="@color/colorPrimaryLight"
+        app:tint="@color/icons"
         tools:ignore="ImageContrastCheck" />
 
     <ImageView
@@ -46,7 +46,7 @@
         app:layout_constraintBottom_toBottomOf="@id/lbl_sort_by"
         app:layout_constraintStart_toEndOf="@id/iv_alphabetical"
         app:layout_constraintTop_toTopOf="@id/lbl_sort_by"
-        app:tint="@color/colorPrimaryLight"
+        app:tint="@color/icons"
         tools:ignore="ImageContrastCheck" />
 
     <com.google.android.material.divider.MaterialDivider
@@ -79,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_marginBottom="120dp"
-        app:backgroundTint="@color/colorPrimaryDark"
+        app:backgroundTint="@color/fab"
         android:layout_marginEnd="16dp"
         app:tint="@color/white"
         android:src="@drawable/ic_add"
