@@ -87,6 +87,9 @@ class AddItemFragment : BaseFragment() {
     private fun observePurchasedAndSoftDeletedItems() {
         shopSpecificListViewModel.purchasedAndSoftDeletedItems.observe(viewLifecycleOwner) { items ->
             adapter.submitList(items)
+
+            // Update the visibility of the empty message TextView based on the list size
+            binding.tvEmptyItemsMessage.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
         }
     }
 
@@ -101,6 +104,7 @@ class AddItemFragment : BaseFragment() {
         override fun afterTextChanged(s: Editable?) {
             val isEnabled = !s.isNullOrEmpty()
             binding.btnNext.isEnabled = isEnabled
+            binding.tvEmptyItemsMessage.visibility = View.GONE
 
             val context = requireContext()
             if (isEnabled) {

@@ -131,6 +131,7 @@
     <string name="proceed_to_the_next_step_after_selecting_your_icon">Proceed to the next step after selecting your icon</string>
     <string name="save_your_shop_if_you_are_satisfied_with_your_selection">Save your shop if you are satisfied with your selection</string>
     <string name="restart_the_process_of_adding_a_new_shop_clearing_all_current_selections">Restart the process of adding a new shop, clearing all current selections</string>
+    <string name="items_will_appear_here">Items will appear here for 14 days after they are checked off as purchased from your shop(s)</string>
 
 
 </resources>

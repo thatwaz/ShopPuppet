@@ -60,7 +60,21 @@
         app:layout_constraintEnd_toEndOf="@id/iv_delete_all_recently_purchased_items"
         app:layout_constraintTop_toBottomOf="@id/recently_purchased_label"/>
 
-
+    <TextView
+        android:id="@+id/tv_empty_items_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/cl_btn_next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/divider"
+        android:textColor="@color/inactive_grey"
+        android:padding="12dp"
+        android:textSize="18sp"
+        android:layout_marginBottom="400dp"
+        android:visibility="gone"
+        android:gravity="center"
+        android:text="@string/items_will_appear_here"/>
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -69,7 +83,7 @@
         android:layout_height="0dp"
         android:layout_marginStart="18dp"
         android:layout_marginEnd="10dp"
-
+        android:visibility="visible"
         android:fadingEdgeLength="75dp"
         android:requiresFadingEdge="vertical"
         android:layout_marginTop="4dp"
