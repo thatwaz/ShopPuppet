@@ -107,6 +107,7 @@ For more detailed information on how to contribute, please take a look at our [C
 ## Credits
 
 - **UI Design and Icons**: Designed with Material Design guidelines for a cohesive and intuitive user experience.
+-  **App Icon and Splash Screen Artwork**: Felicia Charbonneau
 - **Data Handling**: Room and LiveData are used for efficient data management and UI updates.
 - **Bullseye Icon**: Sourced from [Iconfinder](https://www.iconfinder.com). The icon has been resized to fit the app's design, with an adjustment of 12dp to its original size. For more details on the licensing and usage terms, please visit [Iconfinder's License Overview](https://support.iconfinder.com/en/articles/18233-license-overview).
 
